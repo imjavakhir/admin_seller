@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "392797374600",
+    "project_id": "woodline-admin-seller",
+    "storage_bucket": "woodline-admin-seller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392797374600:android:b1c3d0ec760a3e461fb73d",
+        "android_client_info": {
+          "package_name": "com.example.admin_seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392797374600-29n8a5fukre06rvk6l7rug1448le3gnl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe6qxAr-l4YaR__PhSgNajyzU7PAd8of4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392797374600-29n8a5fukre06rvk6l7rug1448le3gnl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "392797374600-edg2t7dnjqeb9bnask1snp7dttf2rcal.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.adminSeller"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
