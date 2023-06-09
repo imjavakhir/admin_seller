@@ -6,9 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BigTextFieldWidget extends StatelessWidget {
   final String hintext;
+  final TextEditingController textEditingController;
   const BigTextFieldWidget({
     super.key,
-    required this.hintext,
+    required this.hintext, required this.textEditingController,
   });
 
   @override
@@ -24,6 +25,7 @@ class BigTextFieldWidget extends StatelessWidget {
           ),
           ScreenUtil().setVerticalSpacing(10.h),
           TextField(
+            controller: textEditingController,
             maxLines: 10,
             decoration: InputDecoration(
                 contentPadding:

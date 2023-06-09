@@ -20,6 +20,14 @@ void main() async {
   );
   FirebaseNotificationService().initNotifications();
   LocalNotificationService().initialize();
+  runApp(const MyApp());
+}
+
+
+
+
+
+
 
   // final fcmToken = (await FirebaseMessaging.instance.getToken())!;
   // await AuthLocalDataSource().saveFcmToken(fcmToken);
@@ -49,5 +57,3 @@ void main() async {
   //     'User granted permission: ${notificationSettings.authorizationStatus}');
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
   //     overlays: [SystemUiOverlay.top]);
-  runApp(const MyApp());
-}

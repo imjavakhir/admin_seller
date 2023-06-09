@@ -46,13 +46,6 @@ class _SellerPageState extends State<SellerPage> {
                 isReady: _isReady,
               );
             }),
-            SellerCard(
-              ontapRed: () {},
-              ontapGreenR: () {},
-              ontapRedR: () {},
-              ontapGreen: () {},
-              isReady: false,
-            ),
           ],
         ),
       ),

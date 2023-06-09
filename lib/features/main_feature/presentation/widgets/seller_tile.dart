@@ -6,24 +6,33 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SellerTile extends StatelessWidget {
   final VoidCallback? onTap;
   final String title;
+  final String subtitle;
 
   const SellerTile({
     super.key,
-    required this.onTap,
+   this.onTap,
     required this.title,
+    this.subtitle = '',
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      enableFeedback: false,
       splashColor: AppColors.blue.withOpacity(0.05),
       dense: true,
       visualDensity: const VisualDensity(vertical: -2),
-      contentPadding: EdgeInsets.symmetric(horizontal: 24.w),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 24.w,
+      ),
       onTap: onTap,
       title: Text(
         title,
         style: Styles.headline4Reg,
+      ),
+      subtitle: Text(
+        '+998$subtitle',
+        style: Styles.headline6,
       ),
     );
   }

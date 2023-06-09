@@ -1,6 +1,10 @@
+import 'package:admin_seller/features/auth_feature/presentation/pages/auth_page.dart';
+import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
 import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
 import 'package:admin_seller/features/main_feature/presentation/widgets/seller_tile.dart';
+import 'package:admin_seller/services/login_service.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
+import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
@@ -12,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum Seller { auto, select }
 
+bool _isloading = false;
 int _selected = 0;
 Seller selectedSellerMode = Seller.auto;
 
@@ -23,13 +28,46 @@ class AdminSellerPage extends StatefulWidget {
 }
 
 class _AdminSellerPageState extends State<AdminSellerPage> {
-  String _selectedSeller = '';
+  final TextEditingController _detailsController = TextEditingController();
+  final LoginService _loginService = LoginService();
+  Sellers? _seller;
+  List<Sellers?>? _sellerList;
+  String _selectedSellerName = '';
+  String _selectedSellerPhone = '';
+
+  void getSeller() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final data = await LoginService().getSeller();
+      setState(() {
+        _seller = data;
+        print(_seller!.fullname);
+        isLoading = false;
+      });
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
+  void getSellers() async {
+    try {
+      final data = await LoginService().getSellers();
+      setState(() {
+        _sellerList = data;
+        print(_sellerList!.length);
+      });
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
   @override
   void initState() {
     SocketIOService().connectSocket();
-    // AuthLocalDataSource().getFcmToken();
-    // AuthLocalDataSource().getLogToken();
-
+    getSeller();
+    getSellers();
     super.initState();
   }
 
@@ -47,7 +85,8 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ScreenUtil().setVerticalSpacing(10.h),
-                const BigTextFieldWidget(
+                BigTextFieldWidget(
+                  textEditingController: _detailsController,
                   hintext: 'Параметры клиента',
                 ),
                 ScreenUtil().setVerticalSpacing(10.h),
@@ -71,6 +110,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                           onChanged: (value) {
                             BlocProvider.of<MainFeatureBloc>(context)
                                 .add(OnSellerChangeEvent(value));
+                            getSeller();
                           },
                           groupValue: state.seller),
                       ScreenUtil().setHorizontalSpacing(10.h),
@@ -80,6 +120,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                           onChanged: (value) {
                             BlocProvider.of<MainFeatureBloc>(context)
                                 .add(OnSellerChangeEvent(value));
+                            // getSellers();
 
                             //modalsheet
                             showModalBottomSheet(
@@ -101,22 +142,32 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                       ),
                                       Flexible(
                                         child: ListView.builder(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.h),
-                                          shrinkWrap: true,
-                                          itemCount: _sellers.length,
-                                          itemBuilder: (context, index) =>
-                                              SellerTile(
-                                            onTap: () {
-                                              setState(() {
-                                                _selectedSeller =
-                                                    _sellers[index];
-                                                Navigator.of(context).pop();
-                                              });
-                                            },
-                                            title: _sellers[index],
-                                          ),
-                                        ),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            shrinkWrap: true,
+                                            itemCount: _sellerList!.length,
+                                            itemBuilder: (context, index) {
+                                              if (isLoading) {
+                                                return const SellersShimmer();
+                                              }
+                                              return SellerTile(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _selectedSellerName =
+                                                        _sellerList![index]!
+                                                            .fullname;
+                                                    _selectedSellerPhone =
+                                                        _sellerList![index]!
+                                                            .phoneNumber;
+                                                    Navigator.of(context).pop();
+                                                  });
+                                                },
+                                                title: _sellerList![index]!
+                                                    .fullname,
+                                                subtitle: _sellerList![index]!
+                                                    .phoneNumber,
+                                              );
+                                            }),
                                       )
                                     ],
                                   );
@@ -136,18 +187,20 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                     style: Styles.headline4,
                   ),
                 ),
-                ScreenUtil().setVerticalSpacing(10.h),
-                if (state.seller == Seller.auto)
-                  const SellerTile(
-                    onTap: null,
-                    title: 'Toshmatov Eshmat',
+                if (isLoading) const SellersShimmer(),
+                if (state.seller == Seller.auto && !isLoading)
+                  SellerTile(
+                    title: _seller!.fullname,
+                    subtitle: _seller!.phoneNumber,
                   ),
                 if (state.seller == Seller.select)
                   SellerTile(
-                    onTap: null,
-                    title: _selectedSeller.isNotEmpty
-                        ? _selectedSeller
+                    title: _selectedSellerName.isNotEmpty
+                        ? _selectedSellerName
                         : 'Выберите продавца',
+                    subtitle: _selectedSellerPhone.isNotEmpty
+                        ? _selectedSellerPhone
+                        : '',
                   ),
                 ScreenUtil().setVerticalSpacing(30.h),
               ],
@@ -158,7 +211,19 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
             floatingActionButton: LongButton(
                 buttonName: 'Отправить уведомление',
                 onTap: () async {
-                  SocketIOService().sendnotification();
+                  if (state.seller == Seller.auto) {
+                    print(
+                        '${_seller!.fullname}---------------------${_seller!.id}');
+                    SocketIOService()
+                        .sendnotification(_seller!.id, _detailsController.text);
+                  }
+                  if (state.seller == Seller.select) {
+                    print(
+                        '$_selectedSellerName---------------------${_seller!.id}');
+                    SocketIOService()
+                        .sendnotification(_seller!.id, _detailsController.text);
+                  }
+
                   // SocketIOService().disconnectSocket();
                 }),
           );
@@ -167,36 +232,3 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
     );
   }
 }
-
-List _sellers = [
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-  'Bekzod',
-  'Asror',
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-  'Bekzod',
-  'Asror',
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-  'Bekzod',
-  'Asror',
-  'Asror',
-  'Fathulloh',
-  'Javoxir',
-  'Rustam',
-];

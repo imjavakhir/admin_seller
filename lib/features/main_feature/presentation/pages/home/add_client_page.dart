@@ -43,7 +43,7 @@ class AddClientpage extends StatelessWidget {
             label: 'Имя и Фамилия',
           ),
           ScreenUtil().setVerticalSpacing(20.h),
-          const BigTextFieldWidget(hintext: 'Описание'),
+        BigTextFieldWidget(hintext: 'Описание',textEditingController: TextEditingController(),),
           ScreenUtil().setVerticalSpacing(30.h),
         ],
       )),

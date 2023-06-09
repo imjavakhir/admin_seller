@@ -12,7 +12,7 @@ class SocketIOService {
 
     final fcmTokenLocal = await AuthLocalDataSource().getFcmToken();
     socket = IO.io(
-        local,
+        remote,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setQuery({'token': logToken})
@@ -35,10 +35,9 @@ class SocketIOService {
     // }
   }
 
-  void sendnotification() {
+  void sendnotification(String sellerId, String details) {
     if (socket != null) {
-      socket!.emit('new-visit',
-          {"details": "Salom", "seller": "647d8723fa2292a5e24f01ba"});
+      socket!.emit('new-visit', {"details": details, "seller": sellerId});
       print('sended');
     } else {}
   }
