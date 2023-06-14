@@ -1,4 +1,4 @@
-import 'package:admin_seller/features/main_feature/presentation/pages/home/admin_seller.dart';
+import 'package:admin_seller/features/seller_admin/presentation/pages/admin_seller.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

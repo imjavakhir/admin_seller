@@ -1,6 +1,6 @@
 import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
 import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
-import 'package:admin_seller/features/main_feature/presentation/widgets/seller_tile.dart';
+import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';

@@ -10,7 +10,7 @@ class SellerTile extends StatelessWidget {
 
   const SellerTile({
     super.key,
-   this.onTap,
+    this.onTap,
     required this.title,
     this.subtitle = '',
   });

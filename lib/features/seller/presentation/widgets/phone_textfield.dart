@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
-import 'package:admin_seller/features/main_feature/presentation/widgets/label_textfield.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/label_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_decoration.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';

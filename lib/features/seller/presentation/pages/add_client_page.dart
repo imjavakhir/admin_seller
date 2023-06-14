@@ -1,5 +1,5 @@
 import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/presentation/widgets/phone_textfield.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';

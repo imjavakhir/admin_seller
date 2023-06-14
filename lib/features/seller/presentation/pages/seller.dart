@@ -2,7 +2,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/main_feature/presentation/widgets/seller_card.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:flutter/material.dart';
