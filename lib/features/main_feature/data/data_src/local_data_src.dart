@@ -33,12 +33,15 @@ class AuthLocalDataSource {
   Future<bool> removeFcmToken() async {
     final SharedPreferences prefs = await _prefs;
     final removedFcm = prefs.remove('fcmToken');
+    print('-----------------------removeFcm----$removedFcm');
     return removedFcm;
   }
 
   Future<bool> removeLogToken() async {
     final SharedPreferences prefs = await _prefs;
     final removedLog = prefs.remove('logToken');
+    print('-----------------------removeLog----$removedLog');
     return removedLog;
   }
+
 }

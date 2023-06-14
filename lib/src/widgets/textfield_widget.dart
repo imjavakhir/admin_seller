@@ -8,11 +8,18 @@ import 'package:admin_seller/src/theme/text_styles.dart';
 
 class TextfieldWidget extends StatelessWidget {
   final String hintext;
+  final String? initialValue;
   final TextInputType textInputType;
   final TextEditingController textEditingController;
   final bool obsecure;
   final VoidCallback? eyeTap;
   final bool isPasswordField;
+  final double paddingW;
+  final bool isSoldField;
+  final bool isDisabled;
+  final FocusNode? focusNode;
+  final Function()? onEditingComplete;
+  final ValueChanged? valueChanged;
   const TextfieldWidget(
       {Key? key,
       required this.hintext,
@@ -20,22 +27,43 @@ class TextfieldWidget extends StatelessWidget {
       required this.textEditingController,
       this.obsecure = false,
       this.eyeTap,
-      this.isPasswordField = false})
+      this.isPasswordField = false,
+      this.paddingW = 24,
+      this.isSoldField = false,
+      this.isDisabled = false,
+      this.focusNode,
+      this.onEditingComplete,
+      this.valueChanged, this.initialValue})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: TextField(
+        padding: EdgeInsets.symmetric(horizontal: paddingW.w),
+        child: TextFormField(
+          
+          initialValue: initialValue,
+          onChanged: valueChanged,
+          enableSuggestions: false,
+          style: Styles.headline4,
+          onEditingComplete: onEditingComplete,
+          focusNode: focusNode,
+          enabled: !isDisabled,
           obscureText: obsecure,
           textInputAction: TextInputAction.next,
           controller: textEditingController,
           keyboardType: textInputType,
           decoration: InputDecoration(
+              disabledBorder: Decorations.disabledBorder,
+              suffix: isSoldField
+                  ? Text(
+                      'Сум',
+                      style: Styles.headline6,
+                    )
+                  : null,
               suffixIcon: isPasswordField
                   ? IconButton(
-                    enableFeedback: false,
+                      enableFeedback: false,
                       onPressed: eyeTap,
                       splashRadius: 24,
                       icon: Icon(

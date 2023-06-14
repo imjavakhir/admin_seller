@@ -6,10 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LabelTextField extends StatelessWidget {
   final String label;
-
+  final String? initialValue;
+  final TextEditingController textEditingController;
   const LabelTextField({
     super.key,
     required this.label,
+    required this.textEditingController, this.initialValue,
   });
 
   @override
@@ -26,8 +28,9 @@ class LabelTextField extends StatelessWidget {
         ),
         ScreenUtil().setVerticalSpacing(10.h),
         TextfieldWidget(
+          initialValue: initialValue,
           hintext: label,
-          textEditingController: TextEditingController(),
+          textEditingController: textEditingController,
           textInputType: TextInputType.text,
         ),
       ],

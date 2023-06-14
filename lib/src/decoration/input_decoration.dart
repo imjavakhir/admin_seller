@@ -14,4 +14,7 @@ abstract class Decorations {
   static OutlineInputBorder errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10.r),
       borderSide: BorderSide(color: AppColors.red));
+  static OutlineInputBorder disabledBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: const BorderSide(color: Colors.transparent));
 }

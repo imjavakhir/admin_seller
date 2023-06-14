@@ -10,6 +10,10 @@ class LocalNotificationService {
         const InitializationSettings(
             android: AndroidInitializationSettings('@mipmap/ic_launcher'));
     notificationsPlugin.initialize(initializationSettings);
+    notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestPermission();
   }
 
   void createNotification(RemoteMessage message) async {

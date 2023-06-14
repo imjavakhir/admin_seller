@@ -44,9 +44,9 @@ class SocketIOService {
 
   void disconnectSocket() {
     socket!.disconnect();
-    print('--------------------------${socket!.disconnected}');
-    socket!.onDisconnect((_) {
-      print('disconnnect----------------------');
-    });
+    print('diconccecd--------------------------${socket!.disconnected}');
+    // socket!.onDisconnect((_) {
+    //   print('disconnnect----------------------');
+    // });
   }
 }

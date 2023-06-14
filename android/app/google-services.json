@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:392797374600:android:b1c3d0ec760a3e461fb73d",
         "android_client_info": {
-          "package_name": "com.example.admin_seller"
+          "package_name": "com.woodline.selling"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "392797374600-edg2t7dnjqeb9bnask1snp7dttf2rcal.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.adminSeller"
+                "bundle_id": "com.woodline.selling"
               }
             }
           ]

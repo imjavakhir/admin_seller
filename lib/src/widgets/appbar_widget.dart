@@ -7,11 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSize {
   final String title;
   final Widget? leading;
+  final List<Widget>? actions;
 
   const AppBarWidget({
     super.key,
     required this.title,
-    this.leading,
+    this.leading, this.actions,
   });
 
   @override
@@ -22,7 +23,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
-      actions: const [],
+      actions: actions,
       elevation: 0,
       centerTitle: true,
       backgroundColor: AppColors.white,

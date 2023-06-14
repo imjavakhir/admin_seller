@@ -9,15 +9,11 @@ abstract class AppPages {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.main:
-        return PageAnimation.animatedPageRoute(
-            settings,
-            MainPage(
-              isAdmin: isAdmin,
-            ));
+        return PageAnimation.animatedPageRoute(settings, const MainPage());
       case AppRoutes.auth:
         return PageAnimation.animatedPageRoute(settings, AuthPage());
       case AppRoutes.addClient:
-        return PageAnimation.animatedPageRoute(settings, const AddClientpage());
+        return PageAnimation.animatedPageRoute(settings, AddClientpage());
 
       default:
         return MaterialPageRoute(builder: (_) => const Scaffold());

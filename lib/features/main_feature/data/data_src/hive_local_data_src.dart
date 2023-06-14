@@ -32,5 +32,6 @@ class HiveDataSource {
 
   Future<void> clearUserDetails() async {
     box.clear();
+    print('----------userdetails--------------revmoved');
   }
 }

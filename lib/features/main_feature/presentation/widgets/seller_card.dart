@@ -107,7 +107,7 @@ class SellerCard extends StatelessWidget {
                 height: 32,
                 fontsize: 12,
                 buttonName: !isReady ? 'Отменить' : 'Пустой',
-                onTap: !isReady ? ontapRed : ontapRed,
+                onTap: !isReady ? ontapRed : ontapRedR,
               )
             ],
           )

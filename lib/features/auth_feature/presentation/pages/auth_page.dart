@@ -6,7 +6,7 @@ import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
 import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/services/login_service.dart';
+import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,11 +16,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:admin_seller/src/theme/text_styles.dart';
 
-late bool isAdmin;
 bool isLoading = false;
 
 class AuthPage extends StatelessWidget {
-  final LoginService _loginService = LoginService();
+  final ApiService _loginService = ApiService();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -88,8 +87,8 @@ class AuthPage extends StatelessWidget {
               return LongButton(
                 isloading: isLoading,
                 onTap: () async {
-                  isAdmin = state.isAdmin;
-                  final role = isAdmin ? 'seller_admin' : 'seller';
+                  final role = state.isAdmin ? 'seller_admin' : 'seller';
+
                   setState(() {
                     isLoading = true;
                   });
@@ -105,13 +104,25 @@ class AuthPage extends StatelessWidget {
                     if (userModel != null) {
                       print('TOKEN--------${userModel.token}');
                       await AuthLocalDataSource().saveLogToken(userModel.token);
-                      HiveDataSource().saveUserDetails(
+                      await HiveDataSource().saveUserDetails(
                           branch: userModel.branch,
                           fullName: userModel.fullname,
                           type: userModel.type);
-                   
 
+                      final user = HiveDataSource().box.values.toList().first;
+
+                      print(user.type);
                       Navigator.of(context).pushNamed(AppRoutes.main);
+                      // Navigator.of(context).push(PageRouteBuilder(
+                      //   pageBuilder: (context, animation, secondaryAnimation) =>
+                      //       MainPage(),
+                      //   transitionsBuilder:
+                      //       (context, animation, secondaryAnimation, child) =>
+                      //           FadeTransition(
+                      //     opacity: animation,
+                      //     child: child,
+                      //   ),
+                      // ));
                       setState(() {
                         isLoading = false;
                       });

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:admin_seller/app.dart';
+import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
 import 'package:admin_seller/firebase_options.dart';
 import 'package:admin_seller/services/firebase_push_notification.dart';
@@ -18,9 +19,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseNotificationService().initNotifications();
+  await FirebaseNotificationService().initNotifications();
   LocalNotificationService().initialize();
-  runApp(const MyApp());
+  String? localToken = await AuthLocalDataSource().getLogToken();
+
+  runApp(MyApp(
+    savedToken: localToken,
+  ));
 }
 
 
