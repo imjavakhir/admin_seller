@@ -4,8 +4,10 @@ import 'package:admin_seller/features/main_feature/data/models/search_customer/s
 import 'package:admin_seller/features/seller/presentation/widgets/label_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_decoration.dart';
+import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
@@ -14,11 +16,12 @@ String? sendingFullname;
 class PhoneField extends StatefulWidget {
   final TextEditingController textEditingControllerPhone;
   final TextEditingController textEditingControllerName;
-
+  final List<TextInputFormatter>? listformater;
   const PhoneField({
     super.key,
     required this.textEditingControllerPhone,
     required this.textEditingControllerName,
+    this.listformater,
   });
 
   @override
@@ -44,9 +47,25 @@ class _PhoneFieldState extends State<PhoneField> {
           child: TypeAheadField<SearchedCustomer?>(
             loadingBuilder: (context) => const SizedBox(),
             textFieldConfiguration: TextFieldConfiguration(
+                inputFormatters: widget.listformater,
                 controller: widget.textEditingControllerPhone,
                 textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
+                    prefixIconConstraints: const BoxConstraints(),
+                    prefixIcon: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              right: BorderSide(
+                                  width: 1, color: AppColors.textfieldText))),
+                      child: Text(
+                        '+998',
+                        style: Styles.headline4,
+                      ),
+                    ),
+                    isCollapsed: true,
                     hintStyle: Styles.headline4
                         .copyWith(color: AppColors.textfieldText),
                     filled: true,
@@ -58,7 +77,9 @@ class _PhoneFieldState extends State<PhoneField> {
                     focusedBorder: Decorations.focusedBorder,
                     errorBorder: Decorations.errorBorder)),
             suggestionsCallback: (pattern) {
-              return ApiService().getSearchedCustomer(searchNumber: pattern);
+              print(MaskFormat.mask.getUnmaskedText());
+              return ApiService().getSearchedCustomer(
+                  searchNumber: MaskFormat.mask.getUnmaskedText());
             },
             itemBuilder: (context, itemData) {
               final seachedCustomer = itemData;

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:admin_seller/app_const/app_colors.dart';
@@ -20,6 +21,8 @@ class TextfieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final Function()? onEditingComplete;
   final ValueChanged? valueChanged;
+  final bool isPhoneNumber;
+  final List<TextInputFormatter>? listFormater;
   const TextfieldWidget(
       {Key? key,
       required this.hintext,
@@ -27,13 +30,16 @@ class TextfieldWidget extends StatelessWidget {
       required this.textEditingController,
       this.obsecure = false,
       this.eyeTap,
+      this.isPhoneNumber = false,
       this.isPasswordField = false,
       this.paddingW = 24,
       this.isSoldField = false,
       this.isDisabled = false,
       this.focusNode,
       this.onEditingComplete,
-      this.valueChanged, this.initialValue})
+      this.valueChanged,
+      this.initialValue,
+      this.listFormater})
       : super(key: key);
 
   @override
@@ -41,7 +47,6 @@ class TextfieldWidget extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingW.w),
         child: TextFormField(
-          
           initialValue: initialValue,
           onChanged: valueChanged,
           enableSuggestions: false,
@@ -49,11 +54,27 @@ class TextfieldWidget extends StatelessWidget {
           onEditingComplete: onEditingComplete,
           focusNode: focusNode,
           enabled: !isDisabled,
+          inputFormatters: listFormater,
           obscureText: obsecure,
           textInputAction: TextInputAction.next,
           controller: textEditingController,
           keyboardType: textInputType,
           decoration: InputDecoration(
+              isCollapsed: true,
+              prefixIcon: isPhoneNumber
+                  ? Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              right: BorderSide(
+                                  width: 1, color: AppColors.textfieldText))),
+                      child: Text(
+                        '+998',
+                        style: Styles.headline4,
+                      ),
+                    )
+                  : null,
               disabledBorder: Decorations.disabledBorder,
               suffix: isSoldField
                   ? Text(

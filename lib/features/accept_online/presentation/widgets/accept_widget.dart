@@ -9,13 +9,13 @@ class AcceptWidget extends StatelessWidget {
   final String fullname;
   final String phoneNumber;
   final VoidCallback onTapTick;
-  final VoidCallback onTapClose;
+  // final VoidCallback onTapClose;
   const AcceptWidget({
     super.key,
     required this.fullname,
     required this.phoneNumber,
     required this.onTapTick,
-    required this.onTapClose,
+    // required this.onTapClose,
   });
 
   @override
@@ -69,21 +69,21 @@ class AcceptWidget extends StatelessWidget {
                       color: AppColors.green,
                     )),
               ),
-              Material(
-                color: Colors.transparent,
-                type: MaterialType.button,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.r)),
-                child: IconButton(
-                    splashRadius: 24,
-                    onPressed: onTapClose,
-                    icon: SvgPicture.asset(
-                      AppIcons.closeCircle,
-                      height: 36.h,
-                      width: 36.h,
-                      color: AppColors.red,
-                    )),
-              )
+              // Material(
+              //   color: Colors.transparent,
+              //   type: MaterialType.button,
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(100.r)),
+              //   child: IconButton(
+              //       splashRadius: 24,
+              //       onPressed: onTapClose,
+              //       icon: SvgPicture.asset(
+              //         AppIcons.closeCircle,
+              //         height: 36.h,
+              //         width: 36.h,
+              //         color: AppColors.red,
+              //       )),
+              // )
             ],
           )
         ],

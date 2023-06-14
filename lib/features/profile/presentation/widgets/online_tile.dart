@@ -8,15 +8,17 @@ import 'package:admin_seller/src/theme/text_styles.dart';
 class OnlineTile extends StatelessWidget {
   final ValueChanged onChanged;
   final bool value;
-  const OnlineTile({
-    super.key,
-    required this.onChanged,
-    required this.value,
-  });
+  final bool isVerified;
+  const OnlineTile(
+      {super.key,
+      required this.onChanged,
+      required this.value,
+      this.isVerified = false});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: isVerified ? AppColors.primaryColor.withOpacity(0.1) : null,
       height: 50.h,
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(

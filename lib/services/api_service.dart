@@ -1,3 +1,4 @@
+import 'package:admin_seller/features/accept_online/data/models/user_unverified_model.dart';
 import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
@@ -5,6 +6,7 @@ import 'package:admin_seller/features/main_feature/data/models/seller_model/sell
 import 'package:admin_seller/features/main_feature/data/models/selling/empty_selling.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_selling.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
+import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {
@@ -17,6 +19,10 @@ class ApiService {
   final sellerApi = 'http://64.226.90.160:3000/user/pick/?type=one';
   final sellersApi = 'http://64.226.90.160:3000/user/pick/?type=all';
   final visitApi = 'http://64.226.90.160:3000/visit';
+  final userOnlineStatusApi = 'http://64.226.90.160:3000/user/status';
+  final userOnlineUnverifiedApi =
+      'http://64.226.90.160:3000/user/seller/online';
+
   final searchCustomerApi =
       'http://64.226.90.160:3000/customer/search/?phone_number=';
 
@@ -207,6 +213,102 @@ class ApiService {
       print('848484 ---------------------------------------$error-------');
     }
     return notSoldSelling;
+  }
+
+  Future<UserOnlineModel?> getUserOnlineInfo() async {
+    final token = await AuthLocalDataSource().getLogToken();
+    UserOnlineModel? userOnlineModel;
+    try {
+      Response response = await dio.get(userOnlineStatusApi,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        userOnlineModel = UserOnlineModel.fromJson(response.data);
+        print('-----------------success-----${userOnlineModel.isOnline}');
+        return userOnlineModel;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return userOnlineModel;
+  }
+
+  Future<UserOnlineModel?> changeUserOnlineInfo(
+      {required bool isOnline}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    UserOnlineModel? userOnlineModel;
+    final data = {
+      "is_online": isOnline,
+      "is_paused": false,
+    };
+    try {
+      Response response = await dio.put(userOnlineStatusApi,
+          data: data,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        userOnlineModel = UserOnlineModel.fromJson(response.data);
+        print(
+            'after put-----------------success-----${userOnlineModel.isOnline}');
+        return userOnlineModel;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return userOnlineModel;
+  }
+
+  Future<UserOnlineModel?> verifyUser({required String seller}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    UserOnlineModel? userOnlineModel;
+    final data = {"is_online": true, "is_verified": true, "seller": seller};
+    try {
+      Response response = await dio.put(userOnlineStatusApi,
+          data: data,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        userOnlineModel = UserOnlineModel.fromJson(response.data);
+        print(
+            'verified-----------------success-----${userOnlineModel.isVerified}---${userOnlineModel.id}');
+        return userOnlineModel;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return userOnlineModel;
+  }
+
+  Future<List<UserUnverified?>> getAllUnverified() async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<UserUnverified?> userUnverified = [];
+
+    try {
+      Response response = await dio.get(userOnlineUnverifiedApi,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        userUnverified = userUnverifiedFromJson(response.data);
+        print(
+            'unverified-----------------success-----${userUnverified.first!.id}');
+        return userUnverified;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return userUnverified;
   }
 }
 

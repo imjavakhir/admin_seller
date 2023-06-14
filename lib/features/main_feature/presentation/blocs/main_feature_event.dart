@@ -24,12 +24,4 @@ class OnSellerChangeEvent extends MainFeatureEvent {
   
 }
 
-class OnlineChangedEvent extends MainFeatureEvent {
- final bool switchValue;
-
-  const OnlineChangedEvent(this.switchValue);
-
- 
-  
-}
 

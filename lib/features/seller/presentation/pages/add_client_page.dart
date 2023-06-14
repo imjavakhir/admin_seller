@@ -1,6 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
+import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
@@ -50,6 +51,7 @@ class AddClientpage extends StatelessWidget {
               ),
               ScreenUtil().setVerticalSpacing(10.h),
               PhoneField(
+                listformater: [MaskFormat.mask],
                 textEditingControllerPhone: _phoneController,
                 textEditingControllerName: _fullNameController,
               ),
@@ -115,14 +117,14 @@ class AddClientpage extends StatelessWidget {
                     if (soldInfo == Sold.notSold) {
                       ApiService().sendNotSoldSelling(
                           details: _detailsController.text,
-                          phoneNumber: _phoneController.text,
+                          phoneNumber: MaskFormat.mask.getUnmaskedText(),
                           fullName: _fullNameController.text);
                     }
                     if (soldInfo == Sold.sold) {
                       ApiService().sendSoldSelling(
                           details: _detailsController.text,
                           fullName: _fullNameController.text,
-                          phoneNumber: _phoneController.text,
+                          phoneNumber: MaskFormat.mask.getUnmaskedText(),
                           price: double.parse(_priceController.text));
                     }
                     // LoginService().sendSoldSelling();

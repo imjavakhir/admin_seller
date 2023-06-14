@@ -3,7 +3,7 @@ import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
-import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
+import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/online_tile.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/profile_tile.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
@@ -25,115 +25,103 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool? isAdmin;
-  checkUser() {
-    final user = HiveDataSource().box.values.toList().first;
-    print(user.type);
-
-    if (user.type == 'seller_admin') {
-      setState(() {
-        isAdmin = true;
-      });
-    } else {
-      isAdmin = false;
-    }
-  }
-
   @override
   void initState() {
-    checkUser();
+    BlocProvider.of<ProfileBloc>(context).add(GetUserOnlineModelEvent());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MainFeatureBloc(),
-      child: BlocBuilder<MainFeatureBloc, MainFeatureState>(
-        builder: (context, state) {
-          final hiveUserBox = Hive.box<UserModelHive>('User');
-          final user = hiveUserBox.values.toList().cast<UserModelHive>();
-          return Scaffold(
-            appBar: const AppBarWidget(
-              title: 'Профиль',
-            ),
-            body: RefreshIndicator(
-              backgroundColor: AppColors.primaryColor,
-              color: AppColors.black,
-              onRefresh: () {
-                return Future.delayed(const Duration(milliseconds: 3000));
-              },
-              child: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        Container(
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: AppColors.blue),
-                          margin: EdgeInsets.symmetric(horizontal: 24.w),
-                          height: 75.h,
-                          width: 75.h,
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        final hiveUserBox = Hive.box<UserModelHive>('User');
+        final user = hiveUserBox.values.toList().cast<UserModelHive>();
+        return Scaffold(
+          appBar: const AppBarWidget(
+            title: 'Профиль',
+          ),
+          body: RefreshIndicator(
+            backgroundColor: AppColors.primaryColor,
+            color: AppColors.black,
+            onRefresh: () async {
+              return BlocProvider.of<ProfileBloc>(context)
+                  .add(GetUserOnlineModelEvent());
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ScreenUtil().setVerticalSpacing(10.h),
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: AppColors.blue),
+                        margin: EdgeInsets.symmetric(horizontal: 24.w),
+                        height: 75.h,
+                        width: 75.h,
+                        child: Text(
+                          user.first.fullName.characters.first,
+                          style:
+                              Styles.headline2.copyWith(color: AppColors.white),
+                        ),
+                      ),
+                      ScreenUtil().setVerticalSpacing(15.h),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
                           child: Text(
-                            user.first.fullName.characters.first,
-                            style: Styles.headline2
-                                .copyWith(color: AppColors.white),
-                          ),
+                            user.first.fullName,
+                            style: Styles.headline2,
+                          )),
+                      ScreenUtil().setVerticalSpacing(24.h),
+                      const Divider(
+                        height: 0,
+                        color: AppColors.grey,
+                      ),
+                      ProfileTile(
+                        title: 'Филиал',
+                        subtitle: user.first.branch,
+                      ),
+                      ProfileTile(
+                        title: 'Должность',
+                        subtitle: user.first.type == 'seller_admin'
+                            ? 'Админ Продавец'
+                            : 'Продавец',
+                      ),
+                      if (user.first.type == 'seller')
+                        OnlineTile(
+                          isVerified: state.userOnlineModel != null
+                              ? state.userOnlineModel!.isVerified
+                              : false,
+                          value: state.switchValue,
+                          onChanged: (value) {
+                            BlocProvider.of<ProfileBloc>(context)
+                                .add(OnlineChangedEvent(value));
+                          },
                         ),
-                        ScreenUtil().setVerticalSpacing(15.h),
-                        Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w),
-                            child: Text(
-                              user.first.fullName,
-                              style: Styles.headline2,
-                            )),
-                        ScreenUtil().setVerticalSpacing(24.h),
-                        const Divider(
-                          height: 0,
-                          color: AppColors.grey,
-                        ),
-                        ProfileTile(
-                          title: 'Филиал',
-                          subtitle: user.first.branch,
-                        ),
-                        ProfileTile(
-                          title: 'Должность',
-                          subtitle: user.first.type == 'seller_admin'
-                              ? 'Админ Продавец'
-                              : 'Продавец',
-                        ),
-                        if (!isAdmin!)
-                          OnlineTile(
-                            value: state.switchValue,
-                            onChanged: (value) {
-                              BlocProvider.of<MainFeatureBloc>(context)
-                                  .add(OnlineChangedEvent(value));
-                            },
-                          ),
-                        const Spacer(),
-                        TransparentLongButton(
-                            buttonName: 'Выйти',
-                            onTap: () async {
-                              Navigator.of(context).pushNamed(AppRoutes.auth);
-                              await HiveDataSource().clearUserDetails();
-                              await AuthLocalDataSource().removeLogToken();
-                              SocketIOService().disconnectSocket();
-                              // await AuthLocalDataSource().removeFcmToken();
-                            }),
-                        ScreenUtil().setVerticalSpacing(30.h)
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                      const Spacer(),
+                      TransparentLongButton(
+                          buttonName: 'Выйти',
+                          onTap: () async {
+                            Navigator.of(context).pushNamed(AppRoutes.auth);
+                            await HiveDataSource().clearUserDetails();
+                            await AuthLocalDataSource().removeLogToken();
+                            SocketIOService().disconnectSocket();
+                            // await AuthLocalDataSource().removeFcmToken();
+                          }),
+                      ScreenUtil().setVerticalSpacing(30.h)
+                    ],
+                  ),
+                )
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

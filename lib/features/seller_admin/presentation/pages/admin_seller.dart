@@ -81,182 +81,179 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MainFeatureBloc(),
-      child: BlocBuilder<MainFeatureBloc, MainFeatureState>(
-        builder: (context, state) {
-          return Scaffold(
-              appBar: const AppBarWidget(
-                title: 'Продавцы',
-              ),
-              body: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        BigTextFieldWidget(
-                          textEditingController: _detailsController,
-                          hintext: 'Параметры клиента',
+    return BlocBuilder<MainFeatureBloc, MainFeatureState>(
+      builder: (context, state) {
+        return Scaffold(
+            appBar: const AppBarWidget(
+              title: 'Продавцы',
+            ),
+            body: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ScreenUtil().setVerticalSpacing(10.h),
+                      BigTextFieldWidget(
+                        textEditingController: _detailsController,
+                        hintext: 'Параметры клиента',
+                      ),
+                      ScreenUtil().setVerticalSpacing(10.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
                         ),
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 24.w,
-                          ),
-                          child: Text(
-                            'Продавец',
-                            style: Styles.headline4,
-                          ),
+                        child: Text(
+                          'Продавец',
+                          style: Styles.headline4,
                         ),
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
-                          child: Row(
-                            children: [
-                              MyCustomRadioButton(
-                                  text: 'Авто',
-                                  value: Seller.auto,
-                                  onChanged: (value) {
-                                    BlocProvider.of<MainFeatureBloc>(context)
-                                        .add(OnSellerChangeEvent(value));
-                                    getSeller();
-                                  },
-                                  groupValue: state.seller),
-                              ScreenUtil().setHorizontalSpacing(10.h),
-                              MyCustomRadioButton(
-                                  text: 'Продавцы',
-                                  value: Seller.select,
-                                  onChanged: (value) {
-                                    BlocProvider.of<MainFeatureBloc>(context)
-                                        .add(OnSellerChangeEvent(value));
-                                    // getSellers();
+                      ),
+                      ScreenUtil().setVerticalSpacing(10.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Row(
+                          children: [
+                            MyCustomRadioButton(
+                                text: 'Авто',
+                                value: Seller.auto,
+                                onChanged: (value) {
+                                  BlocProvider.of<MainFeatureBloc>(context)
+                                      .add(OnSellerChangeEvent(value));
+                                  getSeller();
+                                },
+                                groupValue: state.seller),
+                            ScreenUtil().setHorizontalSpacing(10.h),
+                            MyCustomRadioButton(
+                                text: 'Продавцы',
+                                value: Seller.select,
+                                onChanged: (value) {
+                                  BlocProvider.of<MainFeatureBloc>(context)
+                                      .add(OnSellerChangeEvent(value));
+                                  // getSellers();
 
-                                    //modalsheet
-                                    showModalBottomSheet(
-                                        useSafeArea: true,
-                                        isScrollControlled: true,
-                                        context: context,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.r)),
-                                        builder: (_) {
-                                          return Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ScreenUtil()
-                                                  .setVerticalSpacing(24),
-                                              Center(
-                                                child: Text(
-                                                  'Выберите продавца',
-                                                  style: Styles.headline2,
-                                                ),
+                                  //modalsheet
+                                  showModalBottomSheet(
+                                      useSafeArea: true,
+                                      isScrollControlled: true,
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.r)),
+                                      builder: (_) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ScreenUtil()
+                                                .setVerticalSpacing(24),
+                                            Center(
+                                              child: Text(
+                                                'Выберите продавца',
+                                                style: Styles.headline2,
                                               ),
-                                              Flexible(
-                                                child: ListView.builder(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10.h),
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        _sellerList!.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      if (_isLoading) {
-                                                        return const SellersShimmer();
-                                                      }
-                                                      return SellerTile(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _selectedSellerName =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .fullname;
-                                                            _selectedSellerPhone =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .phoneNumber;
-                                                            _selectedSellerId =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .id;
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          });
-                                                        },
-                                                        title:
-                                                            _sellerList![index]!
-                                                                .fullname,
-                                                        subtitle:
-                                                            _sellerList![index]!
-                                                                .phoneNumber,
-                                                      );
-                                                    }),
-                                              )
-                                            ],
-                                          );
-                                        });
-                                  },
-                                  groupValue: state.seller)
-                            ],
-                          ),
+                                            ),
+                                            Flexible(
+                                              child: ListView.builder(
+                                                  padding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 10.h),
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      _sellerList!.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    if (_isLoading) {
+                                                      return const SellersShimmer();
+                                                    }
+                                                    return SellerTile(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _selectedSellerName =
+                                                              _sellerList![
+                                                                      index]!
+                                                                  .fullname;
+                                                          _selectedSellerPhone =
+                                                              _sellerList![
+                                                                      index]!
+                                                                  .phoneNumber;
+                                                          _selectedSellerId =
+                                                              _sellerList![
+                                                                      index]!
+                                                                  .id;
+                                                          Navigator.of(
+                                                                  context)
+                                                              .pop();
+                                                        });
+                                                      },
+                                                      title:
+                                                          _sellerList![index]!
+                                                              .fullname,
+                                                      subtitle:
+                                                          _sellerList![index]!
+                                                              .phoneNumber,
+                                                    );
+                                                  }),
+                                            )
+                                          ],
+                                        );
+                                      });
+                                },
+                                groupValue: state.seller)
+                          ],
                         ),
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 24.w,
-                          ),
-                          child: Text(
-                            'Выбранний продавец',
-                            style: Styles.headline4,
-                          ),
+                      ),
+                      ScreenUtil().setVerticalSpacing(10.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
                         ),
-                        // if (_isLoading) const SellersShimmer(),
-                        // if (state.seller == Seller.auto && !_isLoading)
-                        //   SellerTile(
-                        //     title: _seller!.fullname,
-                        //     subtitle: _seller!.phoneNumber,
-                        //   ),
-                        if (state.seller == Seller.select)
-                          SellerTile(
-                            title: _selectedSellerName.isNotEmpty
-                                ? _selectedSellerName
-                                : 'Выберите продавца',
-                            subtitle: _selectedSellerPhone.isNotEmpty
-                                ? _selectedSellerPhone
-                                : '',
-                          ),
-                        ScreenUtil().setVerticalSpacing(30.h),
-                        const Spacer(),
-                        LongButton(
-                            buttonName: 'Отправить уведомление',
-                            onTap: () async {
-                              if (state.seller == Seller.auto) {
-                                print(
-                                    '${_seller!.fullname}---------------------${_seller!.id}');
-                                SocketIOService().sendnotification(
-                                    _seller!.id, _detailsController.text);
-                              }
-                              if (state.seller == Seller.select) {
-                                print(
-                                    '$_selectedSellerName---------------------${_seller!.id}');
-                                SocketIOService().sendnotification(
-                                    _selectedSellerId, _detailsController.text);
-                              }
+                        child: Text(
+                          'Выбранний продавец',
+                          style: Styles.headline4,
+                        ),
+                      ),
+                      // if (_isLoading) const SellersShimmer(),
+                      // if (state.seller == Seller.auto && !_isLoading)
+                      //   SellerTile(
+                      //     title: _seller!.fullname,
+                      //     subtitle: _seller!.phoneNumber,
+                      //   ),
+                      if (state.seller == Seller.select)
+                        SellerTile(
+                          title: _selectedSellerName.isNotEmpty
+                              ? _selectedSellerName
+                              : 'Выберите продавца',
+                          subtitle: _selectedSellerPhone.isNotEmpty
+                              ? _selectedSellerPhone
+                              : '',
+                        ),
+                      ScreenUtil().setVerticalSpacing(30.h),
+                      const Spacer(),
+                      LongButton(
+                          buttonName: 'Отправить уведомление',
+                          onTap: () async {
+                            if (state.seller == Seller.auto) {
+                              print(
+                                  '${_seller!.fullname}---------------------${_seller!.id}');
+                              SocketIOService().sendnotification(
+                                  _seller!.id, _detailsController.text);
+                            }
+                            if (state.seller == Seller.select) {
+                              print(
+                                  '$_selectedSellerName---------------------${_seller!.id}');
+                              SocketIOService().sendnotification(
+                                  _selectedSellerId, _detailsController.text);
+                            }
 
-                              // SocketIOService().disconnectSocket();
-                            }),
-                        ScreenUtil().setVerticalSpacing(30.h),
-                      ],
-                    ),
-                  )
-                ],
-              ));
-        },
-      ),
+                            // SocketIOService().disconnectSocket();
+                          }),
+                      ScreenUtil().setVerticalSpacing(30.h),
+                    ],
+                  ),
+                )
+              ],
+            ));
+      },
     );
   }
 }
