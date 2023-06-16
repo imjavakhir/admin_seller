@@ -20,19 +20,15 @@ class SocketIOService {
             .build());
 
     socket!.connect();
+    socket!.on('new-order',
+        (data) => print('--------------------------Received response: $data'));
     socket!.onConnect((_) {
-      print('connected');
+      print('connected--------------------------------');
       print('--------------------------${socket!.connected}');
       if (socket == null) {
         print('nobullllll--------');
       }
     });
-    // if (logToken != null) {
-    // } else {
-    //   if (kDebugMode) {
-    //     print('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
-    //   }
-    // }
   }
 
   void sendnotification(String sellerId, String details) {

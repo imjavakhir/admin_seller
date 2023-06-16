@@ -177,7 +177,8 @@ class ApiService {
         return soldSelling;
       }
     } catch (error) {
-      print('848484 ---------------------------------------$error-------');
+      print(
+          '${data['phone_number']} ---------------------------------------$error-------');
     }
     return soldSelling;
   }
@@ -231,7 +232,7 @@ class ApiService {
         return userOnlineModel;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      print('hahah------------------------------------$error-------');
     }
     return userOnlineModel;
   }

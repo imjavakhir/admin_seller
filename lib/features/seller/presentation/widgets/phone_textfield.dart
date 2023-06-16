@@ -11,8 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-String? sendingFullname;
-
 class PhoneField extends StatefulWidget {
   final TextEditingController textEditingControllerPhone;
   final TextEditingController textEditingControllerName;
@@ -115,7 +113,7 @@ class _PhoneFieldState extends State<PhoneField> {
                 widget.textEditingControllerPhone.text =
                     suggestion!.phoneNumber!;
                 widget.textEditingControllerName.text = suggestion.fullname;
-                print(sendingFullname);
+                print('---------${suggestion.phoneNumber}---------');
               });
             },
             debounceDuration: const Duration(milliseconds: 500),

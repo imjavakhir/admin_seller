@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
@@ -25,9 +27,10 @@ class _SellerPageState extends State<SellerPage> {
   @override
   void initState() {
     ApiService().getSearchedCustomer(searchNumber: '77');
-    if (socket == null) {
-      SocketIOService().connectSocket();
-    }
+
+    SocketIOService().connectSocket();
+
+
     super.initState();
   }
 

@@ -94,9 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       if (user.first.type == 'seller')
                         OnlineTile(
-                          isVerified: state.userOnlineModel != null
-                              ? state.userOnlineModel!.isVerified
-                              : false,
+                          isVerified: state.isVerified ?? false,
                           value: state.switchValue,
                           onChanged: (value) {
                             BlocProvider.of<ProfileBloc>(context)

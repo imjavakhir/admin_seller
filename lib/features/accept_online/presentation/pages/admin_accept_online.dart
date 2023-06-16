@@ -47,18 +47,17 @@ class _AcceptOnlineAcceptState extends State<AcceptOnlineAccept> {
                     } else if (snapshot.connectionState ==
                         ConnectionState.done) {
                       if (snapshot.data!.isNotEmpty) {
-                        return Column(
-                          children: [
-                            AcceptWidget(
-                              fullname: snapshot.data!.first!.fullname!,
-                              phoneNumber:
-                                  '+998${snapshot.data!.first!.phoneNumber!}',
-                              onTapTick: () {
-                                BlocProvider.of<AcceptOnlineBloc>(context)
-                                    .add(const AcceptUserEvent(0));
-                              },
-                            ),
-                          ],
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) => AcceptWidget(
+                            fullname: snapshot.data![index]!.fullname!,
+                            phoneNumber:
+                                '+998${snapshot.data![index]!.phoneNumber!}',
+                            onTapTick: () {
+                              BlocProvider.of<AcceptOnlineBloc>(context)
+                                  .add(AcceptUserEvent(index));
+                            },
+                          ),
                         );
                       } else {
                         return Center(

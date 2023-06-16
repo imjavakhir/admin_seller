@@ -23,30 +23,35 @@ class TextfieldWidget extends StatelessWidget {
   final ValueChanged? valueChanged;
   final bool isPhoneNumber;
   final List<TextInputFormatter>? listFormater;
-  const TextfieldWidget(
-      {Key? key,
-      required this.hintext,
-      this.textInputType = TextInputType.text,
-      required this.textEditingController,
-      this.obsecure = false,
-      this.eyeTap,
-      this.isPhoneNumber = false,
-      this.isPasswordField = false,
-      this.paddingW = 24,
-      this.isSoldField = false,
-      this.isDisabled = false,
-      this.focusNode,
-      this.onEditingComplete,
-      this.valueChanged,
-      this.initialValue,
-      this.listFormater})
-      : super(key: key);
+  final GlobalKey? textFieldKey = GlobalKey(debugLabel: 'textFfieldKey');
+  TextfieldWidget({
+    Key? key,
+    required this.hintext,
+    this.textInputType = TextInputType.text,
+    required this.textEditingController,
+    this.obsecure = false,
+    this.eyeTap,
+    this.isPhoneNumber = false,
+    this.isPasswordField = false,
+    this.paddingW = 24,
+    this.isSoldField = false,
+    this.isDisabled = false,
+    this.focusNode,
+    this.onEditingComplete,
+    this.valueChanged,
+    this.initialValue,
+    this.listFormater,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingW.w),
         child: TextFormField(
+          key: textFieldKey,
+          onTap: () {
+            Scrollable.ensureVisible(textFieldKey!.currentContext!);
+          },
           initialValue: initialValue,
           onChanged: valueChanged,
           enableSuggestions: false,

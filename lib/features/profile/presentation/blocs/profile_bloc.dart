@@ -1,5 +1,5 @@
 import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
+import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,14 +16,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onOnlineChangedEvent(
       OnlineChangedEvent event, Emitter<ProfileState> emit) async {
-    await ApiService().changeUserOnlineInfo(isOnline: !state.switchValue);
-    emit(state.copyWith(switchValue: event.switchValue));
+    await ApiService().changeUserOnlineInfo(isOnline: event.switchValue);
+    AuthLocalDataSource().saveUserStatusSwitch(event.switchValue);
+    final value = await AuthLocalDataSource().getUserStatusSwitch();
+    final userOnlineModel = await ApiService().getUserOnlineInfo();
+    AuthLocalDataSource().saveUserStatus(userOnlineModel!.isVerified!);
+    final userStatusVerified = await AuthLocalDataSource().getUserStatus();
+    emit(state.copyWith(switchValue: value, isVerified: userStatusVerified));
   }
 
   Future<void> _getUserOnlineModelEvent(
       GetUserOnlineModelEvent event, Emitter<ProfileState> emit) async {
     final userOnlineModel = await ApiService().getUserOnlineInfo();
-    emit(ProfileState(userOnlineModel: userOnlineModel));
+    AuthLocalDataSource().saveUserStatus(userOnlineModel!.isVerified!);
+
+    final userStatusVerified = await AuthLocalDataSource().getUserStatus();
+    AuthLocalDataSource().saveUserStatusSwitch(userOnlineModel.isOnline!);
+    final value = await AuthLocalDataSource().getUserStatusSwitch();
+
+    emit(state.copyWith(isVerified: userStatusVerified, switchValue: value));
   }
 
   Future<void> _checkUserEvent(

@@ -15,7 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 enum Sold { sold, notSold }
 
 Sold soldInfo = Sold.notSold;
-bool isSoldInfo = false;
+bool isSoldInfo = true;
 
 class AddClientpage extends StatelessWidget {
   final TextEditingController _detailsController = TextEditingController();
@@ -26,126 +26,139 @@ class AddClientpage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ScreenUtil().setVerticalSpacing(10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Text(
-                  'Параметры клиента',
-                  style: Styles.headline4,
-                ),
-              ),
-              ScreenUtil().setVerticalSpacing(6.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Text(
-                  'Красная рубашка, джинсы',
-                  style: Styles.headline6.copyWith(fontSize: 18.sp),
-                ),
-              ),
-              ScreenUtil().setVerticalSpacing(10.h),
-              PhoneField(
-                listformater: [MaskFormat.mask],
-                textEditingControllerPhone: _phoneController,
-                textEditingControllerName: _fullNameController,
-              ),
-              ScreenUtil().setVerticalSpacing(20.h),
-              BigTextFieldWidget(
-                hintext: 'Описание',
-                textEditingController: _detailsController,
-              ),
-              ScreenUtil().setVerticalSpacing(20.h),
-              StatefulBuilder(builder: (contex, setState) {
-                return Padding(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        body: CustomScrollView(slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScreenUtil().setVerticalSpacing(10.h),
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Состаяние товара',
-                        style: Styles.headline4,
-                      ),
-                      ScreenUtil().setVerticalSpacing(10.h),
-                      Row(
-                        children: [
-                          MyCustomRadioButton(
-                              text: 'Не продано',
-                              value: Sold.notSold,
-                              onChanged: (value) {
-                                setState(() {
-                                  soldInfo = value;
-                                  isSoldInfo = true;
-                                  _priceController.clear();
-                                });
-                              },
-                              groupValue: soldInfo),
-                          ScreenUtil().setHorizontalSpacing(10.h),
-                          MyCustomRadioButton(
-                              text: 'Продано',
-                              value: Sold.sold,
-                              onChanged: (value) {
-                                setState(() {
-                                  soldInfo = value;
-                                  isSoldInfo = false;
-                                });
-                              },
-                              groupValue: soldInfo)
-                        ],
-                      ),
-                      ScreenUtil().setVerticalSpacing(10.h),
-                      TextfieldWidget(
-                          isDisabled: isSoldInfo,
-                          isSoldField: true,
-                          paddingW: 0,
-                          hintext: '0',
-                          textEditingController: _priceController)
-                    ],
+                  child: Text(
+                    'Параметры клиента',
+                    style: Styles.headline4,
                   ),
-                );
-              }),
-              ScreenUtil().setVerticalSpacing(30.h),
-              const Spacer(),
-              LongButton(
-                  buttonName: 'Оформить',
-                  onTap: () async {
-                    if (soldInfo == Sold.notSold) {
-                      ApiService().sendNotSoldSelling(
-                          details: _detailsController.text,
-                          phoneNumber: MaskFormat.mask.getUnmaskedText(),
-                          fullName: _fullNameController.text);
-                    }
-                    if (soldInfo == Sold.sold) {
-                      ApiService().sendSoldSelling(
-                          details: _detailsController.text,
-                          fullName: _fullNameController.text,
-                          phoneNumber: MaskFormat.mask.getUnmaskedText(),
-                          price: double.parse(_priceController.text));
-                    }
-                    // LoginService().sendSoldSelling();
-                  }),
-              ScreenUtil().setVerticalSpacing(30.h),
-            ],
-          ),
-        )
-      ]),
-      appBar: AppBarWidget(
-        title: 'Оформить клиента',
-        leading: IconButton(
-            splashRadius: 24.r,
-            iconSize: 24.h,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              CupertinoIcons.chevron_left,
-              color: AppColors.black,
-            )),
+                ),
+                ScreenUtil().setVerticalSpacing(6.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Text(
+                    'Красная рубашка, джинсы',
+                    style: Styles.headline6.copyWith(fontSize: 18.sp),
+                  ),
+                ),
+                ScreenUtil().setVerticalSpacing(10.h),
+                PhoneField(
+                  listformater: [MaskFormat.mask],
+                  textEditingControllerPhone: _phoneController,
+                  textEditingControllerName: _fullNameController,
+                ),
+                ScreenUtil().setVerticalSpacing(20.h),
+                BigTextFieldWidget(
+                  hintext: 'Описание',
+                  textEditingController: _detailsController,
+                ),
+                ScreenUtil().setVerticalSpacing(20.h),
+                StatefulBuilder(builder: (contex, setState) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Состаяние товара',
+                          style: Styles.headline4,
+                        ),
+                        ScreenUtil().setVerticalSpacing(10.h),
+                        Row(
+                          children: [
+                            MyCustomRadioButton(
+                                text: 'Не продано',
+                                value: Sold.notSold,
+                                onChanged: (value) {
+                                  setState(() {
+                                    soldInfo = value;
+                                    isSoldInfo = true;
+                                    _priceController.clear();
+                                  });
+                                },
+                                groupValue: soldInfo),
+                            ScreenUtil().setHorizontalSpacing(10.h),
+                            MyCustomRadioButton(
+                                text: 'Продано',
+                                value: Sold.sold,
+                                onChanged: (value) {
+                                  setState(() {
+                                    soldInfo = value;
+                                    isSoldInfo = false;
+                                  });
+                                },
+                                groupValue: soldInfo)
+                          ],
+                        ),
+                        ScreenUtil().setVerticalSpacing(10.h),
+                        TextfieldWidget(
+                            textInputType: TextInputType.number,
+                            // textFieldKey: GlobalKey(),
+                            isDisabled: isSoldInfo,
+                            isSoldField: true,
+                            paddingW: 0,
+                            hintext: '0',
+                            textEditingController: _priceController)
+                      ],
+                    ),
+                  );
+                }),
+                ScreenUtil().setVerticalSpacing(30.h),
+                const Spacer(),
+                LongButton(
+                    buttonName: 'Оформить',
+                    onTap: () async {
+                      if (soldInfo == Sold.notSold) {
+                        ApiService().sendNotSoldSelling(
+                            details: _detailsController.text,
+                            phoneNumber: _phoneController.text
+                                .replaceAll('-', '')
+                                .replaceAll('(', '')
+                                .replaceAll(')', '')
+                                .replaceAll(' ', ''),
+                            fullName: _fullNameController.text);
+                      }
+                      if (soldInfo == Sold.sold) {
+                        ApiService().sendSoldSelling(
+                            details: _detailsController.text,
+                            fullName: _fullNameController.text,
+                            phoneNumber: _phoneController.text
+                                .replaceAll('-', '')
+                                .replaceAll('(', '')
+                                .replaceAll(')', '')
+                                .replaceAll(' ', ''),
+                            price: double.parse(_priceController.text));
+                      }
+                      // LoginService().sendSoldSelling();
+                    }),
+                ScreenUtil().setVerticalSpacing(30.h),
+              ],
+            ),
+          )
+        ]),
+        appBar: AppBarWidget(
+          title: 'Оформить клиента',
+          leading: IconButton(
+              splashRadius: 24.r,
+              iconSize: 24.h,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(
+                CupertinoIcons.chevron_left,
+                color: AppColors.black,
+              )),
+        ),
       ),
     );
   }

@@ -11,10 +11,10 @@ String userOnlineModelToJson(UserOnlineModel data) =>
     json.encode(data.toJson());
 
 class UserOnlineModel {
-  final String id;
-  final bool isOnline;
-  final bool isPaused;
-  final bool isVerified;
+  final String? id;
+  final bool? isOnline;
+  final bool? isPaused;
+  final bool? isVerified;
 
   UserOnlineModel({
     required this.id,
