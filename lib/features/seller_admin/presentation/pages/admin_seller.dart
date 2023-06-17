@@ -5,6 +5,7 @@ import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -28,6 +29,7 @@ class AdminSellerPage extends StatefulWidget {
 
 class _AdminSellerPageState extends State<AdminSellerPage> {
   final TextEditingController _detailsController = TextEditingController();
+  final GlobalKey<FormState> paramFormKey = GlobalKey<FormState>();
 
   Sellers? _seller;
   List<Sellers?>? _sellerList;
@@ -70,11 +72,15 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
   @override
   void initState() {
     SocketIOService().connectSocket();
-
     getSellers();
     getSeller();
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    SocketIOService().disconnectSocket();
+    super.dispose();
   }
 
   @override
@@ -95,9 +101,16 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ScreenUtil().setVerticalSpacing(10.h),
-                        BigTextFieldWidget(
-                          textEditingController: _detailsController,
-                          hintext: 'Параметры клиента',
+                        Form(
+                          key: paramFormKey,
+                          child: BigTextFieldWidget(
+                            validator: Validators.empty,
+                            valueChanged: (value) {
+                              paramFormKey.currentState!.validate();
+                            },
+                            textEditingController: _detailsController,
+                            hintext: 'Параметры клиента',
+                          ),
                         ),
                         ScreenUtil().setVerticalSpacing(10.h),
                         Padding(
@@ -171,15 +184,15 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                                             _selectedSellerName =
                                                                 _sellerList![
                                                                         index]!
-                                                                    .fullname;
+                                                                    .fullname!;
                                                             _selectedSellerPhone =
                                                                 _sellerList![
                                                                         index]!
-                                                                    .phoneNumber;
+                                                                    .phoneNumber!;
                                                             _selectedSellerId =
                                                                 _sellerList![
                                                                         index]!
-                                                                    .id;
+                                                                    .id!;
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -187,10 +200,10 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                                         },
                                                         title:
                                                             _sellerList![index]!
-                                                                .fullname,
+                                                                .fullname!,
                                                         subtitle:
                                                             _sellerList![index]!
-                                                                .phoneNumber,
+                                                                .phoneNumber!,
                                                       );
                                                     }),
                                               )
@@ -232,18 +245,22 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                         LongButton(
                             buttonName: 'Отправить уведомление',
                             onTap: () async {
-                              if (state.seller == Seller.auto) {
-                                print(
-                                    '${_seller!.fullname}---------------------${_seller!.id}');
-                                SocketIOService().sendnotification(
-                                    _seller!.id, _detailsController.text);
-                              }
-                              if (state.seller == Seller.select) {
-                                print(
-                                    '$_selectedSellerName---------------------${_detailsController.text}');
-                                SocketIOService().sendnotification(
-                                    _selectedSellerId, _detailsController.text);
-                           
+                              final isValidated =
+                                  paramFormKey.currentState!.validate();
+                              if (isValidated) {
+                                if (state.seller == Seller.auto) {
+                                  print(
+                                      '${_seller!.fullname}---------------------${_seller!.id}');
+                                  SocketIOService().sendnotification(
+                                      _seller!.id!, _detailsController.text);
+                                }
+                                if (state.seller == Seller.select) {
+                                  print(
+                                      '$_selectedSellerName---------------------${_detailsController.text}');
+                                  SocketIOService().sendnotification(
+                                      _selectedSellerId,
+                                      _detailsController.text);
+                                }
                               }
 
                               // SocketIOService().disconnectSocket();

@@ -3,6 +3,7 @@ import 'package:admin_seller/features/seller/presentation/widgets/phone_textfiel
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -22,6 +23,10 @@ class AddClientpage extends StatelessWidget {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+
+  final GlobalKey<FormState> paramClientFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> fullnameFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
   AddClientpage({super.key});
 
   @override
@@ -52,15 +57,34 @@ class AddClientpage extends StatelessWidget {
                   ),
                 ),
                 ScreenUtil().setVerticalSpacing(10.h),
-                PhoneField(
-                  listformater: [MaskFormat.mask],
-                  textEditingControllerPhone: _phoneController,
-                  textEditingControllerName: _fullNameController,
+                Form(
+                  key: phoneFormKey,
+                  child: PhoneField(
+                    formState: fullnameFormKey,
+                    validatorName: Validators.empty,
+                    valueChangedname: (value) {
+                      fullnameFormKey.currentState!.validate();
+                    },
+                    validator: Validators.phoneNumber,
+                    valueChanged: (value) {
+                      phoneFormKey.currentState!.validate();
+                    },
+                    listformater: [MaskFormat.mask],
+                    textEditingControllerPhone: _phoneController,
+                    textEditingControllerName: _fullNameController,
+                  ),
                 ),
                 ScreenUtil().setVerticalSpacing(20.h),
-                BigTextFieldWidget(
-                  hintext: 'Описание',
-                  textEditingController: _detailsController,
+                Form(
+                  key: paramClientFormKey,
+                  child: BigTextFieldWidget(
+                    validator: Validators.empty,
+                    valueChanged: (value) {
+                      paramClientFormKey.currentState!.validate();
+                    },
+                    hintext: 'Описание',
+                    textEditingController: _detailsController,
+                  ),
                 ),
                 ScreenUtil().setVerticalSpacing(20.h),
                 StatefulBuilder(builder: (contex, setState) {
@@ -118,27 +142,38 @@ class AddClientpage extends StatelessWidget {
                 LongButton(
                     buttonName: 'Оформить',
                     onTap: () async {
-                      if (soldInfo == Sold.notSold) {
-                        ApiService().sendNotSoldSelling(
-                            details: _detailsController.text,
-                            phoneNumber: _phoneController.text
-                                .replaceAll('-', '')
-                                .replaceAll('(', '')
-                                .replaceAll(')', '')
-                                .replaceAll(' ', ''),
-                            fullName: _fullNameController.text);
+                      final isValidatedPhone =
+                          phoneFormKey.currentState!.validate();
+                      final isValidatedParams =
+                          paramClientFormKey.currentState!.validate();
+                      final isValidatedName =
+                          fullnameFormKey.currentState!.validate();
+                      if (isValidatedName &&
+                          isValidatedParams &&
+                          isValidatedPhone) {
+                        if (soldInfo == Sold.notSold) {
+                          ApiService().sendNotSoldSelling(
+                              details: _detailsController.text,
+                              phoneNumber: _phoneController.text
+                                  .replaceAll('-', '')
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', '')
+                                  .replaceAll(' ', ''),
+                              fullName: _fullNameController.text);
+                        }
+                        if (soldInfo == Sold.sold) {
+                          ApiService().sendSoldSelling(
+                              details: _detailsController.text,
+                              fullName: _fullNameController.text,
+                              phoneNumber: _phoneController.text
+                                  .replaceAll('-', '')
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', '')
+                                  .replaceAll(' ', ''),
+                              price: double.parse(_priceController.text));
+                        }
                       }
-                      if (soldInfo == Sold.sold) {
-                        ApiService().sendSoldSelling(
-                            details: _detailsController.text,
-                            fullName: _fullNameController.text,
-                            phoneNumber: _phoneController.text
-                                .replaceAll('-', '')
-                                .replaceAll('(', '')
-                                .replaceAll(')', '')
-                                .replaceAll(' ', ''),
-                            price: double.parse(_priceController.text));
-                      }
+
                       // LoginService().sendSoldSelling();
                     }),
                 ScreenUtil().setVerticalSpacing(30.h),

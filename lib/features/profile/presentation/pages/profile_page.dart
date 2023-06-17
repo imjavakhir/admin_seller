@@ -33,6 +33,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
@@ -105,7 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       TransparentLongButton(
                           buttonName: 'Выйти',
                           onTap: () async {
-                            Navigator.of(context).pushNamed(AppRoutes.auth);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, AppRoutes.auth, (route) => false);
                             await HiveDataSource().clearUserDetails();
                             await AuthLocalDataSource().removeLogToken();
                             SocketIOService().disconnectSocket();

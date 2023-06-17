@@ -11,9 +11,9 @@ String sellerToJson(List<Sellers> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Sellers {
-  final String id;
-  final String fullname;
-  final String phoneNumber;
+  final String? id;
+  final String? fullname;
+  final String? phoneNumber;
 
   Sellers({
     required this.id,

@@ -188,6 +188,7 @@ class ApiService {
       required String fullName,
       required String phoneNumber}) async {
     final data = {
+      
       "details": details,
       "phone_number": phoneNumber,
       "fullname": fullName,
@@ -310,6 +311,33 @@ class ApiService {
       print('---------------------------------------$error-------');
     }
     return userUnverified;
+  }
+
+  Future<UserOnlineModel?> changePause({required bool isPaused}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    UserOnlineModel? userOnlineModel;
+    final data = {
+      "is_online": true,
+      "is_paused": isPaused,
+    };
+    try {
+      Response response = await dio.put(userOnlineStatusApi,
+          data: data,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        userOnlineModel = UserOnlineModel.fromJson(response.data);
+        print(
+            'after put-----------------success-----${userOnlineModel.isPaused}');
+        return userOnlineModel;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return userOnlineModel;
   }
 }
 

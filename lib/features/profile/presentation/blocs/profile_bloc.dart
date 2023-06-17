@@ -28,10 +28,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Future<void> _getUserOnlineModelEvent(
       GetUserOnlineModelEvent event, Emitter<ProfileState> emit) async {
     final userOnlineModel = await ApiService().getUserOnlineInfo();
-    AuthLocalDataSource().saveUserStatus(userOnlineModel!.isVerified!);
+    if (userOnlineModel != null) {
+      AuthLocalDataSource().saveUserStatus(userOnlineModel.isVerified!);
+    }
 
     final userStatusVerified = await AuthLocalDataSource().getUserStatus();
-    AuthLocalDataSource().saveUserStatusSwitch(userOnlineModel.isOnline!);
+    if (userOnlineModel != null) {
+      AuthLocalDataSource().saveUserStatusSwitch(userOnlineModel.isOnline!);
+    }
     final value = await AuthLocalDataSource().getUserStatusSwitch();
 
     emit(state.copyWith(isVerified: userStatusVerified, switchValue: value));

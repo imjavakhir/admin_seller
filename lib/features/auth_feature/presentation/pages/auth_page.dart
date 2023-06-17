@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
@@ -8,6 +7,7 @@ import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
+import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +23,8 @@ class AuthPage extends StatelessWidget {
   final ApiService _loginService = ApiService();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> formKeyPhone = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyPassword = GlobalKey<FormState>();
 
   AuthPage({super.key});
 
@@ -38,27 +40,41 @@ class AuthPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Логин',
+                      'Авторизация',
                       style: Styles.headline1,
                     ),
                     ScreenUtil().setVerticalSpacing(45.h),
-                    TextfieldWidget(
-                      listFormater: [MaskFormat.mask],
-                      isPhoneNumber: true,
-                      textEditingController: _phoneController,
-                      textInputType: TextInputType.phone,
-                      hintext: 'Phone number',
+                    Form(
+                      key: formKeyPhone,
+                      child: TextfieldWidget(
+                        valueChanged: (value) {
+                          formKeyPhone.currentState!.validate();
+                        },
+                        validator: Validators.phoneNumber,
+                        listFormater: [MaskFormat.mask],
+                        isPhoneNumber: true,
+                        textEditingController: _phoneController,
+                        textInputType: TextInputType.phone,
+                        hintext: 'Phone number',
+                      ),
                     ),
                     ScreenUtil().setVerticalSpacing(28.h),
-                    TextfieldWidget(
-                      hintext: 'Password',
-                      obsecure: state.obscureText,
-                      textEditingController: _passwordController,
-                      isPasswordField: true,
-                      eyeTap: () {
-                        BlocProvider.of<AuthBloc>(context)
-                            .add(EyeIconPressed());
-                      },
+                    Form(
+                      key: formKeyPassword,
+                      child: TextfieldWidget(
+                        valueChanged: (value) {
+                          formKeyPassword.currentState!.validate();
+                        },
+                        validator: Validators.password,
+                        hintext: 'Password',
+                        obsecure: state.obscureText,
+                        textEditingController: _passwordController,
+                        isPasswordField: true,
+                        eyeTap: () {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(EyeIconPressed());
+                        },
+                      ),
                     ),
                     ScreenUtil().setVerticalSpacing(10.h),
                     Padding(
@@ -90,55 +106,52 @@ class AuthPage extends StatelessWidget {
               return LongButton(
                 isloading: isLoading,
                 onTap: () async {
-                  final role = state.isAdmin ? 'seller_admin' : 'seller';
+                  final isValidatedPhone =
+                      formKeyPhone.currentState!.validate();
+                  final isValidatedPassword =
+                      formKeyPassword.currentState!.validate();
+                  if (isValidatedPhone && isValidatedPassword) {
+                    final role = state.isAdmin ? 'seller_admin' : 'seller';
+                    setState(() {
+                      isLoading = true;
+                    });
+                    final fcmLocal = await AuthLocalDataSource().getFcmToken();
+                    UserModel? userModel;
+                    if (isLoading) {
+                      userModel = await _loginService.login(
+                        phoneNumber: MaskFormat.mask.getUnmaskedText(),
+                        password: _passwordController.text,
+                        role: role,
+                        fireBaseToken: fcmLocal!,
+                      );
+                      print(MaskFormat.mask.getMaskedText());
+                      if (userModel != null) {
+                        print('TOKEN--------${userModel.token}');
+                        await AuthLocalDataSource()
+                            .saveLogToken(userModel.token);
+                        await HiveDataSource().saveUserDetails(
+                            branch: userModel.branch,
+                            fullName: userModel.fullname,
+                            type: userModel.type);
 
-                  setState(() {
-                    isLoading = true;
-                  });
-                  final fcmLocal = await AuthLocalDataSource().getFcmToken();
-                  UserModel? userModel;
-                  if (isLoading) {
-                    userModel = await _loginService.login(
-                      phoneNumber: MaskFormat.mask.getUnmaskedText(),
-                      password: _passwordController.text,
-                      role: role,
-                      fireBaseToken: fcmLocal!,
-                    );
-                    print(MaskFormat.mask.getMaskedText());
-                    if (userModel != null) {
-                      print('TOKEN--------${userModel.token}');
-                      await AuthLocalDataSource().saveLogToken(userModel.token);
-                      await HiveDataSource().saveUserDetails(
-                          branch: userModel.branch,
-                          fullName: userModel.fullname,
-                          type: userModel.type);
+                        final user = HiveDataSource().box.values.toList().first;
 
-                      final user = HiveDataSource().box.values.toList().first;
+                        print(user.type);
+                        Navigator.of(context).pushNamed(AppRoutes.main);
 
-                      print(user.type);
-                      Navigator.of(context).pushNamed(AppRoutes.main);
-                      // Navigator.of(context).push(PageRouteBuilder(
-                      //   pageBuilder: (context, animation, secondaryAnimation) =>
-                      //       MainPage(),
-                      //   transitionsBuilder:
-                      //       (context, animation, secondaryAnimation, child) =>
-                      //           FadeTransition(
-                      //     opacity: animation,
-                      //     child: child,
-                      //   ),
-                      // ));
-                      setState(() {
-                        isLoading = false;
-                      });
-                    } else {
-                      (showDialog(
-                          context: context,
-                          builder: (_) => const Dialog(
-                                child: Text('error'),
-                              )));
-                      setState(() {
-                        isLoading = false;
-                      });
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } else {
+                        (showDialog(
+                            context: context,
+                            builder: (_) => const Dialog(
+                                  child: Text('error'),
+                                )));
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     }
                   }
                 },

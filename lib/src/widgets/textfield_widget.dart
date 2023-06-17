@@ -24,6 +24,7 @@ class TextfieldWidget extends StatelessWidget {
   final bool isPhoneNumber;
   final List<TextInputFormatter>? listFormater;
   final GlobalKey? textFieldKey = GlobalKey(debugLabel: 'textFfieldKey');
+  final String? Function(String?)? validator;
   TextfieldWidget({
     Key? key,
     required this.hintext,
@@ -41,6 +42,7 @@ class TextfieldWidget extends StatelessWidget {
     this.valueChanged,
     this.initialValue,
     this.listFormater,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,7 @@ class TextfieldWidget extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingW.w),
         child: TextFormField(
+          validator: validator,
           key: textFieldKey,
           onTap: () {
             Scrollable.ensureVisible(textFieldKey!.currentContext!);
@@ -106,6 +109,7 @@ class TextfieldWidget extends StatelessWidget {
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
               filled: true,
+              focusedErrorBorder: Decorations.errorBorder,
               fillColor: AppColors.textfieldBackground,
               enabledBorder: Decorations.enabledBorder,
               focusedBorder: Decorations.focusedBorder,

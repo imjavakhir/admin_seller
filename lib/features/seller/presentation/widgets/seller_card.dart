@@ -13,6 +13,7 @@ class SellerCard extends StatelessWidget {
   final VoidCallback ontapRedR;
   final VoidCallback ontapGreen;
   final bool isReady;
+  final String parametrs;
 
   const SellerCard(
       {Key? key,
@@ -20,7 +21,7 @@ class SellerCard extends StatelessWidget {
       required this.ontapGreenR,
       required this.ontapRedR,
       required this.ontapGreen,
-      required this.isReady})
+      required this.isReady, required this.parametrs})
       : super(key: key);
 
   @override
@@ -54,7 +55,7 @@ class SellerCard extends StatelessWidget {
                   ),
                   ScreenUtil().setVerticalSpacing(6.h),
                   Text(
-                    'Красная рубашка, джинсы',
+                    parametrs,
                     style: Styles.headline6,
                   ),
                 ],

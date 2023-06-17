@@ -15,11 +15,21 @@ class PhoneField extends StatefulWidget {
   final TextEditingController textEditingControllerPhone;
   final TextEditingController textEditingControllerName;
   final List<TextInputFormatter>? listformater;
+  final ValueChanged? valueChanged;
+  final ValueChanged? valueChangedname;
+  final String? Function(String?)? validator;
+  final String? Function(String?)? validatorName;
+  final GlobalKey<FormState>? formState;
   const PhoneField({
     super.key,
     required this.textEditingControllerPhone,
     required this.textEditingControllerName,
     this.listformater,
+    this.valueChanged,
+    this.validator,
+    this.validatorName,
+    this.formState,
+    this.valueChangedname,
   });
 
   @override
@@ -42,9 +52,11 @@ class _PhoneFieldState extends State<PhoneField> {
         ScreenUtil().setVerticalSpacing(10.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: TypeAheadField<SearchedCustomer?>(
+          child: TypeAheadFormField<SearchedCustomer?>(
+            validator: widget.validator,
             loadingBuilder: (context) => const SizedBox(),
             textFieldConfiguration: TextFieldConfiguration(
+                onChanged: widget.valueChanged,
                 inputFormatters: widget.listformater,
                 controller: widget.textEditingControllerPhone,
                 textInputAction: TextInputAction.next,
@@ -72,6 +84,7 @@ class _PhoneFieldState extends State<PhoneField> {
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                     enabledBorder: Decorations.enabledBorder,
+                    focusedErrorBorder: Decorations.errorBorder,
                     focusedBorder: Decorations.focusedBorder,
                     errorBorder: Decorations.errorBorder)),
             suggestionsCallback: (pattern) {
@@ -120,9 +133,14 @@ class _PhoneFieldState extends State<PhoneField> {
           ),
         ),
         ScreenUtil().setVerticalSpacing(20.h),
-        LabelTextField(
-          textEditingController: widget.textEditingControllerName,
-          label: 'Имя и Фамилия',
+        Form(
+          key: widget.formState,
+          child: LabelTextField(
+            valueChanged: widget.valueChangedname,
+            validator: widget.validatorName,
+            textEditingController: widget.textEditingControllerName,
+            label: 'Имя и Фамилия',
+          ),
         ),
       ],
     );

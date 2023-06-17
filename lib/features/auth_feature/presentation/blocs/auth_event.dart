@@ -10,9 +10,8 @@ abstract class AuthEvent extends Equatable {
 class EyeIconPressed extends AuthEvent {}
 
 class LoginButtonPressed extends AuthEvent {
-  final String role;
 
-  const LoginButtonPressed({required this.role});
+
 }
 
 class DeleteToken extends AuthEvent {}

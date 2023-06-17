@@ -8,10 +8,13 @@ class BigTextFieldWidget extends StatelessWidget {
   final String hintext;
   final TextEditingController textEditingController;
   final GlobalKey? textFieldKey = GlobalKey(debugLabel: 'bigTextFieldKey');
+  final String? Function(String?)? validator;
+  final ValueChanged? valueChanged;
   BigTextFieldWidget({
     super.key,
     required this.hintext,
     required this.textEditingController,
+    this.validator, this.valueChanged,
   });
 
   @override
@@ -26,7 +29,9 @@ class BigTextFieldWidget extends StatelessWidget {
             style: Styles.headline4,
           ),
           ScreenUtil().setVerticalSpacing(10.h),
-          TextField(
+          TextFormField(
+            onChanged: valueChanged,
+            validator: validator,
             key: textFieldKey,
             onTap: () {
               Scrollable.ensureVisible(textFieldKey!.currentContext!);
@@ -34,11 +39,13 @@ class BigTextFieldWidget extends StatelessWidget {
             controller: textEditingController,
             maxLines: 10,
             decoration: InputDecoration(
+            
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 filled: true,
                 fillColor: AppColors.textfieldBackground,
                 hintText: hintext,
+                focusedErrorBorder: Decorations.errorBorder,
                 hintStyle:
                     Styles.headline4.copyWith(color: AppColors.textfieldText),
                 enabledBorder: Decorations.enabledBorder,
