@@ -22,7 +22,7 @@ abstract class Validators {
     if (value == null || value.isEmpty) {
       return 'Не должно быть пустым';
     }
-    if (value.length != 8) {
+    if (value.length < 8) {
       return 'Должно быть не менее 8 символов';
     }
     return null;

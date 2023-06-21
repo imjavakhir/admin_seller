@@ -4,10 +4,12 @@
 
 import 'dart:convert';
 
-ClientInfo clientInfoFromJson(String str) =>
-    ClientInfo.fromJson(json.decode(str));
 
-String clientInfoToJson(ClientInfo data) => json.encode(data.toJson());
+List<ClientInfo> clientsInfoFromJson(List str) => List<ClientInfo>.from(str.map((x) => ClientInfo.fromJson(x)));
+ClientInfo clientInfoFromJson(String str) => ClientInfo.fromJson(json.decode(str));
+
+String clientInfoToJson(List<ClientInfo> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 
 class ClientInfo {
   final String? id;

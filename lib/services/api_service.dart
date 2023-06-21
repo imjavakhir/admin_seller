@@ -7,18 +7,21 @@ import 'package:admin_seller/features/main_feature/data/models/selling/empty_sel
 import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_selling.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
 import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
+import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:admin_seller/services/dio_exceptions.dart';
 import 'package:dio/dio.dart';
 
 class ApiService {
   final dio = Dio(BaseOptions(
-    contentType: 'application/json',
-    connectTimeout: const Duration(milliseconds: 25000),
-    receiveTimeout: const Duration(milliseconds: 25000),
-  ));
+      contentType: 'application/json',
+      connectTimeout: const Duration(milliseconds: 10000),
+      receiveTimeout: const Duration(milliseconds: 10000),
+      sendTimeout: const Duration(milliseconds: 10000)));
   final loginApi = 'http://64.226.90.160:3000/auth/login';
   final sellerApi = 'http://64.226.90.160:3000/user/pick/?type=one';
   final sellersApi = 'http://64.226.90.160:3000/user/pick/?type=all';
   final visitApi = 'http://64.226.90.160:3000/visit';
+  final userVisitsApi = 'http://64.226.90.160:3000/user/visits';
   final userOnlineStatusApi = 'http://64.226.90.160:3000/user/status';
   final userOnlineUnverifiedApi =
       'http://64.226.90.160:3000/user/seller/online';
@@ -45,8 +48,10 @@ class ApiService {
         print('-----------------success');
         return userModel;
       }
-    } catch (error) {
-      print('848484 ---------------------------------------$error');
+    } on DioError catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e);
+
+      print('---------------------------------------$errorMessage');
     }
     return userModel;
   }
@@ -117,14 +122,10 @@ class ApiService {
 
 //emopty selling
 
-  Future<EmptySelling?> sendEmptySelling() async {
+  Future<EmptySelling?> sendEmptySelling({required String id}) async {
     final data = {
-      "details": "",
-      "phone_number": "",
-      "fullname": "",
+      "notification": id,
       "is_empty": true,
-      "is_sold": false,
-      "selling_price": 0
     };
     final token = await AuthLocalDataSource().getLogToken();
     EmptySelling? emptySelling;
@@ -147,13 +148,16 @@ class ApiService {
     return emptySelling;
   }
 
-  Future<SoldSelling?> sendSoldSelling({
-    required String details,
-    required String fullName,
-    required String phoneNumber,
-    required double price,
-  }) async {
+  Future<SoldSelling?> sendSoldSelling(
+      {required String details,
+      required String fullName,
+      required String phoneNumber,
+      required double price,
+      required String id,
+      required String whereFrom}) async {
     final data = {
+      "notification": id,
+      "where_come_from": whereFrom,
       "details": details,
       "phone_number": phoneNumber,
       "fullname": fullName,
@@ -186,9 +190,12 @@ class ApiService {
   Future<NotSoldSelling?> sendNotSoldSelling(
       {required String details,
       required String fullName,
-      required String phoneNumber}) async {
+      required String phoneNumber,
+      required String id,
+      required String whereFrom}) async {
     final data = {
-      
+      "notification": id,
+      "where_come_from": whereFrom,
       "details": details,
       "phone_number": phoneNumber,
       "fullname": fullName,
@@ -338,6 +345,28 @@ class ApiService {
       print('---------------------------------------$error-------');
     }
     return userOnlineModel;
+  }
+
+  Future<List<ClientInfo?>> getAllUserVisits() async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<ClientInfo?> clientInfoList = [];
+
+    try {
+      Response response = await dio.get(userVisitsApi,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        clientInfoList = clientsInfoFromJson(response.data);
+        print('visits-----------------success-----${clientInfoList.first!.id}');
+        return clientInfoList;
+      }
+    } catch (error) {
+      print('---------------------------------------$error-------');
+    }
+    return clientInfoList;
   }
 }
 

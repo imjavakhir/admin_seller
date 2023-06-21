@@ -6,6 +6,7 @@ import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.
 import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
+import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,10 +33,14 @@ class MyApp extends StatelessWidget {
                 TextEditingController(), GlobalKey<FormState>()),
           ),
           BlocProvider(
-            create: (context) => AcceptOnlineBloc(),
+            create: (context) =>
+                AcceptOnlineBloc()..add(GetUsersUnverifiedEvent()),
           ),
           BlocProvider(
             create: (context) => SellerBloc(SocketServiceImpl()),
+          ),
+          BlocProvider(
+            create: (context) => SellerAdminBloc(),
           ),
         ],
         child: MaterialApp(

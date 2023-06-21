@@ -1,9 +1,7 @@
-import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
-import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
+import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
-import 'package:admin_seller/services/api_service.dart';
+import 'package:admin_seller/features/seller_admin/presentation/widgets/sellers_widget.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
-import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
@@ -31,49 +29,11 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
   final TextEditingController _detailsController = TextEditingController();
   final GlobalKey<FormState> paramFormKey = GlobalKey<FormState>();
 
-  Sellers? _seller;
-  List<Sellers?>? _sellerList;
-  String _selectedSellerName = '';
-  String _selectedSellerPhone = '';
-  String _selectedSellerId = '';
-
-  void getSeller() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      final data = await ApiService().getSeller();
-      setState(() {
-        _seller = data;
-        print(_seller!.fullname);
-        _isLoading = false;
-      });
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
-  void getSellers() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      final data = await ApiService().getSellers();
-      setState(() {
-        _sellerList = data;
-        print(_sellerList!.length);
-        _isLoading = false;
-      });
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
   @override
   void initState() {
     SocketIOService().connectSocket();
-    getSellers();
-    getSeller();
+    BlocProvider.of<SellerAdminBloc>(context).add(GetSellerEvent());
+
     super.initState();
   }
 
@@ -85,7 +45,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainFeatureBloc, MainFeatureState>(
+    return BlocBuilder<SellerAdminBloc, SellerAdminState>(
       builder: (context, state) {
         return GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -131,21 +91,19 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                   text: 'Авто',
                                   value: Seller.auto,
                                   onChanged: (value) {
-                                    BlocProvider.of<MainFeatureBloc>(context)
+                                    BlocProvider.of<SellerAdminBloc>(context)
                                         .add(OnSellerChangeEvent(value));
-                                    getSeller();
+                                    BlocProvider.of<SellerAdminBloc>(context)
+                                        .add(GetSellerEvent());
                                   },
-                                  groupValue: state.seller),
+                                  groupValue: state.sellerType),
                               ScreenUtil().setHorizontalSpacing(10.h),
                               MyCustomRadioButton(
                                   text: 'Продавцы',
                                   value: Seller.select,
                                   onChanged: (value) {
-                                    BlocProvider.of<MainFeatureBloc>(context)
+                                    BlocProvider.of<SellerAdminBloc>(context)
                                         .add(OnSellerChangeEvent(value));
-                                    // getSellers();
-
-                                    //modalsheet
                                     showModalBottomSheet(
                                         useSafeArea: true,
                                         isScrollControlled: true,
@@ -153,65 +111,11 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20.r)),
-                                        builder: (_) {
-                                          return Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ScreenUtil()
-                                                  .setVerticalSpacing(24),
-                                              Center(
-                                                child: Text(
-                                                  'Выберите продавца',
-                                                  style: Styles.headline2,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                child: ListView.builder(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 10.h),
-                                                    shrinkWrap: true,
-                                                    itemCount:
-                                                        _sellerList!.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      if (_isLoading) {
-                                                        return const SellersShimmer();
-                                                      }
-                                                      return SellerTile(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _selectedSellerName =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .fullname!;
-                                                            _selectedSellerPhone =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .phoneNumber!;
-                                                            _selectedSellerId =
-                                                                _sellerList![
-                                                                        index]!
-                                                                    .id!;
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          });
-                                                        },
-                                                        title:
-                                                            _sellerList![index]!
-                                                                .fullname!,
-                                                        subtitle:
-                                                            _sellerList![index]!
-                                                                .phoneNumber!,
-                                                      );
-                                                    }),
-                                              )
-                                            ],
-                                          );
+                                        builder: (context) {
+                                          return const SellerListWidget();
                                         });
                                   },
-                                  groupValue: state.seller)
+                                  groupValue: state.sellerType)
                             ],
                           ),
                         ),
@@ -225,21 +129,24 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                             style: Styles.headline4,
                           ),
                         ),
-                        // if (_isLoading) const SellersShimmer(),
-                        // if (state.seller == Seller.auto && !_isLoading)
-                        //   SellerTile(
-                        //     title: _seller!.fullname,
-                        //     subtitle: _seller!.phoneNumber,
-                        //   ),
-                        if (state.seller == Seller.select)
+                        // if (state.showLoading) const SellersShimmer(),
+                        if (state.seller == Seller.auto && !state.showLoading)
                           SellerTile(
-                            title: _selectedSellerName.isNotEmpty
-                                ? _selectedSellerName
-                                : 'Выберите продавца',
-                            subtitle: _selectedSellerPhone.isNotEmpty
-                                ? _selectedSellerPhone
+                            title: state.seller != null
+                                ? state.seller!.fullname!
+                                : 'Нет онлайн продавцов',
+                            subtitle: state.seller != null
+                                ? state.seller!.phoneNumber!
                                 : '',
                           ),
+                        if (state.sellerType == Seller.select)
+                          SellerTile(
+                              title: state.selectedSeller != null
+                                  ? state.selectedSeller!.fullname!
+                                  : 'Виберите продавца',
+                              subtitle: state.selectedSeller != null
+                                  ? state.selectedSeller!.phoneNumber!
+                                  : ''),
                         ScreenUtil().setVerticalSpacing(30.h),
                         const Spacer(),
                         LongButton(
@@ -248,17 +155,18 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                               final isValidated =
                                   paramFormKey.currentState!.validate();
                               if (isValidated) {
-                                if (state.seller == Seller.auto) {
+                                if (state.sellerType == Seller.auto) {
                                   print(
-                                      '${_seller!.fullname}---------------------${_seller!.id}');
+                                      '${state.seller!.fullname}---------------------${state.seller!.id}');
                                   SocketIOService().sendnotification(
-                                      _seller!.id!, _detailsController.text);
+                                      state.seller!.id!,
+                                      _detailsController.text);
                                 }
-                                if (state.seller == Seller.select) {
+                                if (state.sellerType == Seller.select) {
                                   print(
-                                      '$_selectedSellerName---------------------${_detailsController.text}');
+                                      '${state.selectedSeller!.phoneNumber}---------------------${_detailsController.text}');
                                   SocketIOService().sendnotification(
-                                      _selectedSellerId,
+                                      state.selectedSeller!.id!,
                                       _detailsController.text);
                                 }
                               }

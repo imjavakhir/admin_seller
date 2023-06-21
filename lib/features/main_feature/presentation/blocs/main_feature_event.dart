@@ -15,13 +15,6 @@ class OnPageChangedEvent extends MainFeatureEvent {
   
 }
 
-class OnSellerChangeEvent extends MainFeatureEvent {
- final Seller seller;
 
-  const OnSellerChangeEvent(this.seller);
-
- 
-  
-}
 
 

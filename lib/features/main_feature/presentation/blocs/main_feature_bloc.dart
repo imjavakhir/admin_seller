@@ -8,15 +8,9 @@ part 'main_feature_state.dart';
 class MainFeatureBloc extends Bloc<MainFeatureEvent, MainFeatureState> {
   MainFeatureBloc() : super(const MainFeatureState()) {
     on<OnPageChangedEvent>(_onPageChangedEvent);
-    on<OnSellerChangeEvent>(_onSellerChangeEvent);
   }
   void _onPageChangedEvent(
       OnPageChangedEvent event, Emitter<MainFeatureState> emit) {
     emit(state.copyWith(selectedIndex: event.selectedIndex));
-  }
-
-  void _onSellerChangeEvent(
-      OnSellerChangeEvent event, Emitter<MainFeatureState> emit) {
-    emit(state.copyWith(seller: event.seller));
   }
 }

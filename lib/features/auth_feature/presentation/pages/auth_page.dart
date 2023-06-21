@@ -7,6 +7,7 @@ import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
+import 'package:admin_seller/src/ui_tools/ui_tools.dart';
 import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
@@ -143,11 +144,8 @@ class AuthPage extends StatelessWidget {
                           isLoading = false;
                         });
                       } else {
-                        (showDialog(
-                            context: context,
-                            builder: (_) => const Dialog(
-                                  child: Text('error'),
-                                )));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            UITools.customSnackBar(title: 'Error'));
                         setState(() {
                           isLoading = false;
                         });

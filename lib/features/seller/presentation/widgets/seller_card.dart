@@ -1,27 +1,26 @@
 import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SellerCard extends StatelessWidget {
-  final VoidCallback ontapRed;
+  // final VoidCallback ontapRed;
   final VoidCallback ontapGreenR;
   final VoidCallback ontapRedR;
-  final VoidCallback ontapGreen;
+  // final VoidCallback ontapGreen;
   final bool isReady;
   final String parametrs;
 
   const SellerCard(
       {Key? key,
-      required this.ontapRed,
+      // required this.ontapRed,
       required this.ontapGreenR,
       required this.ontapRedR,
-      required this.ontapGreen,
-      required this.isReady, required this.parametrs})
+      // required this.ontapGreen,
+      required this.isReady,
+      required this.parametrs})
       : super(key: key);
 
   @override
@@ -61,7 +60,7 @@ class SellerCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              Container(
+              /*  Container(
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
                 height: 22.h,
                 decoration: BoxDecoration(
@@ -86,7 +85,7 @@ class SellerCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              )
+              ) */
             ],
           ),
           const Spacer(),
@@ -95,9 +94,9 @@ class SellerCard extends StatelessWidget {
             children: [
               LongButton(
                 paddingW: 0,
-                buttonName: !isReady ? 'Принимать' : 'Оформить',
+                buttonName: /* !isReady ? 'Принимать' : */ 'Оформить',
                 fontsize: 12,
-                onTap: !isReady ? ontapGreen : ontapGreenR,
+                onTap: /* !isReady ? ontapGreen : */ ontapGreenR,
                 height: 32,
                 width: 120,
               ),
@@ -107,8 +106,8 @@ class SellerCard extends StatelessWidget {
                 width: 120,
                 height: 32,
                 fontsize: 12,
-                buttonName: !isReady ? 'Отменить' : 'Пустой',
-                onTap: !isReady ? ontapRed : ontapRedR,
+                buttonName: /* !isReady ? 'Отменить' : */ 'Пустой',
+                onTap: /* !isReady ? ontapRed : */ ontapRedR,
               )
             ],
           )

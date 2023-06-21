@@ -17,8 +17,8 @@ class SellersShimmer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 300.w,
-                height: 20.h,
+                width: 200.w,
+                height: 18.h,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.r),
                     color: AppColors.white),
@@ -26,7 +26,7 @@ class SellersShimmer extends StatelessWidget {
               ScreenUtil().setVerticalSpacing(6.h),
               Container(
                 width: 150.w,
-                height: 16.h,
+                height: 14.h,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.r),
                     color: AppColors.white),

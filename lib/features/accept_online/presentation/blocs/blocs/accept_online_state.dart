@@ -8,3 +8,4 @@ class AcceptOnlineState extends Equatable {
   @override
   List<Object> get props => [userOnlineModelList];
 }
+

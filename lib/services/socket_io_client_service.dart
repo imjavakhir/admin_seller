@@ -35,6 +35,7 @@ class SocketServiceImpl implements SocketService {
   void disconnect() {
     if (socket.connected) {
       socket.disconnect();
+        print('disconnected---------}');
     }
   }
 
@@ -73,7 +74,7 @@ class SocketIOService {
 
     socket!.connect();
     socket!.on('new-order', (data) {
-      clientInfos.add(clientInfoFromJson(data));
+      clientInfos.add(ClientInfo.fromJson(data));
       print('clientinfos----------$clientInfos');
       print('--------------------------Received response: $data');
     });

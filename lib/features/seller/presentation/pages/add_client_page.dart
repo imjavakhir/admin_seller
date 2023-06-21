@@ -1,4 +1,9 @@
 import 'package:admin_seller/app_const/app_colors.dart';
+import 'package:admin_seller/app_const/app_icons.dart';
+import 'package:admin_seller/app_const/app_routes.dart';
+import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/dropdown_client_from.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
@@ -9,9 +14,12 @@ import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/radio_button.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum Sold { sold, notSold }
 
@@ -23,177 +31,197 @@ class AddClientpage extends StatelessWidget {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-
   final GlobalKey<FormState> paramClientFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> fullnameFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
-  AddClientpage({super.key});
+  AddClientpage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final ClientInfo client =
+        ModalRoute.of(context)!.settings.arguments! as ClientInfo;
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        body: CustomScrollView(slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ScreenUtil().setVerticalSpacing(10.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Text(
-                    'Параметры клиента',
-                    style: Styles.headline4,
-                  ),
-                ),
-                ScreenUtil().setVerticalSpacing(6.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Text(
-                    'Красная рубашка, джинсы',
-                    style: Styles.headline6.copyWith(fontSize: 18.sp),
-                  ),
-                ),
-                ScreenUtil().setVerticalSpacing(10.h),
-                Form(
-                  key: phoneFormKey,
-                  child: PhoneField(
-                    formState: fullnameFormKey,
-                    validatorName: Validators.empty,
-                    valueChangedname: (value) {
-                      fullnameFormKey.currentState!.validate();
-                    },
-                    validator: Validators.phoneNumber,
-                    valueChanged: (value) {
-                      phoneFormKey.currentState!.validate();
-                    },
-                    listformater: [MaskFormat.mask],
-                    textEditingControllerPhone: _phoneController,
-                    textEditingControllerName: _fullNameController,
-                  ),
-                ),
-                ScreenUtil().setVerticalSpacing(20.h),
-                Form(
-                  key: paramClientFormKey,
-                  child: BigTextFieldWidget(
-                    validator: Validators.empty,
-                    valueChanged: (value) {
-                      paramClientFormKey.currentState!.validate();
-                    },
-                    hintext: 'Описание',
-                    textEditingController: _detailsController,
-                  ),
-                ),
-                ScreenUtil().setVerticalSpacing(20.h),
-                StatefulBuilder(builder: (contex, setState) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Состаяние товара',
-                          style: Styles.headline4,
-                        ),
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        Row(
+      child: BlocBuilder<SellerBloc, SellerState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: CustomScrollView(slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ScreenUtil().setVerticalSpacing(10.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Text(
+                        'Параметры клиента',
+                        style: Styles.headline4,
+                      ),
+                    ),
+                    ScreenUtil().setVerticalSpacing(6.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Text(
+                        '${client.details!} --- ${client.id}',
+                        style: Styles.headline6.copyWith(fontSize: 18.sp),
+                      ),
+                    ),
+                    ScreenUtil().setVerticalSpacing(10.h),
+                    Form(
+                      key: phoneFormKey,
+                      child: PhoneField(
+                        formState: fullnameFormKey,
+                        validatorName: Validators.empty,
+                        valueChangedname: (value) {
+                          fullnameFormKey.currentState!.validate();
+                        },
+                        validator: Validators.phoneNumber,
+                        valueChanged: (value) {
+                          phoneFormKey.currentState!.validate();
+                        },
+                        listformater: [MaskFormat.mask],
+                        textEditingControllerPhone: _phoneController,
+                        textEditingControllerName: _fullNameController,
+                      ),
+                    ),
+                    ScreenUtil().setVerticalSpacing(20.h),
+                    DropDownClientFrom(
+                      value: state.whereFrom,
+                      valueChanged: (value) {
+                        BlocProvider.of<SellerBloc>(context)
+                            .add(WhereFromEvent(value));
+                      },
+                    ),
+                    ScreenUtil().setVerticalSpacing(20.h),
+                    Form(
+                      key: paramClientFormKey,
+                      child: BigTextFieldWidget(
+                        validator: Validators.empty,
+                        valueChanged: (value) {
+                          paramClientFormKey.currentState!.validate();
+                        },
+                        hintext: 'Описание',
+                        textEditingController: _detailsController,
+                      ),
+                    ),
+                    ScreenUtil().setVerticalSpacing(20.h),
+                    StatefulBuilder(builder: (contex, setState) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            MyCustomRadioButton(
-                                text: 'Не продано',
-                                value: Sold.notSold,
-                                onChanged: (value) {
-                                  setState(() {
-                                    soldInfo = value;
-                                    isSoldInfo = true;
-                                    _priceController.clear();
-                                  });
-                                },
-                                groupValue: soldInfo),
-                            ScreenUtil().setHorizontalSpacing(10.h),
-                            MyCustomRadioButton(
-                                text: 'Продано',
-                                value: Sold.sold,
-                                onChanged: (value) {
-                                  setState(() {
-                                    soldInfo = value;
-                                    isSoldInfo = false;
-                                  });
-                                },
-                                groupValue: soldInfo)
+                            Text(
+                              'Состаяние товара',
+                              style: Styles.headline4,
+                            ),
+                            ScreenUtil().setVerticalSpacing(10.h),
+                            Row(
+                              children: [
+                                MyCustomRadioButton(
+                                    text: 'Не продано',
+                                    value: Sold.notSold,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        soldInfo = value;
+                                        isSoldInfo = true;
+                                        _priceController.clear();
+                                      });
+                                    },
+                                    groupValue: soldInfo),
+                                ScreenUtil().setHorizontalSpacing(10.h),
+                                MyCustomRadioButton(
+                                    text: 'Продано',
+                                    value: Sold.sold,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        soldInfo = value;
+                                        isSoldInfo = false;
+                                      });
+                                    },
+                                    groupValue: soldInfo)
+                              ],
+                            ),
+                            ScreenUtil().setVerticalSpacing(10.h),
+                            TextfieldWidget(
+                                textInputType: TextInputType.number,
+                                // textFieldKey: GlobalKey(),
+                                isDisabled: isSoldInfo,
+                                isSoldField: true,
+                                paddingW: 0,
+                                hintext: '0',
+                                textEditingController: _priceController)
                           ],
                         ),
-                        ScreenUtil().setVerticalSpacing(10.h),
-                        TextfieldWidget(
-                            textInputType: TextInputType.number,
-                            // textFieldKey: GlobalKey(),
-                            isDisabled: isSoldInfo,
-                            isSoldField: true,
-                            paddingW: 0,
-                            hintext: '0',
-                            textEditingController: _priceController)
-                      ],
-                    ),
-                  );
-                }),
-                ScreenUtil().setVerticalSpacing(30.h),
-                const Spacer(),
-                LongButton(
-                    buttonName: 'Оформить',
-                    onTap: () async {
-                      final isValidatedPhone =
-                          phoneFormKey.currentState!.validate();
-                      final isValidatedParams =
-                          paramClientFormKey.currentState!.validate();
-                      final isValidatedName =
-                          fullnameFormKey.currentState!.validate();
-                      if (isValidatedName &&
-                          isValidatedParams &&
-                          isValidatedPhone) {
-                        if (soldInfo == Sold.notSold) {
-                          ApiService().sendNotSoldSelling(
-                              details: _detailsController.text,
-                              phoneNumber: _phoneController.text
-                                  .replaceAll('-', '')
-                                  .replaceAll('(', '')
-                                  .replaceAll(')', '')
-                                  .replaceAll(' ', ''),
-                              fullName: _fullNameController.text);
-                        }
-                        if (soldInfo == Sold.sold) {
-                          ApiService().sendSoldSelling(
-                              details: _detailsController.text,
-                              fullName: _fullNameController.text,
-                              phoneNumber: _phoneController.text
-                                  .replaceAll('-', '')
-                                  .replaceAll('(', '')
-                                  .replaceAll(')', '')
-                                  .replaceAll(' ', ''),
-                              price: double.parse(_priceController.text));
-                        }
-                      }
-
-                      // LoginService().sendSoldSelling();
+                      );
                     }),
-                ScreenUtil().setVerticalSpacing(30.h),
-              ],
+                    ScreenUtil().setVerticalSpacing(30.h),
+                    const Spacer(),
+                    LongButton(
+                        buttonName: 'Оформить',
+                        onTap: () async {
+                          print(client.id);
+                          final isValidatedPhone =
+                              phoneFormKey.currentState!.validate();
+                          final isValidatedParams =
+                              paramClientFormKey.currentState!.validate();
+                          final isValidatedName =
+                              fullnameFormKey.currentState!.validate();
+                          if (isValidatedName &&
+                              isValidatedParams &&
+                              isValidatedPhone) {
+                            if (soldInfo == Sold.notSold) {
+                              ApiService().sendNotSoldSelling(
+                                  id: client.id!,
+                                  whereFrom: state.whereFrom,
+                                  details: _detailsController.text,
+                                  phoneNumber: _phoneController.text
+                                      .replaceAll('-', '')
+                                      .replaceAll('(', '')
+                                      .replaceAll(')', '')
+                                      .replaceAll(' ', ''),
+                                  fullName: _fullNameController.text);
+                            }
+                            if (soldInfo == Sold.sold) {
+                              ApiService().sendSoldSelling(
+                                  whereFrom: state.whereFrom,
+                                  id: client.id!,
+                                  details: _detailsController.text,
+                                  fullName: _fullNameController.text,
+                                  phoneNumber: _phoneController.text
+                                      .replaceAll('-', '')
+                                      .replaceAll('(', '')
+                                      .replaceAll(')', '')
+                                      .replaceAll(' ', ''),
+                                  price: double.parse(_priceController.text));
+                            }
+                          }
+
+                          // LoginService().sendSoldSelling();
+                        }),
+                    ScreenUtil().setVerticalSpacing(30.h),
+                  ],
+                ),
+              )
+            ]),
+            appBar: AppBarWidget(
+              title: 'Оформить клиента',
+              leading: IconButton(
+                  splashRadius: 24.r,
+                  iconSize: 24.h,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.main);
+                  },
+                  icon: const Icon(
+                    CupertinoIcons.chevron_left,
+                    color: AppColors.black,
+                  )),
             ),
-          )
-        ]),
-        appBar: AppBarWidget(
-          title: 'Оформить клиента',
-          leading: IconButton(
-              splashRadius: 24.r,
-              iconSize: 24.h,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                CupertinoIcons.chevron_left,
-                color: AppColors.black,
-              )),
-        ),
+          );
+        },
       ),
     );
   }

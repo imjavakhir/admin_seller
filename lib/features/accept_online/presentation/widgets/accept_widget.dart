@@ -1,6 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,14 +10,16 @@ class AcceptWidget extends StatelessWidget {
   final String fullname;
   final String phoneNumber;
   final VoidCallback onTapTick;
+  final bool isLoading;
   // final VoidCallback onTapClose;
-  const AcceptWidget({
-    super.key,
-    required this.fullname,
-    required this.phoneNumber,
-    required this.onTapTick,
-    // required this.onTapClose,
-  });
+  const AcceptWidget(
+      {super.key,
+      required this.fullname,
+      required this.phoneNumber,
+      required this.onTapTick,
+      this.isLoading = false
+      // required this.onTapClose,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -53,21 +56,24 @@ class AcceptWidget extends StatelessWidget {
                 ],
               ),
               const Spacer(),
+
               Material(
                 type: MaterialType.button,
                 color: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100.r)),
-                child: IconButton(
-                    splashColor: Colors.transparent,
-                    splashRadius: 24,
-                    onPressed: onTapTick,
-                    icon: SvgPicture.asset(
-                      AppIcons.tick,
-                      height: 36.h,
-                      width: 36.h,
-                      color: AppColors.green,
-                    )),
+                child: isLoading
+                    ? const CupertinoActivityIndicator()
+                    : IconButton(
+                        splashColor: Colors.transparent,
+                        splashRadius: 24,
+                        onPressed: onTapTick,
+                        icon: SvgPicture.asset(
+                          AppIcons.tick,
+                          height: 36.h,
+                          width: 36.h,
+                          color: AppColors.green,
+                        )),
               ),
               // Material(
               //   color: Colors.transparent,
