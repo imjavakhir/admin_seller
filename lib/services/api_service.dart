@@ -29,6 +29,7 @@ class ApiService {
   final searchCustomerApi =
       'http://64.226.90.160:3000/customer/search/?phone_number=';
 
+//auth repo
   Future<UserModel?> login(
       {required String phoneNumber,
       required String password,
@@ -56,6 +57,7 @@ class ApiService {
     return userModel;
   }
 
+//seller admin repo
   Future<Sellers?> getSeller() async {
     final token = await AuthLocalDataSource().getLogToken();
     Sellers? sellerModel;
@@ -76,7 +78,7 @@ class ApiService {
     }
     return sellerModel;
   }
-
+//seller repo
   Future<List<SearchedCustomer?>> getSearchedCustomer(
       {required String searchNumber}) async {
     final token = await AuthLocalDataSource().getLogToken();
@@ -99,6 +101,8 @@ class ApiService {
     return searchedCustomer;
   }
 
+
+//seller admin repo
   Future<List<Sellers?>> getSellers() async {
     final token = await AuthLocalDataSource().getLogToken();
     List<Sellers?> sellersModel = [];
@@ -120,7 +124,7 @@ class ApiService {
     return sellersModel;
   }
 
-//emopty selling
+//seller repo
 
   Future<EmptySelling?> sendEmptySelling({required String id}) async {
     final data = {
@@ -148,6 +152,7 @@ class ApiService {
     return emptySelling;
   }
 
+//seller repo
   Future<SoldSelling?> sendSoldSelling(
       {required String details,
       required String fullName,
@@ -186,7 +191,7 @@ class ApiService {
     }
     return soldSelling;
   }
-
+//seller repo
   Future<NotSoldSelling?> sendNotSoldSelling(
       {required String details,
       required String fullName,
@@ -223,7 +228,7 @@ class ApiService {
     }
     return notSoldSelling;
   }
-
+//profile repo
   Future<UserOnlineModel?> getUserOnlineInfo() async {
     final token = await AuthLocalDataSource().getLogToken();
     UserOnlineModel? userOnlineModel;
@@ -244,6 +249,8 @@ class ApiService {
     }
     return userOnlineModel;
   }
+
+  //profile repo
 
   Future<UserOnlineModel?> changeUserOnlineInfo(
       {required bool isOnline}) async {
@@ -273,6 +280,7 @@ class ApiService {
     return userOnlineModel;
   }
 
+//accept user online
   Future<UserOnlineModel?> verifyUser({required String seller}) async {
     final token = await AuthLocalDataSource().getLogToken();
     UserOnlineModel? userOnlineModel;
@@ -297,6 +305,8 @@ class ApiService {
     return userOnlineModel;
   }
 
+
+//accept user online
   Future<List<UserUnverified?>> getAllUnverified() async {
     final token = await AuthLocalDataSource().getLogToken();
     List<UserUnverified?> userUnverified = [];
@@ -320,6 +330,7 @@ class ApiService {
     return userUnverified;
   }
 
+//seller repo
   Future<UserOnlineModel?> changePause({required bool isPaused}) async {
     final token = await AuthLocalDataSource().getLogToken();
     UserOnlineModel? userOnlineModel;
@@ -346,7 +357,7 @@ class ApiService {
     }
     return userOnlineModel;
   }
-
+//seller repo
   Future<List<ClientInfo?>> getAllUserVisits() async {
     final token = await AuthLocalDataSource().getLogToken();
     List<ClientInfo?> clientInfoList = [];

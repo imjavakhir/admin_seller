@@ -1,6 +1,6 @@
 import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
 import 'package:admin_seller/features/seller_admin/presentation/pages/admin_seller.dart';
-import 'package:admin_seller/services/api_service.dart';
+import 'package:admin_seller/features/seller_admin/repository/seller_admin_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'seller_admin_event.dart';
@@ -13,18 +13,18 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
     on<OnSellerChangeEvent>(_onSellerChangeEvent);
     on<SelectedSellerEvent>(_selectedSellerEvent);
   }
-
+  final SellerAdminRepository _sellerAdminRepository = SellerAdminRepository();
   void _getSellersEvent(
       GetSellerListEvent event, Emitter<SellerAdminState> emit) async {
     emit(state.copyWith(showLoading: true));
-    final sellerList = await ApiService().getSellers();
+    final sellerList = await _sellerAdminRepository.getSellers();
     emit(state.copyWith(sellerList: sellerList, showLoading: false));
   }
 
   Future<void> _getSellerEvent(
       GetSellerEvent event, Emitter<SellerAdminState> emit) async {
     emit(state.copyWith(showLoading: true));
-    final seller = await ApiService().getSeller();
+    final seller = await _sellerAdminRepository.getSeller();
     emit(state.copyWith(seller: seller, showLoading: false));
   }
 

@@ -1,6 +1,6 @@
 part of 'profile_bloc.dart';
 
-class ProfileState extends Equatable {
+class ProfileState {
   final bool switchValue;
   final bool isVerified;
   final bool? isAdmin;
@@ -12,7 +12,4 @@ class ProfileState extends Equatable {
         switchValue: switchValue ?? this.switchValue,
         isVerified: isVerified ?? this.isVerified);
   }
-
-  @override
-  List<Object> get props => [switchValue, isVerified];
 }

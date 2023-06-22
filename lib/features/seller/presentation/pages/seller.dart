@@ -5,6 +5,7 @@ import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
+import 'package:admin_seller/features/seller/repository/seller_repo.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -27,6 +28,7 @@ class SellerPage extends StatefulWidget {
 }
 
 class _SellerPageState extends State<SellerPage> {
+  final SellerRepository _sellerRepository = SellerRepository();
   @override
   void initState() {
     BlocProvider.of<SellerBloc>(context).add(GetClientsFromApi());
@@ -37,125 +39,114 @@ class _SellerPageState extends State<SellerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SellerBloc, SellerState>(
-      builder: (context, state) {
-        return RefreshIndicator(
-          backgroundColor: AppColors.primaryColor,
-          color: AppColors.black,
-          onRefresh: () async {
-            return BlocProvider.of<SellerBloc>(context)
-                .add(const ClientInfoListEvent([]));
-          },
-          child: Scaffold(
-            appBar: AppBarWidget(
-              title: 'Клиенты',
-              actions: [
-                StatefulBuilder(builder: (context, setState) {
-                  return IconButton(
-                    splashRadius: 24.r,
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => Dialog(
-                                backgroundColor: AppColors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.r)),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 24.w, vertical: 12.h),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
+    return BlocBuilder<SellerBloc, SellerState>(builder: (context, state) {
+      return Scaffold(
+        appBar: AppBarWidget(
+          title: 'Клиенты',
+          actions: [
+            StatefulBuilder(builder: (context, setState) {
+              return IconButton(
+                splashRadius: 24.r,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => Dialog(
+                            backgroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r)),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24.w, vertical: 12.h),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    !isPaused
+                                        ? 'Вы хотите перерыв?'
+                                        : 'Вы на перерыве, хотите вернуться к работе?',
+                                    style: Styles.headline3,
+                                  ),
+                                  ScreenUtil().setVerticalSpacing(20.h),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(
-                                        !isPaused
-                                            ? 'Вы хотите перерыв?'
-                                            : 'Вы на перерыве, хотите вернуться к работе?',
-                                        style: Styles.headline3,
-                                      ),
-                                      ScreenUtil().setVerticalSpacing(20.h),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          LongButton(
-                                            paddingW: 0,
-                                            buttonName: 'Да',
-                                            fontsize: 12,
-                                            onTap: () async {
-                                              setState(() {
-                                                isPaused = !isPaused;
-                                              });
-                                              ApiService().changePause(
-                                                  isPaused: isPaused);
+                                      LongButton(
+                                        paddingW: 0,
+                                        buttonName: 'Да',
+                                        fontsize: 12,
+                                        onTap: () async {
+                                          setState(() {
+                                            isPaused = !isPaused;
+                                          });
+                                          ApiService()
+                                              .changePause(isPaused: isPaused);
 
-                                              Navigator.of(context).pop();
-                                            },
-                                            height: 32,
-                                            width: 64,
-                                          ),
-                                          ScreenUtil()
-                                              .setHorizontalSpacing(20.w),
-                                          TransparentLongButton(
-                                            paddingW: 0,
-                                            width: 64,
-                                            height: 32,
-                                            fontsize: 12,
-                                            buttonName: 'Нет',
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ],
+                                          Navigator.of(context).pop();
+                                        },
+                                        height: 32,
+                                        width: 64,
+                                      ),
+                                      ScreenUtil().setHorizontalSpacing(20.w),
+                                      TransparentLongButton(
+                                        paddingW: 0,
+                                        width: 64,
+                                        height: 32,
+                                        fontsize: 12,
+                                        buttonName: 'Нет',
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
                                       )
                                     ],
-                                  ),
-                                ),
-                              ));
-                    },
-                    icon: SvgPicture.asset(
-                      isPaused ? AppIcons.userTick : AppIcons.userRemove,
-                      color: !isPaused ? AppColors.green : AppColors.red,
-                      height: 32.h,
-                      width: 32.w,
-                    ),
-                  );
-                })
-              ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ));
+                },
+                icon: SvgPicture.asset(
+                  isPaused ? AppIcons.userTick : AppIcons.userRemove,
+                  color: !isPaused ? AppColors.green : AppColors.red,
+                  height: 32.h,
+                  width: 32.w,
+                ),
+              );
+            })
+          ],
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            return BlocProvider.of<SellerBloc>(context)
+                .add(GetClientsFromApi());
+          },
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 10.h),
+            physics: const AlwaysScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: state.clientInfoList.length,
+            itemBuilder: (context, index) => SellerCard(
+              selectedItem: state.selectedIndex,
+              index: index,
+              showLoading: state.showLoading,
+              parametrs: state.clientInfoList[index]!.details!,
+              ontapGreenR: () {
+                Navigator.of(context).pushNamed(AppRoutes.addClient,
+                    arguments: state.clientInfoList[index]);
+                debugPrint(state.clientInfoList[index]!.details!);
+                debugPrint(state.clientInfoList[index]!.details!);
+              },
+              ontapRedR: () async {
+                BlocProvider.of<SellerBloc>(context)
+                    .add(ClearVisits(index, state.clientInfoList[index]!.id!));
+
+                // _sellerRepository
+                // .sendEmptySelling(id: state.clientInfoList[index]!.id!);
+              },
             ),
-            body: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: true,
-                    child: StatefulBuilder(builder: (context, setState) {
-                      return ListView.builder(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        // physics: const AlwaysScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: state.clientInfoList.length,
-                        itemBuilder: (context, index) => SellerCard(
-                          parametrs: state.clientInfoList[index]!.details!,
-                          ontapGreenR: () {
-                            Navigator.of(context).pushNamed(AppRoutes.addClient,
-                                arguments: state.clientInfoList[index]);
-                            debugPrint(state.clientInfoList[index]!.details!);
-                            debugPrint(state.clientInfoList[index]!.details!);
-                          },
-                          ontapRedR: () async {
-                            ApiService().sendEmptySelling(
-                                id: state.clientInfoList[index]!.id!);
-                          },
-                          isReady: _isReady,
-                        ),
-                      );
-                    }),
-                  )
-                ]),
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 }

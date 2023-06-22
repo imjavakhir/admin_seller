@@ -10,109 +10,137 @@ class SellerCard extends StatelessWidget {
   final VoidCallback ontapGreenR;
   final VoidCallback ontapRedR;
   // final VoidCallback ontapGreen;
-  final bool isReady;
+  // final bool isReady;
+  final int selectedItem;
+  final int index;
   final String parametrs;
-
+  final bool showLoading;
   const SellerCard(
       {Key? key,
       // required this.ontapRed,
       required this.ontapGreenR,
       required this.ontapRedR,
+      this.showLoading = false,
+      required this.selectedItem,
       // required this.ontapGreen,
-      required this.isReady,
-      required this.parametrs})
+      // required this.isReady,
+      required this.parametrs,
+      required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 20.r,
-                color: AppColors.cardShadow,
-                offset: const Offset(0, 0))
-          ]),
-      height: 164.h,
-      width: double.maxFinite,
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+          decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(10.r),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 20.r,
+                    color: AppColors.cardShadow,
+                    offset: const Offset(0, 0))
+              ]),
+          height: 164.h,
+          width: double.maxFinite,
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Параметры клиента',
-                    style: Styles.headline4,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Параметры клиента',
+                        style: Styles.headline4,
+                      ),
+                      ScreenUtil().setVerticalSpacing(6.h),
+                      SizedBox(
+                        width: 250.w,
+                        child: Text(
+                          parametrs,
+                          style: Styles.headline6,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
                   ),
-                  ScreenUtil().setVerticalSpacing(6.h),
-                  Text(
-                    parametrs,
-                    style: Styles.headline6,
-                  ),
+                  const Spacer(),
+                  /*  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+                    height: 22.h,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100.r),
+                        color: !isReady
+                            ? AppColors.orange.withOpacity(0.1)
+                            : AppColors.green.withOpacity(0.1)),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          !isReady ? AppIcons.clock : AppIcons.tick,
+                          height: 14.h,
+                          width: 14.h,
+                          color: !isReady ? AppColors.orange : AppColors.green,
+                        ),
+                        ScreenUtil().setHorizontalSpacing(2.w),
+                        Text(
+                          !isReady ? 'В ожидание' : 'Принято',
+                          style: Styles.headline5.copyWith(
+                              fontSize: 10.sp,
+                              color: !isReady ? AppColors.orange : AppColors.green),
+                        ),
+                      ],
+                    ),
+                  ) */
                 ],
               ),
               const Spacer(),
-              /*  Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                height: 22.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.r),
-                    color: !isReady
-                        ? AppColors.orange.withOpacity(0.1)
-                        : AppColors.green.withOpacity(0.1)),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      !isReady ? AppIcons.clock : AppIcons.tick,
-                      height: 14.h,
-                      width: 14.h,
-                      color: !isReady ? AppColors.orange : AppColors.green,
-                    ),
-                    ScreenUtil().setHorizontalSpacing(2.w),
-                    Text(
-                      !isReady ? 'В ожидание' : 'Принято',
-                      style: Styles.headline5.copyWith(
-                          fontSize: 10.sp,
-                          color: !isReady ? AppColors.orange : AppColors.green),
-                    ),
-                  ],
-                ),
-              ) */
-            ],
-          ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              LongButton(
-                paddingW: 0,
-                buttonName: /* !isReady ? 'Принимать' : */ 'Оформить',
-                fontsize: 12,
-                onTap: /* !isReady ? ontapGreen : */ ontapGreenR,
-                height: 32,
-                width: 120,
-              ),
-              ScreenUtil().setHorizontalSpacing(10),
-              TransparentLongButton(
-                paddingW: 0,
-                width: 120,
-                height: 32,
-                fontsize: 12,
-                buttonName: /* !isReady ? 'Отменить' : */ 'Пустой',
-                onTap: /* !isReady ? ontapRed : */ ontapRedR,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  LongButton(
+                    paddingW: 0,
+                    buttonName: /* !isReady ? 'Принимать' : */ 'Оформить',
+                    fontsize: 12,
+                    onTap: /* !isReady ? ontapGreen : */ ontapGreenR,
+                    height: 32,
+                    width: 120,
+                  ),
+                  ScreenUtil().setHorizontalSpacing(10),
+                  TransparentLongButton(
+                    paddingW: 0,
+                    width: 120,
+                    height: 32,
+                    fontsize: 12,
+                    buttonName: /* !isReady ? 'Отменить' : */ 'Пустой',
+                    onTap: /* !isReady ? ontapRed : */ ontapRedR,
+                  )
+                ],
               )
             ],
+          ),
+        ),
+        if (showLoading && selectedItem == index)
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            height: 164.h,
+            width: double.maxFinite,
+            child: const Center(
+              child: CircularProgressIndicator(color: AppColors.white),
+            ),
           )
-        ],
-      ),
+      ],
     );
   }
 }

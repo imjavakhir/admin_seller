@@ -4,7 +4,6 @@ import 'package:admin_seller/features/accept_online/presentation/widgets/accept_
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/shimmers/accept_widget_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/ui_tools/ui_tools.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,14 +39,15 @@ class AcceptOnlineAccept extends StatelessWidget {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) => AcceptWidget(
+                       /*  selectedItem: state.selectedItem,
+                        index: index,
+                        isLoading: state.loading, */
                         fullname: snapshot.data![index]!.fullname!,
                         phoneNumber:
                             '+998${snapshot.data![index]!.phoneNumber!}',
                         onTapTick: () {
                           BlocProvider.of<AcceptOnlineBloc>(context)
                               .add(AcceptUserEvent(index));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              UITools.customSnackBar(title: 'Success'));
                         },
                       ),
                     );

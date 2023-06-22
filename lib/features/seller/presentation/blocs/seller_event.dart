@@ -11,7 +11,9 @@ abstract class SellerEvent extends Equatable {
 class SellerPauseEvent extends SellerEvent {}
 
 class DisconnectSocketEvent extends SellerEvent {}
+
 class GetClientsFromApi extends SellerEvent {}
+
 class WhereFromEvent extends SellerEvent {
   final String whereFrom;
 
@@ -22,4 +24,11 @@ class ClientInfoListEvent extends SellerEvent {
   final List<ClientInfo?> clientInfosList;
 
   const ClientInfoListEvent(this.clientInfosList);
+}
+
+class ClearVisits extends SellerEvent {
+  final String id;
+  final int index;
+
+  const ClearVisits(this.index, this.id);
 }

@@ -1,11 +1,9 @@
 import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/dropdown_client_from.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
-import 'package:admin_seller/services/api_service.dart';
+import 'package:admin_seller/features/seller/repository/seller_repo.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/validators/validators.dart';
@@ -14,12 +12,10 @@ import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/radio_button.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 enum Sold { sold, notSold }
 
@@ -27,6 +23,7 @@ Sold soldInfo = Sold.notSold;
 bool isSoldInfo = true;
 
 class AddClientpage extends StatelessWidget {
+  final SellerRepository _sellerRepository = SellerRepository();
   final TextEditingController _detailsController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
@@ -174,7 +171,7 @@ class AddClientpage extends StatelessWidget {
                               isValidatedParams &&
                               isValidatedPhone) {
                             if (soldInfo == Sold.notSold) {
-                              ApiService().sendNotSoldSelling(
+                             _sellerRepository.sendNotSoldSelling(
                                   id: client.id!,
                                   whereFrom: state.whereFrom,
                                   details: _detailsController.text,
@@ -186,7 +183,7 @@ class AddClientpage extends StatelessWidget {
                                   fullName: _fullNameController.text);
                             }
                             if (soldInfo == Sold.sold) {
-                              ApiService().sendSoldSelling(
+                              _sellerRepository.sendSoldSelling(
                                   whereFrom: state.whereFrom,
                                   id: client.id!,
                                   details: _detailsController.text,
@@ -213,7 +210,7 @@ class AddClientpage extends StatelessWidget {
                   splashRadius: 24.r,
                   iconSize: 24.h,
                   onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.main);
+                    Navigator.of(context).pop();
                   },
                   icon: const Icon(
                     CupertinoIcons.chevron_left,

@@ -8,7 +8,7 @@ abstract class SocketService {
   void disconnect();
 
   void emitEvent(String eventName, dynamic data);
-
+  void offEvent(String eventName);
   void onEvent(String eventName, void Function(dynamic) callback);
 }
 
@@ -35,7 +35,7 @@ class SocketServiceImpl implements SocketService {
   void disconnect() {
     if (socket.connected) {
       socket.disconnect();
-        print('disconnected---------}');
+      print('disconnected---------}');
     }
   }
 
@@ -49,6 +49,11 @@ class SocketServiceImpl implements SocketService {
   @override
   void onEvent(String eventName, void Function(dynamic) callback) {
     socket.on(eventName, callback);
+  }
+
+  @override
+  void offEvent(String eventName) {
+    socket.off(eventName);
   }
 }
 
