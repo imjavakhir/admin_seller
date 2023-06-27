@@ -12,6 +12,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<OnlineChangedEvent>(_onOnlineChangedEvent);
     on<GetUserOnlineModelEvent>(_getUserOnlineModelEvent);
     on<CheckUserEvent>(_checkUserEvent);
+    on<GetUserRating>(_getRating);
   }
 
   final ProfileRepository _profileRepository = ProfileRepository();
@@ -55,5 +56,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } else {
       emit(const ProfileState(isAdmin: false));
     }
+  }
+
+  Future<void> _getRating(
+      GetUserRating event, Emitter<ProfileState> emit) async {
+    final rating = await _profileRepository.getUserRating();
+    emit(state.copyWith(rating: rating!.rating.toString()));
   }
 }

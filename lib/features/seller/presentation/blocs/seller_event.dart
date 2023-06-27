@@ -32,3 +32,4 @@ class ClearVisits extends SellerEvent {
 
   const ClearVisits(this.index, this.id);
 }
+class SavePauseInfo extends SellerEvent{}

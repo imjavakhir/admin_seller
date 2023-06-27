@@ -27,7 +27,7 @@ class ApiService {
       'http://64.226.90.160:3000/user/seller/online';
 
   final searchCustomerApi =
-      'http://64.226.90.160:3000/customer/search/?phone_number=';
+      'http://64.226.90.160:3000/customer/srch/?phone_number=';
 
 //auth repo
   Future<UserModel?> login(
@@ -78,11 +78,12 @@ class ApiService {
     }
     return sellerModel;
   }
+
 //seller repo
-  Future<List<SearchedCustomer?>> getSearchedCustomer(
+  Future<List<SearchedCustomers?>> getSearchedCustomer(
       {required String searchNumber}) async {
     final token = await AuthLocalDataSource().getLogToken();
-    List<SearchedCustomer?> searchedCustomer = [];
+    List<SearchedCustomers?> searchedCustomers = [];
     try {
       Response response = await dio.get(searchCustomerApi + searchNumber,
           options: Options(headers: {
@@ -91,16 +92,15 @@ class ApiService {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200) {
-        searchedCustomer = searchedCustomerFromJson(response.data);
-        print('-----------------success $searchedCustomer');
-        return searchedCustomer;
+        searchedCustomers = searchedCustomersFromJson(response.data);
+        print('-----------------success $searchedCustomers');
+        return searchedCustomers;
       }
     } catch (error) {
       print('searchedCustomer ---------------------------------------$error');
     }
-    return searchedCustomer;
+    return searchedCustomers;
   }
-
 
 //seller admin repo
   Future<List<Sellers?>> getSellers() async {
@@ -191,6 +191,7 @@ class ApiService {
     }
     return soldSelling;
   }
+
 //seller repo
   Future<NotSoldSelling?> sendNotSoldSelling(
       {required String details,
@@ -228,6 +229,7 @@ class ApiService {
     }
     return notSoldSelling;
   }
+
 //profile repo
   Future<UserOnlineModel?> getUserOnlineInfo() async {
     final token = await AuthLocalDataSource().getLogToken();
@@ -305,7 +307,6 @@ class ApiService {
     return userOnlineModel;
   }
 
-
 //accept user online
   Future<List<UserUnverified?>> getAllUnverified() async {
     final token = await AuthLocalDataSource().getLogToken();
@@ -357,6 +358,7 @@ class ApiService {
     }
     return userOnlineModel;
   }
+
 //seller repo
   Future<List<ClientInfo?>> getAllUserVisits() async {
     final token = await AuthLocalDataSource().getLogToken();

@@ -1,5 +1,7 @@
+import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 abstract class SocketService {
@@ -95,6 +97,14 @@ class SocketIOService {
   void sendnotification(String sellerId, String details) {
     if (socket != null) {
       socket!.emit('new-visit', {"details": details, "seller": sellerId});
+      Fluttertoast.showToast(
+        msg: 'Успешно отпрвалено',
+        backgroundColor: AppColors.grey,
+        timeInSecForIosWeb: 2,
+        gravity: ToastGravity.TOP,
+        fontSize: 16,
+        textColor: AppColors.white,
+      );
       print('sended');
     } else {}
   }

@@ -2,6 +2,7 @@ import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_adm
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/sellers_widget.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
+import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
@@ -14,8 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum Seller { auto, select }
 
-bool _isLoading = false;
-int _selected = 0;
 Seller selectedSellerMode = Seller.auto;
 
 class AdminSellerPage extends StatefulWidget {
@@ -31,8 +30,8 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
 
   @override
   void initState() {
-    SocketIOService().connectSocket();
     BlocProvider.of<SellerAdminBloc>(context).add(GetSellerEvent());
+    SocketIOService().connectSocket();
 
     super.initState();
   }
@@ -129,13 +128,17 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                             style: Styles.headline4,
                           ),
                         ),
-                        // if (state.showLoading) const SellersShimmer(),
-                        if (state.seller == Seller.auto && !state.showLoading)
+                        if (state.showLoading &&
+                            state.sellerType == Seller.auto)
+                          const SellersShimmer(),
+                        if (!state.showLoading &&
+                            state.sellerType == Seller.auto &&
+                            state.seller != null)
                           SellerTile(
-                            title: state.seller != null
+                            title: !state.showLoading
                                 ? state.seller!.fullname!
                                 : 'Нет онлайн продавцов',
-                            subtitle: state.seller != null
+                            subtitle: !state.showLoading
                                 ? state.seller!.phoneNumber!
                                 : '',
                           ),
@@ -162,6 +165,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                       state.seller!.id!,
                                       _detailsController.text);
                                 }
+
                                 if (state.sellerType == Seller.select) {
                                   print(
                                       '${state.selectedSeller!.phoneNumber}---------------------${_detailsController.text}');
@@ -169,6 +173,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                       state.selectedSeller!.id!,
                                       _detailsController.text);
                                 }
+                                _detailsController.text = '';
                               }
 
                               // SocketIOService().disconnectSocket();

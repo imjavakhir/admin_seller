@@ -2,16 +2,17 @@ part of 'seller_bloc.dart';
 
 class SellerState {
   final bool isPaused;
-  final String whereFrom;
+  final String? whereFrom;
   final bool showLoading;
   final int selectedIndex;
   List<ClientInfo?> clientInfoList;
+
   SellerState(
       {required this.clientInfoList,
-      this.isPaused = true,
-      this.whereFrom = 'instagram',
+      this.isPaused = false,
+      this.whereFrom ,
       this.showLoading = false,
-      this.selectedIndex=-1});
+      this.selectedIndex = -1});
 
   SellerState copyWith(
       {final List<ClientInfo?>? clientInfoList,
@@ -25,6 +26,6 @@ class SellerState {
         clientInfoList: clientInfoList ?? this.clientInfoList,
         whereFrom: whereFrom ?? this.whereFrom,
         showLoading: showLoading ?? this.showLoading,
-        selectedIndex: selectedIndex??this.selectedIndex);
+        selectedIndex: selectedIndex ?? this.selectedIndex);
   }
 }

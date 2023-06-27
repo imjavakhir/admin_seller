@@ -1,7 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
+import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
-import 'package:admin_seller/features/seller/presentation/widgets/dropdown_client_from.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
 import 'package:admin_seller/features/seller/repository/seller_repo.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum Sold { sold, notSold }
 
+bool _isLoading = false;
 Sold soldInfo = Sold.notSold;
 bool isSoldInfo = true;
 
@@ -31,6 +32,10 @@ class AddClientpage extends StatelessWidget {
   final GlobalKey<FormState> paramClientFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> fullnameFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> phoneFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> sellKey = GlobalKey<FormState>();
+  final TextEditingController _textEditingControllerID =
+      TextEditingController();
+
   AddClientpage({
     super.key,
   });
@@ -62,7 +67,7 @@ class AddClientpage extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
                       child: Text(
-                        '${client.details!} --- ${client.id}',
+                        client.details!,
                         style: Styles.headline6.copyWith(fontSize: 18.sp),
                       ),
                     ),
@@ -70,6 +75,12 @@ class AddClientpage extends StatelessWidget {
                     Form(
                       key: phoneFormKey,
                       child: PhoneField(
+                        textEditingControllerID: _textEditingControllerID,
+                        valueDrop: state.whereFrom,
+                        valueChangedDrop: (value) {
+                          BlocProvider.of<SellerBloc>(context)
+                              .add(WhereFromEvent(value));
+                        },
                         formState: fullnameFormKey,
                         validatorName: Validators.empty,
                         valueChangedname: (value) {
@@ -77,20 +88,12 @@ class AddClientpage extends StatelessWidget {
                         },
                         validator: Validators.phoneNumber,
                         valueChanged: (value) {
-                          phoneFormKey.currentState!.validate();
+                          // phoneFormKey.currentState!.validate();
                         },
                         listformater: [MaskFormat.mask],
                         textEditingControllerPhone: _phoneController,
                         textEditingControllerName: _fullNameController,
                       ),
-                    ),
-                    ScreenUtil().setVerticalSpacing(20.h),
-                    DropDownClientFrom(
-                      value: state.whereFrom,
-                      valueChanged: (value) {
-                        BlocProvider.of<SellerBloc>(context)
-                            .add(WhereFromEvent(value));
-                      },
                     ),
                     ScreenUtil().setVerticalSpacing(20.h),
                     Form(
@@ -143,62 +146,135 @@ class AddClientpage extends StatelessWidget {
                               ],
                             ),
                             ScreenUtil().setVerticalSpacing(10.h),
-                            TextfieldWidget(
-                                textInputType: TextInputType.number,
-                                // textFieldKey: GlobalKey(),
-                                isDisabled: isSoldInfo,
-                                isSoldField: true,
-                                paddingW: 0,
-                                hintext: '0',
-                                textEditingController: _priceController)
+                            Form(
+                              key: sellKey,
+                              child: TextfieldWidget(
+                                  validator: Validators.empty,
+                                  textInputType: TextInputType.number,
+                                  isDisabled: isSoldInfo,
+                                  isSoldField: true,
+                                  paddingW: 0,
+                                  hintext: '0',
+                                  textEditingController: _priceController),
+                            )
                           ],
                         ),
                       );
                     }),
                     ScreenUtil().setVerticalSpacing(30.h),
                     const Spacer(),
-                    LongButton(
-                        buttonName: 'Оформить',
-                        onTap: () async {
-                          print(client.id);
-                          final isValidatedPhone =
-                              phoneFormKey.currentState!.validate();
-                          final isValidatedParams =
-                              paramClientFormKey.currentState!.validate();
-                          final isValidatedName =
-                              fullnameFormKey.currentState!.validate();
-                          if (isValidatedName &&
-                              isValidatedParams &&
-                              isValidatedPhone) {
-                            if (soldInfo == Sold.notSold) {
-                             _sellerRepository.sendNotSoldSelling(
-                                  id: client.id!,
-                                  whereFrom: state.whereFrom,
-                                  details: _detailsController.text,
-                                  phoneNumber: _phoneController.text
-                                      .replaceAll('-', '')
-                                      .replaceAll('(', '')
-                                      .replaceAll(')', '')
-                                      .replaceAll(' ', ''),
-                                  fullName: _fullNameController.text);
-                            }
-                            if (soldInfo == Sold.sold) {
-                              _sellerRepository.sendSoldSelling(
-                                  whereFrom: state.whereFrom,
-                                  id: client.id!,
-                                  details: _detailsController.text,
-                                  fullName: _fullNameController.text,
-                                  phoneNumber: _phoneController.text
-                                      .replaceAll('-', '')
-                                      .replaceAll('(', '')
-                                      .replaceAll(')', '')
-                                      .replaceAll(' ', ''),
-                                  price: double.parse(_priceController.text));
-                            }
-                          }
+                    StatefulBuilder(builder: (context, set) {
+                      return LongButton(
+                          isloading: _isLoading,
+                          buttonName: 'Оформить',
+                          onTap: !_isLoading
+                              ? () async {
+                                  print(client.id);
+                                  if (soldInfo == Sold.notSold) {
+                                    final isValidatedPhone =
+                                        phoneFormKey.currentState!.validate();
+                                    final isValidatedParams = paramClientFormKey
+                                        .currentState!
+                                        .validate();
+                                    final isValidatedName = fullnameFormKey
+                                        .currentState!
+                                        .validate();
+                                    if (isValidatedName &&
+                                        isValidatedParams &&
+                                        isValidatedPhone) {
+                                      set(() {
+                                        _isLoading = true;
+                                      });
+                                      if (_isLoading) {
+                                        await _sellerRepository
+                                            .sendNotSoldSelling(
+                                                id: client.id!,
+                                                whereFrom:
+                                                    _textEditingControllerID
+                                                                .text !=
+                                                            ''
+                                                        ? _textEditingControllerID
+                                                            .text
+                                                        : state.whereFrom!,
+                                                details:
+                                                    _detailsController.text,
+                                                phoneNumber: _phoneController
+                                                    .text
+                                                    .replaceAll('-', '')
+                                                    .replaceAll('(', '')
+                                                    .replaceAll(')', '')
+                                                    .replaceAll(' ', ''),
+                                                fullName:
+                                                    _fullNameController.text);
+                                        Navigator.of(context)
+                                            .pushNamed(AppRoutes.main);
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      } else {
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      }
+                                    }
 
-                          // LoginService().sendSoldSelling();
-                        }),
+                                    // Navigator.of(context)
+                                    //     .pushNamed(AppRoutes.addClient);
+                                  }
+
+                                  if (soldInfo == Sold.sold) {
+                                    final isValidatedSell =
+                                        sellKey.currentState!.validate();
+                                    final isValidatedPhone =
+                                        phoneFormKey.currentState!.validate();
+                                    final isValidatedParams = paramClientFormKey
+                                        .currentState!
+                                        .validate();
+                                    final isValidatedName = fullnameFormKey
+                                        .currentState!
+                                        .validate();
+                                    if (isValidatedName &&
+                                        isValidatedParams &&
+                                        isValidatedPhone &&
+                                        isValidatedSell) {
+                                      set(() {
+                                        _isLoading = true;
+                                      });
+
+                                      if (_isLoading) {
+                                        await _sellerRepository.sendSoldSelling(
+                                            whereFrom: _textEditingControllerID
+                                                        .text !=
+                                                    ''
+                                                ? _textEditingControllerID.text
+                                                : state.whereFrom!,
+                                            id: client.id!,
+                                            details: _detailsController.text,
+                                            fullName: _fullNameController.text,
+                                            phoneNumber: _phoneController.text
+                                                .replaceAll('-', '')
+                                                .replaceAll('(', '')
+                                                .replaceAll(')', '')
+                                                .replaceAll(' ', ''),
+                                            price: double.parse(
+                                                _priceController.text));
+                                        Navigator.of(context)
+                                            .pushNamed(AppRoutes.main);
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      } else {
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      }
+                                    }
+                                  }
+
+                                  // LoginService().sendSoldSelling();
+                                }
+                              : null);
+                    }),
                     ScreenUtil().setVerticalSpacing(30.h),
                   ],
                 ),
@@ -207,6 +283,7 @@ class AddClientpage extends StatelessWidget {
             appBar: AppBarWidget(
               title: 'Оформить клиента',
               leading: IconButton(
+                  enableFeedback: false,
                   splashRadius: 24.r,
                   iconSize: 24.h,
                   onPressed: () {

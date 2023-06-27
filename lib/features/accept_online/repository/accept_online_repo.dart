@@ -35,7 +35,7 @@ class AcceptOnlineRepository {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
-            gravity: ToastGravity.TOP,
+            gravity: ToastGravity.BOTTOM,
             msg: 'Успешно',
             textColor: AppColors.white,
             fontSize: 16,
@@ -71,7 +71,8 @@ class AcceptOnlineRepository {
           }));
       if (response.statusCode == 200) {
         userUnverified = userUnverifiedFromJson(response.data);
-        print('unverified-----------------success-----}');
+        print(
+            'unverified-----------------success-----${userUnverified.length} }');
         return userUnverified;
       }
     } on DioError catch (error) {

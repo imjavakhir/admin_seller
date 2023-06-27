@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     BlocProvider.of<ProfileBloc>(context).add(GetUserOnlineModelEvent());
-
+    BlocProvider.of<ProfileBloc>(context).add(GetUserRating());
     super.initState();
   }
 
@@ -98,13 +98,20 @@ class _ProfilePageState extends State<ProfilePage> {
                             : 'Продавец',
                       ),
                       if (user.first.type == 'seller')
+                        ProfileTile(
+                          title: 'Рейтинг',
+                          subtitle: '${state.rating} балл',
+                        ),
+                      if (user.first.type == 'seller')
                         OnlineTile(
-                          isVerified: state.isVerified ?? false,
+                          isVerified: state.isVerified,
                           value: state.switchValue,
-                          onChanged: (value) {
-                            BlocProvider.of<ProfileBloc>(context)
-                                .add(OnlineChangedEvent(value));
-                          },
+                          onChanged: !state.isVerified
+                              ? (value) {
+                                  BlocProvider.of<ProfileBloc>(context)
+                                      .add(OnlineChangedEvent(value));
+                                }
+                              : null,
                         ),
                       const Spacer(),
                       TransparentLongButton(

@@ -6,7 +6,7 @@ import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 
 class OnlineTile extends StatelessWidget {
-  final ValueChanged onChanged;
+  final ValueChanged? onChanged;
   final bool value;
   final bool isVerified;
   const OnlineTile(

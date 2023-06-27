@@ -42,6 +42,18 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                   shrinkWrap: true,
                   itemCount: state.sellerList!.length,
                   itemBuilder: (context, index) {
+                    if (state.sellerList!.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.w, vertical: 16.h),
+                        child: Center(
+                          child: Text(
+                            'Пока нет онлайн продавцов',
+                            style: Styles.headline2,
+                          ),
+                        ),
+                      );
+                    }
                     if (state.showLoading) {
                       return const SellersShimmer();
                     }

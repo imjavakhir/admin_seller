@@ -14,7 +14,8 @@ class BigTextFieldWidget extends StatelessWidget {
     super.key,
     required this.hintext,
     required this.textEditingController,
-    this.validator, this.valueChanged,
+    this.validator,
+    this.valueChanged,
   });
 
   @override
@@ -30,6 +31,7 @@ class BigTextFieldWidget extends StatelessWidget {
           ),
           ScreenUtil().setVerticalSpacing(10.h),
           TextFormField(
+            keyboardType: TextInputType.text,
             onChanged: valueChanged,
             validator: validator,
             key: textFieldKey,
@@ -39,7 +41,6 @@ class BigTextFieldWidget extends StatelessWidget {
             controller: textEditingController,
             maxLines: 10,
             decoration: InputDecoration(
-            
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 filled: true,

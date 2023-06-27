@@ -16,6 +16,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     on<GetClientsFromApi>(_getClientsFromApi);
     on<WhereFromEvent>(_whereFromEvent);
     on<ClearVisits>(_clearVisits);
+    on<SavePauseInfo>(_savePauseInfo);
   }
 
   final GlobalKey<AnimatedListState> key = GlobalKey();
@@ -57,8 +58,9 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   Future<void> _getClientsFromApi(
       GetClientsFromApi event, Emitter<SellerState> emit) async {
     visits = await _sellerRepository.getAllUserVisits();
-
-    emit(state.copyWith(clientInfoList: visits.reversed.toList()));
+    final value = await AuthLocalDataSource().getUserPause();
+    emit(state.copyWith(
+        clientInfoList: visits.reversed.toList(), isPaused: value));
   }
 
   void _whereFromEvent(WhereFromEvent event, Emitter<SellerState> emit) {
@@ -67,10 +69,25 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   Future<void> _clearVisits(
       ClearVisits event, Emitter<SellerState> emit) async {
-    emit(state.copyWith(showLoading: true,selectedIndex: event.index));
+    emit(state.copyWith(showLoading: true, selectedIndex: event.index));
     await _sellerRepository.sendEmptySelling(id: event.id);
     visits = await _sellerRepository.getAllUserVisits();
+    final value = await AuthLocalDataSource().getUserPause();
+
     emit(state.copyWith(
-        clientInfoList: visits.reversed.toList(), showLoading: false));
+        clientInfoList: visits.reversed.toList(),
+        showLoading: false,
+        isPaused: value));
+  }
+
+  Future<void> _savePauseInfo(
+      SavePauseInfo event, Emitter<SellerState> emit) async {
+    await _sellerRepository.changePause(isPaused: !state.isPaused);
+    AuthLocalDataSource().saveUserPause(!state.isPaused);
+    final value = await AuthLocalDataSource().getUserPause();
+
+    emit(state.copyWith(
+      isPaused: value,
+    ));
   }
 }

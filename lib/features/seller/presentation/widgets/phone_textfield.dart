@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/dropdown_client_from.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/label_textfield.dart';
 import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_decoration.dart';
@@ -20,6 +21,10 @@ class PhoneField extends StatefulWidget {
   final String? Function(String?)? validator;
   final String? Function(String?)? validatorName;
   final GlobalKey<FormState>? formState;
+  final ValueChanged valueChangedDrop;
+  final String? valueDrop;
+  final TextEditingController textEditingControllerID;
+
   const PhoneField({
     super.key,
     required this.textEditingControllerPhone,
@@ -30,6 +35,9 @@ class PhoneField extends StatefulWidget {
     this.validatorName,
     this.formState,
     this.valueChangedname,
+    required this.valueChangedDrop,
+    this.valueDrop,
+    required this.textEditingControllerID,
   });
 
   @override
@@ -52,7 +60,7 @@ class _PhoneFieldState extends State<PhoneField> {
         ScreenUtil().setVerticalSpacing(10.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: TypeAheadFormField<SearchedCustomer?>(
+          child: TypeAheadFormField<SearchedCustomers?>(
             validator: widget.validator,
             loadingBuilder: (context) => const SizedBox(),
             textFieldConfiguration: TextFieldConfiguration(
@@ -95,16 +103,17 @@ class _PhoneFieldState extends State<PhoneField> {
             itemBuilder: (context, itemData) {
               final seachedCustomer = itemData;
               return ListTile(
+                enableFeedback: false,
                 visualDensity: const VisualDensity(vertical: -3),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r)),
                 dense: true,
                 title: Text(
-                  seachedCustomer!.phoneNumber!,
+                  seachedCustomer!.customer!.phoneNumber!,
                   style: Styles.headline4,
                 ),
                 subtitle: Text(
-                  seachedCustomer.fullname,
+                  seachedCustomer.customer!.fullname!,
                   style: Styles.headline6,
                 ),
               );
@@ -123,10 +132,15 @@ class _PhoneFieldState extends State<PhoneField> {
                 constraints: const BoxConstraints(maxHeight: 250)),
             onSuggestionSelected: (suggestion) {
               setState(() {
+                widget.textEditingControllerID.text =
+                    suggestion!.whereComeFrom!;
+
                 widget.textEditingControllerPhone.text =
-                    suggestion!.phoneNumber!;
-                widget.textEditingControllerName.text = suggestion.fullname;
-                print('---------${suggestion.phoneNumber}---------');
+                    '(${suggestion.customer!.phoneNumber![0]}${suggestion.customer!.phoneNumber![1]}) ${suggestion.customer!.phoneNumber![2]}${suggestion.customer!.phoneNumber![3]}${suggestion.customer!.phoneNumber![4]}-${suggestion.customer!.phoneNumber![5]}${suggestion.customer!.phoneNumber![6]}-${suggestion.customer!.phoneNumber![7]}${suggestion.customer!.phoneNumber![8]}';
+                widget.textEditingControllerName.text =
+                    suggestion.customer!.fullname!;
+
+                print('---------${suggestion.customer!.phoneNumber!}---------');
               });
             },
             debounceDuration: const Duration(milliseconds: 500),
@@ -141,6 +155,13 @@ class _PhoneFieldState extends State<PhoneField> {
             textEditingController: widget.textEditingControllerName,
             label: 'Имя и Фамилия',
           ),
+        ),
+        ScreenUtil().setVerticalSpacing(20.h),
+        DropDownClientFrom(
+          value: widget.textEditingControllerID.text != ''
+              ? widget.textEditingControllerID.text
+              : widget.valueDrop,
+          valueChanged: widget.valueChangedDrop,
         ),
       ],
     );

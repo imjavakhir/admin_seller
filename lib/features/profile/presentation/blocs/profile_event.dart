@@ -12,7 +12,7 @@ class OnlineChangedEvent extends ProfileEvent {
 
   const OnlineChangedEvent(this.switchValue);
 }
-
+class GetUserRating extends ProfileEvent {}
 class GetUserOnlineModelEvent extends ProfileEvent {}
 class CheckUserEvent extends ProfileEvent {}
 

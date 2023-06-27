@@ -104,4 +104,30 @@ class AuthLocalDataSource {
     print('-----------------------removeLog----$removedswitch');
     return removedswitch;
   }
+
+    Future<void> saveUserPause(bool pauseValue) async {
+    final SharedPreferences prefs = await _prefs;
+
+    await prefs.setBool(
+      'pauseValue',
+      pauseValue,
+    );
+    print('pauseValue-----------------------------$pauseValue ---- saved');
+  }
+
+  //get statusswitch
+  Future<bool?> getUserPause() async {
+    final SharedPreferences prefs = await _prefs;
+    final pauseValue = prefs.getBool('pauseValue');
+    print('pausevalue-----------------------------$pauseValue ---- fromlocal');
+    return pauseValue;
+  }
+
+  //remove statuswitch
+  Future<bool> removeUserPause() async {
+    final SharedPreferences prefs = await _prefs;
+    final removePause = prefs.remove('pauseValue');
+    print('-----------------------pauseremove----$removePause');
+    return removePause;
+  }
 }

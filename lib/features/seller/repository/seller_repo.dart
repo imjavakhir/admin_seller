@@ -133,7 +133,7 @@ class SellerRepository {
       required String fullName,
       required String phoneNumber,
       required String id,
-      required String whereFrom}) async {
+      required String? whereFrom}) async {
     final data = {
       "notification": id,
       "where_come_from": whereFrom,
@@ -156,6 +156,13 @@ class SellerRepository {
           }));
       if (response.statusCode == 200) {
         notSoldSelling = NotSoldSelling.fromJson(response.data);
+        Fluttertoast.showToast(
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.BOTTOM,
+            msg: 'Успешно',
+            textColor: AppColors.white,
+            fontSize: 16,
+            backgroundColor: AppColors.grey);
         print('-----------------success-----${notSoldSelling.isSold}');
         return notSoldSelling;
       }
@@ -179,7 +186,7 @@ class SellerRepository {
       required String phoneNumber,
       required double price,
       required String id,
-      required String whereFrom}) async {
+      required String? whereFrom}) async {
     final data = {
       "notification": id,
       "where_come_from": whereFrom,
@@ -202,6 +209,13 @@ class SellerRepository {
           }));
       if (response.statusCode == 200) {
         soldSelling = SoldSelling.fromJson(response.data);
+        Fluttertoast.showToast(
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.BOTTOM,
+            msg: 'Успешно',
+            textColor: AppColors.white,
+            fontSize: 16,
+            backgroundColor: AppColors.grey);
         print('-----------------success-----${soldSelling.sellingPrice}');
         return soldSelling;
       }
