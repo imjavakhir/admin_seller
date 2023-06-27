@@ -159,8 +159,8 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                   paramFormKey.currentState!.validate();
                               if (isValidated) {
                                 if (state.sellerType == Seller.auto) {
-                                  print(
-                                      '${state.seller!.fullname}---------------------${state.seller!.id}');
+                                  debugPrint(
+                                      '${state.seller!.fullname}---------------------8484${state.seller!.id}');
                                   SocketIOService().sendnotification(
                                       state.seller!.id!,
                                       _detailsController.text);

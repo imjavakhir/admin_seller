@@ -59,7 +59,8 @@ class SellerAdminRepository {
           }));
       if (response.statusCode == 200) {
         sellerModel = Sellers.fromJson(response.data);
-        print('-----------------success-------${sellerModel.fullname}');
+        print(
+            '${sellerModel.phoneNumber}   ${sellerModel.id}-----------------success-------${sellerModel.fullname}');
         return sellerModel;
       }
     } on DioError catch (error) {
