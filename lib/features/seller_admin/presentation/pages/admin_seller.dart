@@ -135,10 +135,14 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                             state.sellerType == Seller.auto &&
                             state.seller != null)
                           SellerTile(
-                            title: !state.showLoading
+                            isSeller:
+                                state.seller!.fullname != null ? false : true,
+                            title: !state.showLoading &&
+                                    state.seller!.fullname != null
                                 ? state.seller!.fullname!
-                                : 'Нет онлайн продавцов',
-                            subtitle: !state.showLoading
+                                : 'Нет онлайн продавца',
+                            subtitle: !state.showLoading &&
+                                    state.seller!.phoneNumber != null
                                 ? state.seller!.phoneNumber!
                                 : '',
                           ),

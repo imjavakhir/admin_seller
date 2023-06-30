@@ -37,6 +37,13 @@ class ProfileRepository {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
+        Fluttertoast.showToast(
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.TOP,
+            msg: 'Запрос на подтверждение отправлено',
+            textColor: AppColors.white,
+            fontSize: 16,
+            backgroundColor: AppColors.grey);
         print(
             'after put-----------------success-----${userOnlineModel.isOnline}');
         return userOnlineModel;

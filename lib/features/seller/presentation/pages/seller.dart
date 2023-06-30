@@ -120,10 +120,20 @@ class _SellerPageState extends State<SellerPage> {
               BlocBuilder<SellerBloc, SellerState>(builder: (context, state) {
             return state.clientInfoList.isEmpty
                 ? Center(
-                    child: Text(
-                    'Пока нет клиентов',
-                    style: Styles.headline2,
-                  ))
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            100.r,
+                          ),
+                          color: AppColors.primaryColor.withOpacity(0.5)),
+                      child: Text(
+                        'Пока нет клиентов',
+                        style: Styles.headline4,
+                      ),
+                    ),
+                  )
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     physics: const AlwaysScrollableScrollPhysics(),

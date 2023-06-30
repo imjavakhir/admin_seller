@@ -1,3 +1,4 @@
+import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
 import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
@@ -36,24 +37,30 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                 style: Styles.headline2,
               ),
             ),
+            if (state.sellerList!.isEmpty)
+              Center(
+                child: Container(
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        100.r,
+                      ),
+                      color: AppColors.primaryColor.withOpacity(0.5)),
+                  child: Text(
+                    'Пока нет онлайн продавцов',
+                    style: Styles.headline4,
+                  ),
+                ),
+              ),
             Flexible(
               child: ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   shrinkWrap: true,
                   itemCount: state.sellerList!.length,
                   itemBuilder: (context, index) {
-                    if (state.sellerList!.isEmpty) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 24.w, vertical: 16.h),
-                        child: Center(
-                          child: Text(
-                            'Пока нет онлайн продавцов',
-                            style: Styles.headline2,
-                          ),
-                        ),
-                      );
-                    }
                     if (state.showLoading) {
                       return const SellersShimmer();
                     }

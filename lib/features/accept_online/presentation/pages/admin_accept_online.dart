@@ -6,6 +6,7 @@ import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AcceptOnlineAccept extends StatefulWidget {
   const AcceptOnlineAccept({super.key});
@@ -58,15 +59,24 @@ class _AcceptOnlineAcceptState extends State<AcceptOnlineAccept> {
                       onTapTick: () {
                         BlocProvider.of<AcceptOnlineBloc>(context).add(
                             AcceptUserEvent(
-                                state.userUnverifiedList[index]!.id!,index));
+                                state.userUnverifiedList[index]!.id!, index));
                       },
                     ),
                   );
                 } else {
                   return Center(
-                    child: Text(
-                      'Пока нет запросов',
-                      style: Styles.headline2,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            100.r,
+                          ),
+                          color: AppColors.primaryColor.withOpacity(0.5)),
+                      child: Text(
+                        'Пока нет запросов',
+                        style: Styles.headline4,
+                      ),
                     ),
                   );
                 }

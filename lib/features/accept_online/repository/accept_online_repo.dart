@@ -35,7 +35,7 @@ class AcceptOnlineRepository {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
-            gravity: ToastGravity.BOTTOM,
+            gravity: ToastGravity.CENTER,
             msg: 'Успешно',
             textColor: AppColors.white,
             fontSize: 16,

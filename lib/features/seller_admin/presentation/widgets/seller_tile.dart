@@ -7,12 +7,14 @@ class SellerTile extends StatelessWidget {
   final VoidCallback? onTap;
   final String title;
   final String subtitle;
+  final bool isSeller;
 
   const SellerTile({
     super.key,
     this.onTap,
     required this.title,
     this.subtitle = '',
+    this.isSeller = false,
   });
 
   @override
@@ -31,7 +33,7 @@ class SellerTile extends StatelessWidget {
         style: Styles.headline4Reg,
       ),
       subtitle: Text(
-        '+998$subtitle',
+        isSeller ? subtitle : '+998$subtitle',
         style: Styles.headline6,
       ),
     );

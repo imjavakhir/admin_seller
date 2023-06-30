@@ -149,6 +149,9 @@ class AddClientpage extends StatelessWidget {
                             Form(
                               key: sellKey,
                               child: TextfieldWidget(
+                                  listFormater: [
+                                    ThousandsSeparatorInputFormatter()
+                                  ],
                                   validator: Validators.empty,
                                   textInputType: TextInputType.number,
                                   isDisabled: isSoldInfo,
@@ -256,8 +259,9 @@ class AddClientpage extends StatelessWidget {
                                                 .replaceAll('(', '')
                                                 .replaceAll(')', '')
                                                 .replaceAll(' ', ''),
-                                            price: double.parse(
-                                                _priceController.text));
+                                            price: double.parse(_priceController
+                                                .text
+                                                .replaceAll('.', '')));
                                         Navigator.of(context)
                                             .pushNamed(AppRoutes.main);
                                         set(() {

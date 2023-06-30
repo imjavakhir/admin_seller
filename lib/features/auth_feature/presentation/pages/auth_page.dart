@@ -11,7 +11,6 @@ import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,9 +40,15 @@ class AuthPage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text(
-                      'Авторизация',
-                      style: Styles.headline1,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 36.w),
+                      child: Text(
+                        state.isAdmin
+                            ? 'Вы авторизуетесь как администратор'
+                            : 'Вы авторизуетесь как продавец',
+                        style: Styles.headline1,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     ScreenUtil().setVerticalSpacing(45.h),
                     Form(
@@ -79,25 +84,38 @@ class AuthPage extends StatelessWidget {
                       ),
                     ),
                     ScreenUtil().setVerticalSpacing(10.h),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.h),
-                      child: Row(
-                        children: [
-                          CupertinoSwitch(
-                              activeColor: AppColors.primaryColor,
-                              value: state.isAdmin,
-                              onChanged: (value) {
-                                BlocProvider.of<AuthBloc>(context)
-                                    .add(ChangePriority(priority: value));
-                              }),
-                          ScreenUtil().setHorizontalSpacing(10.w),
-                          Text(
-                            state.isAdmin ? 'Admin' : 'Seller',
-                            style: Styles.headline3M,
-                          )
-                        ],
-                      ),
-                    )
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(horizontal: 24.h),
+                    //   child: Row(
+                    //     children: [
+                    //       CupertinoSwitch(
+                    //           activeColor: AppColors.primaryColor,
+                    //           value: state.isAdmin,
+                    //           onChanged: (value) {
+                    //             BlocProvider.of<AuthBloc>(context)
+                    //                 .add(ChangePriority(priority: value));
+                    //           }),
+                    //       ScreenUtil().setHorizontalSpacing(10.w),
+                    //       Text(
+                    //         state.isAdmin ? 'Admin' : 'Seller',
+                    //         style: Styles.headline3M,
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            foregroundColor: AppColors.primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100.r))),
+                        onPressed: () {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(ChangePriority(priority: !state.isAdmin));
+                        },
+                        child: Text(
+                          state.isAdmin ? 'Вы не админ?' : 'Вы админ?',
+                          style: Styles.headline4,
+                        )),
                   ],
                 ),
               ),

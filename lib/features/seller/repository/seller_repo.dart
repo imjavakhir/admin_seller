@@ -106,8 +106,8 @@ class SellerRepository {
         emptySelling = EmptySelling.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
-            gravity: ToastGravity.BOTTOM,
-            msg: 'Успешно ',
+            gravity: ToastGravity.CENTER,
+            msg: 'Успешно',
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
@@ -158,7 +158,7 @@ class SellerRepository {
         notSoldSelling = NotSoldSelling.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
-            gravity: ToastGravity.BOTTOM,
+            gravity: ToastGravity.CENTER,
             msg: 'Успешно',
             textColor: AppColors.white,
             fontSize: 16,
@@ -211,7 +211,7 @@ class SellerRepository {
         soldSelling = SoldSelling.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
-            gravity: ToastGravity.BOTTOM,
+            gravity: ToastGravity.CENTER,
             msg: 'Успешно',
             textColor: AppColors.white,
             fontSize: 16,

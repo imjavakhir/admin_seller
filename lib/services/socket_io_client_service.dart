@@ -101,7 +101,7 @@ class SocketIOService {
         msg: 'Успешно отпрвалено',
         backgroundColor: AppColors.grey,
         timeInSecForIosWeb: 2,
-        gravity: ToastGravity.TOP,
+        gravity: ToastGravity.CENTER,
         fontSize: 16,
         textColor: AppColors.white,
       );
