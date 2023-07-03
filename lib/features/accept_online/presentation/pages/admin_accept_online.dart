@@ -64,20 +64,26 @@ class _AcceptOnlineAcceptState extends State<AcceptOnlineAccept> {
                     ),
                   );
                 } else {
-                  return Center(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            100.r,
+                  return ListView(
+                    children: [
+                      ScreenUtil().setVerticalSpacing(
+                          (MediaQuery.of(context).size.height - 56) / 2),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 6.h, horizontal: 12.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                100.r,
+                              ),
+                              color: AppColors.primaryColor.withOpacity(0.5)),
+                          child: Text(
+                            'Пока нет запросов',
+                            style: Styles.headline4,
                           ),
-                          color: AppColors.primaryColor.withOpacity(0.5)),
-                      child: Text(
-                        'Пока нет запросов',
-                        style: Styles.headline4,
+                        ),
                       ),
-                    ),
+                    ],
                   );
                 }
               }

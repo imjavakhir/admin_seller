@@ -8,6 +8,7 @@ class SellerTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool isSeller;
+  final Widget? trailing;
 
   const SellerTile({
     super.key,
@@ -15,11 +16,13 @@ class SellerTile extends StatelessWidget {
     required this.title,
     this.subtitle = '',
     this.isSeller = false,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      
       enableFeedback: false,
       splashColor: AppColors.blue.withOpacity(0.05),
       dense: true,
@@ -28,6 +31,7 @@ class SellerTile extends StatelessWidget {
         horizontal: 24.w,
       ),
       onTap: onTap,
+      trailing: trailing,
       title: Text(
         title,
         style: Styles.headline4Reg,

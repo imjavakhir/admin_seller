@@ -78,6 +78,7 @@ class AddClientpage extends StatelessWidget {
                         textEditingControllerID: _textEditingControllerID,
                         valueDrop: state.whereFrom,
                         valueChangedDrop: (value) {
+                          _textEditingControllerID.clear();
                           BlocProvider.of<SellerBloc>(context)
                               .add(WhereFromEvent(value));
                         },
@@ -245,23 +246,30 @@ class AddClientpage extends StatelessWidget {
                                       });
 
                                       if (_isLoading) {
-                                        await _sellerRepository.sendSoldSelling(
-                                            whereFrom: _textEditingControllerID
-                                                        .text !=
-                                                    ''
-                                                ? _textEditingControllerID.text
-                                                : state.whereFrom!,
-                                            id: client.id!,
-                                            details: _detailsController.text,
-                                            fullName: _fullNameController.text,
-                                            phoneNumber: _phoneController.text
-                                                .replaceAll('-', '')
-                                                .replaceAll('(', '')
-                                                .replaceAll(')', '')
-                                                .replaceAll(' ', ''),
-                                            price: double.parse(_priceController
-                                                .text
-                                                .replaceAll('.', '')));
+                                        final soldSelling = await _sellerRepository
+                                            .sendSoldSelling(
+                                                whereFrom:
+                                                    _textEditingControllerID
+                                                                .text !=
+                                                            ''
+                                                        ? _textEditingControllerID
+                                                            .text
+                                                        : state.whereFrom!,
+                                                id: client.id!,
+                                                details:
+                                                    _detailsController.text,
+                                                fullName:
+                                                    _fullNameController.text,
+                                                phoneNumber: _phoneController
+                                                    .text
+                                                    .replaceAll('-', '')
+                                                    .replaceAll('(', '')
+                                                    .replaceAll(')', '')
+                                                    .replaceAll(' ', ''),
+                                                price: double.parse(
+                                                    _priceController.text
+                                                        .replaceAll('.', '')));
+                                        debugPrint(soldSelling!.whereComeFrom!);
                                         Navigator.of(context)
                                             .pushNamed(AppRoutes.main);
                                         set(() {

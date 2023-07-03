@@ -20,7 +20,7 @@ import 'package:admin_seller/src/theme/text_styles.dart';
 bool isLoading = false;
 
 class AuthPage extends StatelessWidget {
-  final ApiService _loginService = ApiService();
+  // final ApiService _loginService = ApiService();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> formKeyPhone = GlobalKey<FormState>();
@@ -105,6 +105,7 @@ class AuthPage extends StatelessWidget {
                     // ),
                     TextButton(
                         style: TextButton.styleFrom(
+                          enableFeedback: false,
                             foregroundColor: AppColors.primaryColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.r))),

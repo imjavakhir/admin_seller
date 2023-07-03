@@ -5,6 +5,7 @@ import 'package:admin_seller/app_const/app_icons.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/share_seller_list.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
@@ -119,20 +120,26 @@ class _SellerPageState extends State<SellerPage> {
           child:
               BlocBuilder<SellerBloc, SellerState>(builder: (context, state) {
             return state.clientInfoList.isEmpty
-                ? Center(
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 12.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            100.r,
+                ? ListView(
+                    children: [
+                      ScreenUtil().setVerticalSpacing(
+                          (MediaQuery.of(context).size.height - 56) / 2),
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 6.h, horizontal: 12.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                100.r,
+                              ),
+                              color: AppColors.primaryColor.withOpacity(0.5)),
+                          child: Text(
+                            'Пока нет клиентов',
+                            style: Styles.headline4,
                           ),
-                          color: AppColors.primaryColor.withOpacity(0.5)),
-                      child: Text(
-                        'Пока нет клиентов',
-                        style: Styles.headline4,
+                        ),
                       ),
-                    ),
+                    ],
                   )
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -141,6 +148,28 @@ class _SellerPageState extends State<SellerPage> {
                     itemCount: state.clientInfoList.length,
                     itemBuilder: (context, index) {
                       return SellerCard(
+                        sharePress: () {
+                          showModalBottomSheet(
+                            backgroundColor: AppColors.white,
+                            context: (context),
+                            useSafeArea: true,
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r)),
+                            builder: (context) =>
+                                ShareSellerList(onSend: () async {
+                              print('-------------');
+                              debugPrint(
+                                  "${state.selectedSeller!.fullname!}------------");
+                              if (state.selectedSeller != null) {
+                                BlocProvider.of<SellerBloc>(context).add(
+                                    ShareClient(
+                                        state.clientInfoList[index]!.id!,
+                                        state.selectedSeller!.id!));
+                              }
+                            }),
+                          );
+                        },
                         selectedItem: state.selectedIndex,
                         index: index,
                         showLoading: state.showLoading,

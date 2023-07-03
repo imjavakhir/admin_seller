@@ -45,6 +45,7 @@ class SocketServiceImpl implements SocketService {
   void emitEvent(String eventName, dynamic data) {
     if (socket.connected) {
       socket.emit(eventName, data);
+      print(data);
     }
   }
 
@@ -98,7 +99,7 @@ class SocketIOService {
     if (socket != null) {
       socket!.emit('new-visit', {"details": details, "seller": sellerId});
       Fluttertoast.showToast(
-        msg: 'Успешно отпрвалено',
+        msg: 'Успешно отправлено',
         backgroundColor: AppColors.grey,
         timeInSecForIosWeb: 2,
         gravity: ToastGravity.CENTER,

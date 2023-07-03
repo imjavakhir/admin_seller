@@ -32,4 +32,21 @@ class ClearVisits extends SellerEvent {
 
   const ClearVisits(this.index, this.id);
 }
-class SavePauseInfo extends SellerEvent{}
+
+class SavePauseInfo extends SellerEvent {}
+
+class ShareClient extends SellerEvent {
+  final String notificationId;
+  final String sellerId;
+
+  const ShareClient(this.notificationId, this.sellerId);
+}
+
+class GetSellersEvent extends SellerEvent {}
+
+class ShareSelectedSeller extends SellerEvent {
+  Sellers selectedSeller;
+  ShareSelectedSeller({
+    required this.selectedSeller,
+  });
+}

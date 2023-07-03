@@ -1,3 +1,4 @@
+import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/sellers_widget.dart';
@@ -104,6 +105,7 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                     BlocProvider.of<SellerAdminBloc>(context)
                                         .add(OnSellerChangeEvent(value));
                                     showModalBottomSheet(
+                                        backgroundColor: AppColors.white,
                                         useSafeArea: true,
                                         isScrollControlled: true,
                                         context: context,

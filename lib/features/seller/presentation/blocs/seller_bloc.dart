@@ -1,22 +1,32 @@
+import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
+import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
 import 'package:admin_seller/features/seller/repository/seller_repo.dart';
+import 'package:admin_seller/features/seller_admin/repository/seller_admin_repo.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 part 'seller_event.dart';
 part 'seller_state.dart';
 
 class SellerBloc extends Bloc<SellerEvent, SellerState> {
   SellerBloc(this._socketService)
-      : super(SellerState(clientInfoList: const [])) {
+      : super(SellerState(
+          sellerList: [],
+          clientInfoList: const [],
+        )) {
     on<ClientInfoListEvent>(_clientInfoListEvent);
     on<GetClientsFromApi>(_getClientsFromApi);
     on<WhereFromEvent>(_whereFromEvent);
     on<ClearVisits>(_clearVisits);
     on<SavePauseInfo>(_savePauseInfo);
+    on<ShareClient>(_shareClient);
+    on<GetSellersEvent>(_getSellersEvent);
+    on<ShareSelectedSeller>(_shareSelectedSeller);
   }
 
   final GlobalKey<AnimatedListState> key = GlobalKey();
@@ -52,7 +62,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       });
     }
 
-    emit(SellerState(clientInfoList: event.clientInfosList));
+    emit(SellerState(clientInfoList: event.clientInfosList, sellerList: []));
   }
 
   Future<void> _getClientsFromApi(
@@ -89,5 +99,33 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     emit(state.copyWith(
       isPaused: value,
     ));
+  }
+
+  void _shareClient(ShareClient event, Emitter<SellerState> emit) async {
+    _socketService.emitEvent('share-visit',
+        {"seller": event.sellerId, "notification": event.notificationId});
+    Fluttertoast.showToast(
+      msg: 'Успешно отправлено',
+      backgroundColor: AppColors.grey,
+      timeInSecForIosWeb: 2,
+      gravity: ToastGravity.CENTER,
+      fontSize: 16,
+      textColor: AppColors.white,
+    );
+  }
+
+  final SellerAdminRepository _sellerAdminRepository = SellerAdminRepository();
+  void _getSellersEvent(
+      GetSellersEvent event, Emitter<SellerState> emit) async {
+    emit(state.copyWith(showLoadingBottomSheet: true));
+    final sellerList = await _sellerAdminRepository.getSellers();
+    emit(state.copyWith(sellerList: sellerList, showLoadingBottomSheet: false));
+    debugPrint(state.sellerList.first!.fullname!);
+  }
+
+  void _shareSelectedSeller(
+      ShareSelectedSeller event, Emitter<SellerState> emit) {
+    emit(state.copyWith(selectedSeller: event.selectedSeller));
+    debugPrint(state.selectedSeller!.fullname!);
   }
 }

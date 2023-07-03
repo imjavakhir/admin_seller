@@ -1,4 +1,3 @@
-import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/profile/repository/profile_repo.dart';
 import 'package:equatable/equatable.dart';
@@ -11,7 +10,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(const ProfileState()) {
     on<OnlineChangedEvent>(_onOnlineChangedEvent);
     on<GetUserOnlineModelEvent>(_getUserOnlineModelEvent);
-    on<CheckUserEvent>(_checkUserEvent);
+    // on<CheckUserEvent>(_checkUserEvent);
     on<GetUserRating>(_getRating);
   }
 
@@ -46,21 +45,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(isVerified: userStatusVerified, switchValue: value));
   }
 
-  Future<void> _checkUserEvent(
-      CheckUserEvent event, Emitter<ProfileState> emit) async {
-    final user = HiveDataSource().box.values.toList().first;
-    print(user.type);
+  // Future<void> _checkUserEvent(
+  //     CheckUserEvent event, Emitter<ProfileState> emit) async {
+  //   final user = HiveDataSource().box.values.toList().first;
+  //   print(user.type);
 
-    if (user.type == 'seller_admin') {
-      emit(const ProfileState(isAdmin: true));
-    } else {
-      emit(const ProfileState(isAdmin: false));
-    }
-  }
+  //   if (user.type == 'seller_admin') {
+  //     emit(const ProfileState(isAdmin: true));
+  //   } else {
+  //     emit(const ProfileState(isAdmin: false));
+  //   }
+  // }
 
   Future<void> _getRating(
       GetUserRating event, Emitter<ProfileState> emit) async {
-    final rating = await _profileRepository.getUserRating();
-    emit(state.copyWith(rating: rating!.rating.toString()));
+    final ratingModel = await _profileRepository.getUserRating();
+
+    emit(state.copyWith(
+        rating: (((ratingModel!.rating)! * 100).ceil() / 100).toString()));
   }
 }
