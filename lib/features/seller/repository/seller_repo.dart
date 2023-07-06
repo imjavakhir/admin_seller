@@ -88,10 +88,7 @@ class SellerRepository {
   }
 
   Future<EmptySelling?> sendEmptySelling({required String id}) async {
-    final data = {
-      "notification": id,
-      "is_empty": true,
-    };
+    final data = {"notification": id, "is_empty": true, "report": true};
     final token = await AuthLocalDataSource().getLogToken();
     EmptySelling? emptySelling;
     try {
@@ -133,7 +130,8 @@ class SellerRepository {
       required String fullName,
       required String phoneNumber,
       required String id,
-      required String? whereFrom}) async {
+      required String? whereFrom,
+      required bool? report}) async {
     final data = {
       "notification": id,
       "where_come_from": whereFrom,
@@ -142,7 +140,8 @@ class SellerRepository {
       "fullname": fullName,
       "is_empty": false,
       "is_sold": false,
-      "selling_price": 0
+      "selling_price": 0,
+      "report": report
     };
     final token = await AuthLocalDataSource().getLogToken();
     NotSoldSelling? notSoldSelling;
@@ -186,7 +185,8 @@ class SellerRepository {
       required String phoneNumber,
       required double price,
       required String id,
-      required String? whereFrom}) async {
+      required String? whereFrom,
+      required bool? report}) async {
     final data = {
       "notification": id,
       "where_come_from": whereFrom,
@@ -195,7 +195,8 @@ class SellerRepository {
       "fullname": fullName,
       "is_empty": false,
       "is_sold": true,
-      "selling_price": price
+      "selling_price": price,
+      "report": report
     };
     final token = await AuthLocalDataSource().getLogToken();
     SoldSelling? soldSelling;

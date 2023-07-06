@@ -6,7 +6,6 @@ import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.
 import 'package:admin_seller/features/auth_feature/repository/auth_repo.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/services/api_service.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/validators/validators.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -105,7 +104,7 @@ class AuthPage extends StatelessWidget {
                     // ),
                     TextButton(
                         style: TextButton.styleFrom(
-                          enableFeedback: false,
+                            enableFeedback: false,
                             foregroundColor: AppColors.primaryColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100.r))),

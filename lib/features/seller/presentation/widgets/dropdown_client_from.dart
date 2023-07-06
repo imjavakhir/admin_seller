@@ -43,21 +43,25 @@ class DropDownClientFrom extends StatelessWidget {
                 return Validators.empty(value);
               },
               decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.textfieldBackground,
-                  errorBorder: Decorations.errorBorder,
-                  focusedBorder: Decorations.focusedBorder,
-                  enabledBorder: Decorations.enabledBorder,
-                  focusedErrorBorder: Decorations.errorBorder,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16.w)),
+                isCollapsed: true,
+                filled: true,
+                fillColor: AppColors.textfieldBackground,
+                errorBorder: Decorations.errorBorder,
+                focusedBorder: Decorations.focusedBorder,
+                enabledBorder: Decorations.enabledBorder,
+                focusedErrorBorder: Decorations.errorBorder,
+              ),
               enableFeedback: false,
               autofocus: true,
               barrierColor: Colors.grey.withOpacity(0.8),
               iconStyleData: IconStyleData(
                   iconEnabledColor: AppColors.borderColor,
                   iconSize: 24.h,
-                  icon: const Icon(
-                    CupertinoIcons.chevron_down,
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: const Icon(
+                      CupertinoIcons.chevron_down,
+                    ),
                   )),
               dropdownStyleData: DropdownStyleData(
                 padding: EdgeInsets.zero,
@@ -70,7 +74,6 @@ class DropDownClientFrom extends StatelessWidget {
               menuItemStyleData: MenuItemStyleData(
                   padding: EdgeInsets.symmetric(horizontal: 16.w)),
               buttonStyleData: ButtonStyleData(
-                width: double.maxFinite,
                 height: 50,
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 // decoration: BoxDecoration(

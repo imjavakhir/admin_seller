@@ -192,6 +192,7 @@ class AddClientpage extends StatelessWidget {
                                       if (_isLoading) {
                                         await _sellerRepository
                                             .sendNotSoldSelling(
+                                                report: state.isReported,
                                                 id: client.id!,
                                                 whereFrom:
                                                     _textEditingControllerID
@@ -248,6 +249,7 @@ class AddClientpage extends StatelessWidget {
                                       if (_isLoading) {
                                         final soldSelling = await _sellerRepository
                                             .sendSoldSelling(
+                                                report: state.isReported,
                                                 whereFrom:
                                                     _textEditingControllerID
                                                                 .text !=
@@ -293,6 +295,20 @@ class AddClientpage extends StatelessWidget {
               )
             ]),
             appBar: AppBarWidget(
+              actions: [
+                IconButton(
+                    enableFeedback: false,
+                    splashRadius: 24.r,
+                    iconSize: 24.h,
+                    onPressed: () {
+                      BlocProvider.of<SellerBloc>(context)
+                          .add(ChangeReportStatus());
+                    },
+                    icon: Icon(
+                      state.isReported ? Icons.report : Icons.report_off,
+                      color: AppColors.red,
+                    )),
+              ],
               title: 'Оформить клиента',
               leading: IconButton(
                   enableFeedback: false,

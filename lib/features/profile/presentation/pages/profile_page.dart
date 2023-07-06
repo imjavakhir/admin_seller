@@ -6,7 +6,6 @@ import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_us
 import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/online_tile.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/profile_tile.dart';
-import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -121,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context, AppRoutes.auth, (route) => false);
                             await HiveDataSource().clearUserDetails();
                             await AuthLocalDataSource().removeLogToken();
-                            SocketIOService().disconnectSocket();
+                            // SocketIOService().disconnectSocket();
                             // await AuthLocalDataSource().removeFcmToken();
                           }),
                       ScreenUtil().setVerticalSpacing(30.h)

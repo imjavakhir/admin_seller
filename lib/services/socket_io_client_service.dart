@@ -37,7 +37,7 @@ class SocketServiceImpl implements SocketService {
   void disconnect() {
     if (socket.connected) {
       socket.disconnect();
-      print('disconnected---------}');
+      print('disconnected-------------------------------------------------}');
     }
   }
 

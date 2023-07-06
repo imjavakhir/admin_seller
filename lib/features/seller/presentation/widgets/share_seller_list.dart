@@ -9,10 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShareSellerList extends StatefulWidget {
-  final VoidCallback? onSend;
+  final int clientInfoIndex;
+
   const ShareSellerList({
     super.key,
-    this.onSend,
+    required this.clientInfoIndex,
   });
 
   @override
@@ -27,12 +28,17 @@ class _ShareSellerListState extends State<ShareSellerList> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<SellerBloc, SellerState>(
       builder: (context, state) {
         return DraggableScrollableSheet(
           initialChildSize: 0.5,
-          maxChildSize: 1.0,
+          maxChildSize: 1,
           minChildSize: 0.5,
           expand: false,
           builder: (context, scrollController) => Stack(
@@ -76,12 +82,14 @@ class _ShareSellerListState extends State<ShareSellerList> {
                               if (state.showLoadingBottomSheet) {
                                 return const SellersShimmer();
                               }
+
                               return SellerTile(
                                 onTap: () {
                                   BlocProvider.of<SellerBloc>(context).add(
                                       ShareSelectedSeller(
                                           selectedSeller:
                                               state.sellerList[index]!));
+                                  Navigator.of(context).pop();
                                 },
                                 title: state.sellerList[index]!.fullname!,
                                 subtitle: state.sellerList[index]!.phoneNumber!,
@@ -90,37 +98,6 @@ class _ShareSellerListState extends State<ShareSellerList> {
                   ),
                 ],
               ),
-              Positioned(
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            top: BorderSide(
-                                width: 0, color: AppColors.borderColor))),
-                    child: SellerTile(
-                      title: state.selectedSeller != null
-                          ? state.selectedSeller!.fullname!
-                          : "Не выбрали продавца",
-                      subtitle: state.selectedSeller != null
-                          ? state.selectedSeller!.phoneNumber!
-                          : "",
-                      trailing: Material(
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.r)),
-                        child: IconButton(
-                            disabledColor: AppColors.borderColor,
-                            splashRadius: 24.r,
-                            onPressed: widget.onSend,
-                            icon: const Icon(
-                              CupertinoIcons.paperplane,
-                              color: AppColors.black,
-                            )),
-                      ),
-                    ),
-                  ))
             ],
           ),
         );

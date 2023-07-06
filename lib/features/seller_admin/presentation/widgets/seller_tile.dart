@@ -22,7 +22,7 @@ class SellerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
       enableFeedback: false,
       splashColor: AppColors.blue.withOpacity(0.05),
       dense: true,

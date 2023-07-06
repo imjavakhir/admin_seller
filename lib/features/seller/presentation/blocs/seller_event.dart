@@ -1,11 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'seller_bloc.dart';
 
-abstract class SellerEvent extends Equatable {
+abstract class SellerEvent {
   const SellerEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class SellerPauseEvent extends SellerEvent {}
@@ -36,10 +33,13 @@ class ClearVisits extends SellerEvent {
 class SavePauseInfo extends SellerEvent {}
 
 class ShareClient extends SellerEvent {
-  final String notificationId;
-  final String sellerId;
+  final String? notificationId;
+  final String? sellerId;
 
-  const ShareClient(this.notificationId, this.sellerId);
+  const ShareClient(
+    this.notificationId,
+    this.sellerId,
+  );
 }
 
 class GetSellersEvent extends SellerEvent {}
@@ -50,3 +50,29 @@ class ShareSelectedSeller extends SellerEvent {
     required this.selectedSeller,
   });
 }
+
+class DisconnectSocket extends SellerEvent {}
+
+class ConnectSocket extends SellerEvent {}
+
+class ShareClientBUtton extends SellerEvent {
+  final int shareIndex;
+
+  const ShareClientBUtton(this.shareIndex);
+}
+
+class HelpShareClient extends SellerEvent {
+  final String notificationId;
+  final String sellerId;
+
+  const HelpShareClient(this.notificationId, this.sellerId);
+}
+
+class HelpNotifications extends SellerEvent {
+  final List<HelpClientInfo?> helpClients;
+
+  const HelpNotifications(this.helpClients);
+}
+
+class ChangeReportStatus extends SellerEvent {}
+class GetNewSellerVisits extends SellerEvent{}
