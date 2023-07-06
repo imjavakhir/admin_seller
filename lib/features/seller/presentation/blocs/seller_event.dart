@@ -24,10 +24,11 @@ class ClientInfoListEvent extends SellerEvent {
 }
 
 class ClearVisits extends SellerEvent {
+  final bool report;
   final String id;
   final int index;
 
-  const ClearVisits(this.index, this.id);
+  const ClearVisits(this.index, this.id, this.report);
 }
 
 class SavePauseInfo extends SellerEvent {}
@@ -75,4 +76,5 @@ class HelpNotifications extends SellerEvent {
 }
 
 class ChangeReportStatus extends SellerEvent {}
-class GetNewSellerVisits extends SellerEvent{}
+
+class GetNewSellerVisits extends SellerEvent {}

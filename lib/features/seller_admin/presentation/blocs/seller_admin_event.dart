@@ -21,6 +21,7 @@ class SelectedSellerEvent extends SellerAdminEvent {
     required this.selectedSeller,
   });
 }
-class SendClient extends SellerAdminEvent{
-  
-}
+
+class SendClient extends SellerAdminEvent {}
+
+

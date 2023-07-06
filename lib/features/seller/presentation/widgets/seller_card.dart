@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_colors.dart';
+import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/share_seller_list.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
@@ -97,7 +98,7 @@ class SellerCard extends StatelessWidget {
                         splashRadius: 24.r,
                         onPressed: sharePress,
                         icon: Icon(
-                          CupertinoIcons.share,
+                          CupertinoIcons.chevron_up,
                           size: 24.h,
                           color: AppColors.black,
                         )),
@@ -149,13 +150,16 @@ class SellerCard extends StatelessWidget {
                         child: IconButton(
                             enableFeedback: false,
                             splashRadius: 24.r,
-                            onPressed: state.selectedSeller != null
+                            onPressed: state.selectedSeller != null &&
+                                    state.selectedSeller!.id!.isNotEmpty
                                 ? () {
                                     BlocProvider.of<SellerBloc>(context)
                                         .add(ShareClient(
                                       state.clientInfoList[index]!.id!,
                                       state.selectedSeller!.id!,
                                     ));
+                                    Navigator.of(context)
+                                        .pushNamed(AppRoutes.main);
 
                                     // HelpShareClient(
                                     //     state.clientInfoList[index]!.id!,
@@ -166,7 +170,8 @@ class SellerCard extends StatelessWidget {
                                 : null,
                             icon: Icon(
                               CupertinoIcons.paperplane,
-                              color: state.selectedSeller != null
+                              color: state.selectedSeller != null &&
+                                      state.selectedSeller!.id!.isNotEmpty
                                   ? AppColors.black
                                   : AppColors.borderColor,
                             )),
@@ -179,106 +184,113 @@ class SellerCard extends StatelessWidget {
           ],
         ),
       ),
-      firstChild: Stack(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
-            decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10.r),
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 20.r,
-                      color: AppColors.cardShadow,
-                      offset: const Offset(0, 0))
-                ]),
-            height: 164.h,
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      firstChild: BlocBuilder<SellerBloc, SellerState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(10.r),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 20.r,
+                          color: AppColors.cardShadow,
+                          offset: const Offset(0, 0))
+                    ]),
+                height: 164.h,
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Параметры клиента',
-                          style: Styles.headline4,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Параметры клиента',
+                              style: Styles.headline4,
+                            ),
+                            ScreenUtil().setVerticalSpacing(6.h),
+                            SizedBox(
+                              width: 250.w,
+                              child: Text(
+                                parametrs,
+                                style: Styles.headline6,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                                maxLines: 3,
+                              ),
+                            ),
+                          ],
                         ),
-                        ScreenUtil().setVerticalSpacing(6.h),
-                        SizedBox(
-                          width: 250.w,
-                          child: Text(
-                            parametrs,
-                            style: Styles.headline6,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            maxLines: 3,
-                          ),
-                        ),
+                        const Spacer(),
+                        if (shareId.isEmpty)
+                          Material(
+                            color: AppColors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100.r)),
+                            child: IconButton(
+                                enableFeedback: false,
+                                splashRadius: 24.r,
+                                onPressed: sharePress,
+                                icon: Icon(
+                                  CupertinoIcons.chevron_down,
+                                  size: 24.h,
+                                  color: AppColors.black,
+                                )),
+                          )
                       ],
                     ),
                     const Spacer(),
-                    if (shareId.isEmpty)
-                      Material(
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.r)),
-                        child: IconButton(
-                            enableFeedback: false,
-                            splashRadius: 24.r,
-                            onPressed: sharePress,
-                            icon: Icon(
-                              CupertinoIcons.share,
-                              size: 24.h,
-                              color: AppColors.black,
-                            )),
-                      )
-                  ],
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    LongButton(
-                      paddingW: 0,
-                      buttonName: /* !isReady ? 'Принимать' : */ 'Оформить',
-                      fontsize: 12,
-                      onTap: /* !isReady ? ontapGreen : */ ontapGreenR,
-                      height: 32,
-                      width: 120,
-                    ),
-                    ScreenUtil().setHorizontalSpacing(10),
-                    TransparentLongButton(
-                      paddingW: 0,
-                      width: 120,
-                      height: 32,
-                      fontsize: 12,
-                      buttonName: /* !isReady ? 'Отменить' : */ 'Пустой',
-                      onTap: /* !isReady ? ontapRed : */ ontapRedR,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        LongButton(
+                          paddingW: 0,
+                          buttonName: /* !isReady ? 'Принимать' : */
+                              'Оформить',
+                          fontsize: 12,
+                          onTap: /* !isReady ? ontapGreen : */
+                              ontapGreenR,
+                          height: 32,
+                          width: 120,
+                        ),
+                        ScreenUtil().setHorizontalSpacing(10),
+                        TransparentLongButton(
+                          paddingW: 0,
+                          width: 120,
+                          height: 32,
+                          fontsize: 12,
+                          buttonName: /* !isReady ? 'Отменить' : */
+                              'Пустой',
+                          onTap: /* !isReady ? ontapRed : */ ontapRedR,
+                        )
+                      ],
                     )
                   ],
+                ),
+              ),
+              if (showLoading && selectedItem == index)
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  height: 164.h,
+                  width: double.maxFinite,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: AppColors.white),
+                  ),
                 )
-              ],
-            ),
-          ),
-          if (showLoading && selectedItem == index)
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              height: 164.h,
-              width: double.maxFinite,
-              child: const Center(
-                child: CircularProgressIndicator(color: AppColors.white),
-              ),
-            )
-        ],
+            ],
+          );
+        },
       ),
     );
   }

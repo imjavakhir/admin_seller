@@ -179,6 +179,9 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
                                       state.selectedSeller!.id!,
                                       _detailsController.text);
                                 }
+                                BlocProvider.of<SellerAdminBloc>(context).add(
+                                    const OnSellerChangeEvent(Seller.auto));
+
                                 _detailsController.text = '';
                               }
 

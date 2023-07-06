@@ -5,7 +5,7 @@ import 'package:admin_seller/src/theme/text_styles.dart';
 
 class TransparentLongButton extends StatelessWidget {
   final String buttonName;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double width;
   final double height;
   final double fontsize;

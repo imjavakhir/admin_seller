@@ -24,14 +24,17 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
   Future<void> _getSellerEvent(
       GetSellerEvent event, Emitter<SellerAdminState> emit) async {
     emit(state.copyWith(showLoading: true));
-  
+
     final seller = await _sellerAdminRepository.getSeller();
     emit(state.copyWith(seller: seller, showLoading: false));
   }
 
   void _onSellerChangeEvent(
       OnSellerChangeEvent event, Emitter<SellerAdminState> emit) {
-    emit(state.copyWith(sellerType: event.seller));
+    emit(state.copyWith(
+        sellerType: event.seller,
+        selectedSeller:
+            Sellers(id: '', fullname: 'Виберите продавца', phoneNumber: '')));
   }
 
   void _selectedSellerEvent(

@@ -3,6 +3,7 @@ import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/pause_button.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
+import 'package:admin_seller/src/shimmers/seller_card_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,6 +73,8 @@ class _SellerPageState extends State<SellerPage> {
           },
           child: state.clientInfoList.isEmpty
               ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   children: [
                     ScreenUtil().setVerticalSpacing(
                         (MediaQuery.of(context).size.height - 56) / 2),
@@ -98,9 +101,15 @@ class _SellerPageState extends State<SellerPage> {
                   shrinkWrap: true,
                   itemCount: state.clientInfoList.length,
                   itemBuilder: (context, index) {
+                    if (state.loadingdata) {
+                      return const SellerCardShimmer();
+                    }
                     return SellerCard(
                       isShared: state.isShared,
-                      shareId: state.clientInfoList[index]!.shared_seller!,
+                      shareId:
+                          state.clientInfoList[index]!.shared_seller != null
+                              ? state.clientInfoList[index]!.shared_seller!
+                              : '',
                       sharePress: () {
                         BlocProvider.of<SellerBloc>(context)
                             .add(ShareClientBUtton(index));
@@ -116,8 +125,18 @@ class _SellerPageState extends State<SellerPage> {
                         debugPrint(state.clientInfoList[index]!.details!);
                       },
                       ontapRedR: () async {
+                        final bool reportStatus =
+                            state.clientInfoList[index]!.shared_seller !=
+                                        null &&
+                                    state.clientInfoList[index]!.shared_seller!
+                                        .isNotEmpty
+                                ? true
+                                : false;
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(
-                            index, state.clientInfoList[index]!.id!));
+                            index,
+                            state.clientInfoList[index]!.id!,
+                            reportStatus));
+                        debugPrint('${reportStatus}ssssssss');
 
                         // _sellerRepository
                         // .sendEmptySelling(id: state.clientInfoList[index]!.id!);

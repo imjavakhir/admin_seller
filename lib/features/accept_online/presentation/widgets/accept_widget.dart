@@ -40,7 +40,7 @@ class AcceptWidget extends StatelessWidget {
                     color: AppColors.cardShadow,
                     offset: const Offset(0, 0))
               ]),
-          height: 80.h,
+          height: 90.h,
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: Column(

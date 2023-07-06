@@ -32,7 +32,6 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     on<HelpShareClient>(_helpShareClient);
     on<HelpNotifications>(_helpNotifications);
     on<ChangeReportStatus>(_changeReportStatus);
-
   }
 
   final GlobalKey<AnimatedListState> key = GlobalKey();
@@ -51,6 +50,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   Future<void> _clientInfoListEvent(
       ClientInfoListEvent event, Emitter<SellerState> emit) async {
+
     final logToken = await AuthLocalDataSource().getLogToken();
     // final apiVisits = await ApiService().getAllUserVisits();
     // final newList = List<ClientInfo>.from(state.clientInfoList);
@@ -84,8 +84,11 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   Future<void> _getClientsFromApi(
       GetClientsFromApi event, Emitter<SellerState> emit) async {
+    emit(state.copyWith(loadingdata: true));
     visits = await _sellerRepository.getAllUserVisits();
+
     final value = await AuthLocalDataSource().getUserPause();
+    emit(state.copyWith(loadingdata: false));
     emit(state.copyWith(
         clientInfoList: visits.reversed.toList(), isPaused: value));
   }
@@ -97,7 +100,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   Future<void> _clearVisits(
       ClearVisits event, Emitter<SellerState> emit) async {
     emit(state.copyWith(showLoading: true, selectedIndex: event.index));
-    await _sellerRepository.sendEmptySelling(id: event.id);
+    await _sellerRepository.sendEmptySelling(id: event.id,report: event.report);
     visits = await _sellerRepository.getAllUserVisits();
     final value = await AuthLocalDataSource().getUserPause();
 
@@ -134,7 +137,10 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     );
     visits = await _sellerRepository.getAllUserVisits();
 
-    emit(state.copyWith(clientInfoList: visits.reversed.toList()));
+    emit(SellerState(
+        clientInfoList: visits.reversed.toList(),
+        sellerList: [],
+        helpClients: []));
   }
 
   Future<void> _helpShareClient(
@@ -151,11 +157,12 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       textColor: AppColors.white,
     );
     visits = await _sellerRepository.getAllUserVisits();
-
+    emit(state.copyWith(loadingdata: true));
     emit(SellerState(
         clientInfoList: visits.reversed.toList(),
         sellerList: [],
         helpClients: []));
+    emit(state.copyWith(loadingdata: false));
   }
 
   final SellerAdminRepository _sellerAdminRepository = SellerAdminRepository();
@@ -195,7 +202,10 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   void _sharedClientButton(ShareClientBUtton event, Emitter<SellerState> emit) {
     emit(state.copyWith(
-        isShared: !state.isShared, selectedIndex: event.shareIndex));
+        isShared: !state.isShared,
+        selectedIndex: event.shareIndex,
+        selectedSeller:
+            Sellers(id: '', fullname: 'Не выбрали продавца', phoneNumber: '')));
   }
 
   Future<void> _helpNotifications(
@@ -229,5 +239,4 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     emit(SellerState(
         helpClients: event.helpClients, sellerList: [], clientInfoList: []));
   }
-
 }

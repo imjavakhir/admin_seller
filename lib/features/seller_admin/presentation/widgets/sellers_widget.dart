@@ -42,6 +42,11 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                   style: Styles.headline2,
                 ),
               ),
+              ScreenUtil().setVerticalSpacing(10),
+              const Divider(
+                color: AppColors.grey,
+                height: 0,
+              ),
               Flexible(
                 child: state.sellerList!.isEmpty
                     ? Center(

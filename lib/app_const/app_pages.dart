@@ -7,6 +7,7 @@ import 'package:admin_seller/features/seller/presentation/pages/notification_pag
 
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class AppPages {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -27,9 +28,13 @@ abstract class AppPages {
         return MaterialPageRoute(
             builder: (_) => Scaffold(
                   body: Center(
-                    child: Text(
-                      'Пожалуйста, перезапустите приложение',
-                      style: Styles.headline1,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 36.w),
+                      child: Text(
+                        'Пожалуйста, перезапустите приложение',
+                        textAlign: TextAlign.center,
+                        style: Styles.headline1,
+                      ),
                     ),
                   ),
                 ));

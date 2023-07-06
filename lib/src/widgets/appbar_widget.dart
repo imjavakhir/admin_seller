@@ -12,7 +12,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
   const AppBarWidget({
     super.key,
     required this.title,
-    this.leading, this.actions,
+    this.leading,
+    this.actions,
   });
 
   @override
@@ -20,9 +21,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
     return AppBar(
       leading: leading,
       systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-      ),
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: AppColors.black,
+          systemNavigationBarIconBrightness: Brightness.light),
       actions: actions,
       elevation: 0,
       centerTitle: true,

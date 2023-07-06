@@ -87,8 +87,8 @@ class SellerRepository {
     return userOnlineModel;
   }
 
-  Future<EmptySelling?> sendEmptySelling({required String id}) async {
-    final data = {"notification": id, "is_empty": true, "report": true};
+  Future<EmptySelling?> sendEmptySelling({required String id, required bool report}) async {
+    final data = {"notification": id, "is_empty": true, "report": report};
     final token = await AuthLocalDataSource().getLogToken();
     EmptySelling? emptySelling;
     try {

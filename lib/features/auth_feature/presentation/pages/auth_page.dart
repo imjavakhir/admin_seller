@@ -8,6 +8,7 @@ import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/validators/validators.dart';
+import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:admin_seller/src/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class AuthPage extends StatelessWidget {
         return GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
+            appBar: const AppBarWidget(title: ''),
             body: Center(
               child: SingleChildScrollView(
                 child: Column(

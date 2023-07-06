@@ -3,7 +3,6 @@ import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart
 import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
 import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,6 +43,7 @@ class _ShareSellerListState extends State<ShareSellerList> {
           builder: (context, scrollController) => Stack(
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ScreenUtil().setVerticalSpacing(24),
@@ -52,6 +52,11 @@ class _ShareSellerListState extends State<ShareSellerList> {
                       'Выберите продавца',
                       style: Styles.headline2,
                     ),
+                  ),
+                  ScreenUtil().setVerticalSpacing(10),
+                  const Divider(
+                    color: AppColors.grey,
+                    height: 0,
                   ),
                   Flexible(
                     child: state.sellerList.isEmpty
@@ -89,7 +94,9 @@ class _ShareSellerListState extends State<ShareSellerList> {
                                       ShareSelectedSeller(
                                           selectedSeller:
                                               state.sellerList[index]!));
-                                  Navigator.of(context).pop();
+                                  Navigator.of(
+                                    context,
+                                  ).pop();
                                 },
                                 title: state.sellerList[index]!.fullname!,
                                 subtitle: state.sellerList[index]!.phoneNumber!,

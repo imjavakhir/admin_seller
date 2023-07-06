@@ -50,6 +50,7 @@ class TextfieldWidget extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingW.w),
         child: TextFormField(
+          maxLength: isSoldField ? 11 : null,
           validator: validator,
           key: textFieldKey,
           onTap: () {
@@ -68,6 +69,7 @@ class TextfieldWidget extends StatelessWidget {
           controller: textEditingController,
           keyboardType: textInputType,
           decoration: InputDecoration(
+              counterText: '',
               isCollapsed: true,
               prefixIcon: isPhoneNumber
                   ? Container(

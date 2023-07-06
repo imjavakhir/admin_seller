@@ -296,18 +296,20 @@ class AddClientpage extends StatelessWidget {
             ]),
             appBar: AppBarWidget(
               actions: [
-                IconButton(
-                    enableFeedback: false,
-                    splashRadius: 24.r,
-                    iconSize: 24.h,
-                    onPressed: () {
-                      BlocProvider.of<SellerBloc>(context)
-                          .add(ChangeReportStatus());
-                    },
-                    icon: Icon(
-                      state.isReported ? Icons.report : Icons.report_off,
-                      color: AppColors.red,
-                    )),
+                if (client.shared_seller != null &&
+                    client.shared_seller!.isNotEmpty)
+                  IconButton(
+                      enableFeedback: false,
+                      splashRadius: 24.r,
+                      onPressed: () {
+                        BlocProvider.of<SellerBloc>(context)
+                            .add(ChangeReportStatus());
+                      },
+                      icon: Icon(
+                        state.isReported ? Icons.report : Icons.report,
+                        color:
+                            state.isReported ? AppColors.red : AppColors.green,
+                      )),
               ],
               title: 'Оформить клиента',
               leading: IconButton(
