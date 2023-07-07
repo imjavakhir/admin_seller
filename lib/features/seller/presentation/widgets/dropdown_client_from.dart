@@ -153,6 +153,23 @@ class DropDownClientFrom extends StatelessWidget {
                     ],
                   ),
                 ),
+                    DropdownMenuItem(
+                  value: 'olx',
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        AppIcons.olx,
+                        height: 24.h,
+                        width: 24.h,
+                      ),
+                      ScreenUtil().setHorizontalSpacing(16.w),
+                      Text(
+                        'OLX',
+                        style: Styles.headline4,
+                      ),
+                    ],
+                  ),
+                ),
                 DropdownMenuItem(
                   value: 'banner',
                   child: Row(

@@ -100,7 +100,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   Future<void> _clearVisits(
       ClearVisits event, Emitter<SellerState> emit) async {
     emit(state.copyWith(showLoading: true, selectedIndex: event.index));
-    await _sellerRepository.sendEmptySelling(id: event.id,report: event.report);
+    await _sellerRepository.sendEmptySelling(id: event.id,report: event.report,sharedId: event.sharedId);
     visits = await _sellerRepository.getAllUserVisits();
     final value = await AuthLocalDataSource().getUserPause();
 

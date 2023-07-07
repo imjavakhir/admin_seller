@@ -1,5 +1,6 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
+import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/empty_selling.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_selling.dart';
 import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
@@ -87,8 +88,9 @@ class SellerRepository {
     return userOnlineModel;
   }
 
-  Future<EmptySelling?> sendEmptySelling({required String id, required bool report}) async {
-    final data = {"notification": id, "is_empty": true, "report": report};
+  Future<EmptySelling?> sendEmptySelling(
+      {required String id, required bool report, required String sharedId}) async {
+    final data = {"notification": id, "is_empty": true, "report": report,"shared_seller":sharedId};
     final token = await AuthLocalDataSource().getLogToken();
     EmptySelling? emptySelling;
     try {
@@ -232,5 +234,28 @@ class SellerRepository {
       print('---------------------------------------$error-------');
     }
     return soldSelling;
+  }
+
+  Future<List<SearchedCustomers?>> getSearchedCustomer(
+      {required String searchNumber}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<SearchedCustomers?> searchedCustomers = [];
+    try {
+      Response response =
+          await _dio!.get(AppEndPoints.searchCustomerApi + searchNumber,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200) {
+        searchedCustomers = searchedCustomersFromJson(response.data);
+        print('-----------------success $searchedCustomers');
+        return searchedCustomers;
+      }
+    } catch (error) {
+      print('searchedCustomer ---------------------------------------$error');
+    }
+    return searchedCustomers;
   }
 }

@@ -14,6 +14,7 @@ abstract class AppIcons {
   static const String baner = 'assets/icons/baner.svg';
   static const String facebook = 'assets/icons/facebook.svg';
   static const String recommended = 'assets/icons/recommended.svg';
+  static const String olx = 'assets/icons/olx.svg';
 
   static const Map<String, dynamic> bottomNavigationItems = {
     'Home': {'inactive': home, 'active': home},

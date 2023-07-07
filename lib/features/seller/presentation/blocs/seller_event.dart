@@ -27,8 +27,9 @@ class ClearVisits extends SellerEvent {
   final bool report;
   final String id;
   final int index;
+  final String sharedId;
 
-  const ClearVisits(this.index, this.id, this.report);
+  const ClearVisits(this.index, this.id, this.report, this.sharedId);
 }
 
 class SavePauseInfo extends SellerEvent {}

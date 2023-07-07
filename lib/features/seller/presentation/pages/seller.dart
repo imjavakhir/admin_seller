@@ -132,10 +132,24 @@ class _SellerPageState extends State<SellerPage> {
                                         .isNotEmpty
                                 ? true
                                 : false;
+
+                        final String? reporShareId =
+                            state.clientInfoList[index]!.shared_seller !=
+                                        null &&
+                                    state.clientInfoList[index]!.shared_seller!
+                                        .isNotEmpty
+                                ? state.clientInfoList[index]!.shared_seller
+                                : '';
+
+
+                                
+                        debugPrint("${reporShareId!}-------reportsharedid");
+                        debugPrint("$reportStatus-------reportstatus");
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(
                             index,
                             state.clientInfoList[index]!.id!,
-                            reportStatus));
+                            reportStatus,
+                            reporShareId));
                         debugPrint('${reportStatus}ssssssss');
 
                         // _sellerRepository

@@ -16,12 +16,13 @@ abstract class SocketService {
 
 class SocketServiceImpl implements SocketService {
   late IO.Socket socket;
+  final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
 
   @override
   void connect(String logToken) {
     socket = IO.io(
-        remote,
+        remoteTest,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setQuery({'token': logToken})
@@ -65,6 +66,7 @@ class SocketServiceImpl implements SocketService {
 IO.Socket? socket;
 
 class SocketIOService {
+  final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
   final local = 'http://192.168.100.214:3000/';
   final List<ClientInfo?> clientInfos = [];
@@ -73,7 +75,7 @@ class SocketIOService {
 
     final fcmTokenLocal = await AuthLocalDataSource().getFcmToken();
     socket = IO.io(
-        remote,
+        remoteTest,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setQuery({'token': logToken})
