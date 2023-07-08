@@ -7,7 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellerNotificationCard extends StatelessWidget {
   final String fullName;
-  const SellerNotificationCard({super.key, required this.fullName});
+  final String params;
+  final VoidCallback? onTapRed;
+  final VoidCallback? onTapGreen;
+  const SellerNotificationCard(
+      {super.key, required this.fullName, required this.params, this.onTapRed, this.onTapGreen});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class SellerNotificationCard extends StatelessWidget {
           SizedBox(
             width: 250.w,
             child: Text(
-              'Красная шапка',
+              params,
               style: Styles.headline6,
               overflow: TextOverflow.ellipsis,
               softWrap: true,
@@ -61,7 +65,7 @@ class SellerNotificationCard extends StatelessWidget {
                 paddingW: 0,
                 buttonName: 'Подвердить',
                 fontsize: 12,
-                onTap: () {},
+                onTap: onTapGreen,
                 height: 32,
                 width: 120,
               ),
@@ -72,7 +76,7 @@ class SellerNotificationCard extends StatelessWidget {
                 height: 32,
                 fontsize: 12,
                 buttonName: 'Отменить',
-                onTap: () {},
+                onTap: onTapRed,
               )
             ],
           )

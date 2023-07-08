@@ -5,6 +5,7 @@ import 'package:admin_seller/features/seller/presentation/widgets/pause_button.d
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
 import 'package:admin_seller/src/shimmers/seller_card_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,27 +42,27 @@ class _SellerPageState extends State<SellerPage> {
             isPaused: state.isPaused,
           ),
           title: 'Клиенты',
-          actions: const [
-            // IconButton(
-            //     enableFeedback: false,
-            //     splashRadius: 24.r,
-            //     onPressed: () {
-            //       Navigator.of(context).pushNamed(AppRoutes.notification);
-            //     },
-            //     icon: Badge(
-            //       smallSize: 14.h,
-            //       largeSize: 14.h,
-
-            //       // label: Text(
-            //       //   '1',
-            //       //   style: Styles.headline6
-            //       //       .copyWith(color: AppColors.white, fontSize: 12.sp),
-            //       // ),
-            //       child: const Icon(
-            //         CupertinoIcons.bell,
-            //         color: AppColors.black,
-            //       ),
-            //     ))
+          actions: [
+            IconButton(
+                enableFeedback: false,
+                splashRadius: 24.r,
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AppRoutes.notification);
+                },
+                icon: Badge(
+                  smallSize: 14.h,
+                  largeSize: 14.h,
+                  isLabelVisible: false,
+                  // label: Text(
+                  //   '1',
+                  //   style: Styles.headline6
+                  //       .copyWith(color: AppColors.white, fontSize: 12.sp),
+                  // ),
+                  child: const Icon(
+                    CupertinoIcons.bell,
+                    color: AppColors.black,
+                  ),
+                ))
           ],
         ),
         body: RefreshIndicator(
@@ -107,7 +108,8 @@ class _SellerPageState extends State<SellerPage> {
                     return SellerCard(
                       isShared: state.isShared,
                       shareId:
-                          state.clientInfoList[index]!.shared_seller != null
+                          state.clientInfoList[index]!.shared_seller != null &&
+                                  state.clientInfoList[index]!.is_help != true
                               ? state.clientInfoList[index]!.shared_seller!
                               : '',
                       sharePress: () {
@@ -141,8 +143,6 @@ class _SellerPageState extends State<SellerPage> {
                                 ? state.clientInfoList[index]!.shared_seller
                                 : '';
 
-
-                                
                         debugPrint("${reporShareId!}-------reportsharedid");
                         debugPrint("$reportStatus-------reportstatus");
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(

@@ -58,7 +58,7 @@ class SellerCard extends StatelessWidget {
                   color: AppColors.cardShadow,
                   offset: const Offset(0, 0))
             ]),
-        height: 200.h,
+        height: 240.h,
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         child: Column(
@@ -108,76 +108,113 @@ class SellerCard extends StatelessWidget {
             const Spacer(),
             BlocBuilder<SellerBloc, SellerState>(
               builder: (context, state) {
-                return Container(
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          top: BorderSide(
-                              width: 0, color: AppColors.borderColor))),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 300.w,
-                        child: Material(
-                          type: MaterialType.transparency,
-                          child: SellerTile(
-                            onTap: () {
-                              showModalBottomSheet(
-                                backgroundColor: AppColors.white,
-                                context: (context),
-                                useSafeArea: true,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.r)),
-                                builder: (context) => ShareSellerList(
-                                  clientInfoIndex: index,
-                                ),
-                              );
-                            },
-                            title: state.selectedSeller != null
-                                ? state.selectedSeller!.fullname!
-                                : "Не выбрали продавца",
-                            subtitle: state.selectedSeller != null
-                                ? state.selectedSeller!.phoneNumber!
-                                : "",
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Divider(
+                      height: 0,
+                      color: AppColors.grey,
+                    ),
+                    ScreenUtil().setVerticalSpacing(6.h),
+                    CheckboxListTile(
+                      checkboxShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.r)),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      side: const BorderSide(color: AppColors.grey, width: 1),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+                      activeColor: AppColors.primaryColor,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text(
+                        'Просьба о помощи',
+                        style: Styles.headline5,
+                      ),
+                      value: state.checkBoxValue,
+                      onChanged: (value) {
+                        BlocProvider.of<SellerBloc>(context)
+                            .add(ChangeCheckBoxValue(value!));
+                      },
+                      visualDensity: const VisualDensity(vertical: -4),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 300.w,
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: SellerTile(
+                              onTap: () {
+                                showModalBottomSheet(
+                                  backgroundColor: AppColors.white,
+                                  context: (context),
+                                  useSafeArea: true,
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.r)),
+                                  builder: (context) => ShareSellerList(
+                                    clientInfoIndex: index,
+                                  ),
+                                );
+                              },
+                              title: state.selectedSeller != null
+                                  ? state.selectedSeller!.fullname!
+                                  : "Не выбрали продавца",
+                              subtitle: state.selectedSeller != null
+                                  ? state.selectedSeller!.phoneNumber!
+                                  : "",
+                            ),
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      Material(
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100.r)),
-                        child: IconButton(
-                            enableFeedback: false,
-                            splashRadius: 24.r,
-                            onPressed: state.selectedSeller != null &&
-                                    state.selectedSeller!.id!.isNotEmpty
-                                ? () {
-                                    BlocProvider.of<SellerBloc>(context)
-                                        .add(ShareClient(
-                                      state.clientInfoList[index]!.id!,
-                                      state.selectedSeller!.id!,
-                                    ));
-                                    Navigator.of(context)
-                                        .pushNamed(AppRoutes.main);
-
-                                    // HelpShareClient(
-                                    //     state.clientInfoList[index]!.id!,
-                                    //     state.selectedSeller!.id!));
-
-                                    // Navigator.of(context).pop();
-                                  }
-                                : null,
-                            icon: Icon(
-                              CupertinoIcons.paperplane,
-                              color: state.selectedSeller != null &&
+                        const Spacer(),
+                        Material(
+                          color: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.r)),
+                          child: IconButton(
+                              enableFeedback: false,
+                              splashRadius: 24.r,
+                              onPressed: state.selectedSeller != null &&
                                       state.selectedSeller!.id!.isNotEmpty
-                                  ? AppColors.black
-                                  : AppColors.borderColor,
-                            )),
-                      ),
-                    ],
-                  ),
+                                  ? () {
+                                      if (state.checkBoxValue == true) {
+                                        BlocProvider.of<SellerBloc>(context)
+                                            .add(HelpShareClient(
+                                          state.clientInfoList[index]!.id!,
+                                          state.selectedSeller!.id!,
+                                        ));
+                                        debugPrint(
+                                            "${state.checkBoxValue}-=========");
+                                      }
+                                      if (state.checkBoxValue == false) {
+                                        BlocProvider.of<SellerBloc>(context)
+                                            .add(ShareClient(
+                                          state.clientInfoList[index]!.id!,
+                                          state.selectedSeller!.id!,
+                                        ));
+                                        debugPrint(
+                                            "${state.checkBoxValue}-=========");
+                                      }
+                                      Navigator.of(context)
+                                          .pushNamed(AppRoutes.main);
+
+                                      // HelpShareClient(
+                                      //     state.clientInfoList[index]!.id!,
+                                      //     state.selectedSeller!.id!));
+
+                                      // Navigator.of(context).pop();
+                                    }
+                                  : null,
+                              icon: Icon(
+                                CupertinoIcons.paperplane,
+                                color: state.selectedSeller != null &&
+                                        state.selectedSeller!.id!.isNotEmpty
+                                    ? AppColors.black
+                                    : AppColors.borderColor,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ],
                 );
               },
             )

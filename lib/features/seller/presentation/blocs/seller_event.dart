@@ -10,12 +10,14 @@ class SellerPauseEvent extends SellerEvent {}
 class DisconnectSocketEvent extends SellerEvent {}
 
 class GetClientsFromApi extends SellerEvent {}
+class GetHelpClientsFromApi extends SellerEvent {}
 
 class WhereFromEvent extends SellerEvent {
   final String whereFrom;
 
   const WhereFromEvent(this.whereFrom);
 }
+
 
 class ClientInfoListEvent extends SellerEvent {
   final List<ClientInfo?> clientInfosList;
@@ -69,6 +71,12 @@ class HelpShareClient extends SellerEvent {
 
   const HelpShareClient(this.notificationId, this.sellerId);
 }
+class AcceptNotifEvent extends SellerEvent {
+  final String notificationId;
+  final String sellerId;
+
+  const AcceptNotifEvent(this.notificationId, this.sellerId);
+}
 
 class HelpNotifications extends SellerEvent {
   final List<HelpClientInfo?> helpClients;
@@ -79,3 +87,10 @@ class HelpNotifications extends SellerEvent {
 class ChangeReportStatus extends SellerEvent {}
 
 class GetNewSellerVisits extends SellerEvent {}
+
+class ChangeCheckBoxValue extends SellerEvent {
+  final bool checkBoxValue;
+
+  ChangeCheckBoxValue(this.checkBoxValue);
+}
+

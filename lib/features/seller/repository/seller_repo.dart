@@ -6,9 +6,11 @@ import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_
 import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
 import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:admin_seller/features/seller/data/help_client_model.dart';
 import 'package:admin_seller/services/dio_exceptions.dart';
 import 'package:admin_seller/services/endpoints.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class SellerRepository {
@@ -36,7 +38,7 @@ class SellerRepository {
           }));
       if (response.statusCode == 200) {
         clientInfoList = clientsInfoFromJson(response.data);
-
+      
         return clientInfoList;
       }
     } on DioError catch (error) {
@@ -51,6 +53,36 @@ class SellerRepository {
       print('---------------------------------------$error-------');
     }
     return clientInfoList;
+  }
+
+  Future<List<HelpClientInfo?>> getHelps() async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<HelpClientInfo?> helpClientInfoList = [];
+
+    try {
+      Response response = await _dio!.get(AppEndPoints.userHelps,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        helpClientInfoList = helpClientsInfoFromJson(response.data);
+
+        return helpClientInfoList;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      print('---------------------------------------$error-------');
+    }
+    return helpClientInfoList;
   }
 
   Future<UserOnlineModel?> changePause({required bool isPaused}) async {

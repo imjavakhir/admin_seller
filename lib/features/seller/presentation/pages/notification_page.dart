@@ -45,9 +45,19 @@ class _NotificationPageState extends State<NotificationPage> {
             itemCount: state.helpClients.length,
             itemBuilder: (context, index) {
               return SellerNotificationCard(
-                fullName: state.helpClients[index]!.fullname != null
-                    ? state.helpClients[index]!.fullname!
+                onTapRed: () {},
+                onTapGreen: () {
+                  BlocProvider.of<SellerBloc>(context).add(AcceptNotifEvent(
+                      state.helpClients[index]!.notification!.id!,
+                      state.helpClients[index]!.sharedSeller!.id!));
+                },
+                params: state.helpClients[index]!.notification!.details != null
+                    ? state.helpClients[index]!.notification!.details!
                     : '',
+                fullName:
+                    state.helpClients[index]!.sharedSeller!.fullname != null
+                        ? state.helpClients[index]!.sharedSeller!.fullname!
+                        : '',
               );
             },
           ),

@@ -3,6 +3,8 @@ import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.
 import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
 import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:admin_seller/features/seller/data/help_client_model.dart';
+
 import 'package:admin_seller/features/seller/repository/seller_repo.dart';
 import 'package:admin_seller/features/seller_admin/repository/seller_admin_repo.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
@@ -32,6 +34,8 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     on<HelpShareClient>(_helpShareClient);
     on<HelpNotifications>(_helpNotifications);
     on<ChangeReportStatus>(_changeReportStatus);
+    on<ChangeCheckBoxValue>(_changeCheckBoxValue);
+    on<AcceptNotifEvent>(_acceptNotif);
   }
 
   final GlobalKey<AnimatedListState> key = GlobalKey();
@@ -43,6 +47,11 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   List<ClientInfo?> visits = [];
   List<HelpClientInfo?> helpVisits = [];
 
+  void _changeCheckBoxValue(
+      ChangeCheckBoxValue event, Emitter<SellerState> emit) {
+    emit(state.copyWith(checkBoxValue: event.checkBoxValue));
+  }
+
   void _changeReportStatus(
       ChangeReportStatus event, Emitter<SellerState> emit) {
     emit(state.copyWith(isReported: !state.isReported));
@@ -50,7 +59,6 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   Future<void> _clientInfoListEvent(
       ClientInfoListEvent event, Emitter<SellerState> emit) async {
-
     final logToken = await AuthLocalDataSource().getLogToken();
     // final apiVisits = await ApiService().getAllUserVisits();
     // final newList = List<ClientInfo>.from(state.clientInfoList);
@@ -100,7 +108,8 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   Future<void> _clearVisits(
       ClearVisits event, Emitter<SellerState> emit) async {
     emit(state.copyWith(showLoading: true, selectedIndex: event.index));
-    await _sellerRepository.sendEmptySelling(id: event.id,report: event.report,sharedId: event.sharedId);
+    await _sellerRepository.sendEmptySelling(
+        id: event.id, report: event.report, sharedId: event.sharedId);
     visits = await _sellerRepository.getAllUserVisits();
     final value = await AuthLocalDataSource().getUserPause();
 
@@ -143,6 +152,24 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
         helpClients: []));
   }
 
+  Future<void> _acceptNotif(
+      AcceptNotifEvent event, Emitter<SellerState> emit) async {
+    _socketService.emitEvent('accept-help', {
+      "shared_seller": event.sellerId,
+      "notification": event.notificationId
+    });
+    debugPrint(event.notificationId);
+
+    Fluttertoast.showToast(
+      msg: 'Успешно отправлено',
+      backgroundColor: AppColors.grey,
+      timeInSecForIosWeb: 2,
+      gravity: ToastGravity.CENTER,
+      fontSize: 16,
+      textColor: AppColors.white,
+    );
+  }
+
   Future<void> _helpShareClient(
       HelpShareClient event, Emitter<SellerState> emit) async {
     _socketService.emitEvent('new-help',
@@ -157,12 +184,11 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       textColor: AppColors.white,
     );
     visits = await _sellerRepository.getAllUserVisits();
-    emit(state.copyWith(loadingdata: true));
+
     emit(SellerState(
         clientInfoList: visits.reversed.toList(),
         sellerList: [],
         helpClients: []));
-    emit(state.copyWith(loadingdata: false));
   }
 
   final SellerAdminRepository _sellerAdminRepository = SellerAdminRepository();
@@ -225,10 +251,10 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       _socketService.onEvent('new-help-client', (data) {
         // key.currentState!
         //     .insertItem(0, duration: const Duration(milliseconds: 600));
-        helpVisits.insert(0, helpclientInfoFromJson(data));
+        helpVisits.insert(0, helpClientInfoFromJson(data));
 
         debugPrint(
-            'notification klient ------------${helpVisits.last!.details}');
+            'notification klient ------------${helpVisits.last!.notification!.details}');
 
         add(
           HelpNotifications(helpVisits),
