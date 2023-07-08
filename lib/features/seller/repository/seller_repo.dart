@@ -89,8 +89,15 @@ class SellerRepository {
   }
 
   Future<EmptySelling?> sendEmptySelling(
-      {required String id, required bool report, required String sharedId}) async {
-    final data = {"notification": id, "is_empty": true, "report": report,"shared_seller":sharedId};
+      {required String id,
+      required bool report,
+      required String sharedId}) async {
+    final data = {
+      "notification": id,
+      "is_empty": true,
+      "report": report,
+      "shared_seller": sharedId
+    };
     final token = await AuthLocalDataSource().getLogToken();
     EmptySelling? emptySelling;
     try {
@@ -133,6 +140,7 @@ class SellerRepository {
       required String phoneNumber,
       required String id,
       required String? whereFrom,
+      required String? sharedid,
       required bool? report}) async {
     final data = {
       "notification": id,
@@ -143,7 +151,8 @@ class SellerRepository {
       "is_empty": false,
       "is_sold": false,
       "selling_price": 0,
-      "report": report
+      "report": report,
+      "shared_seller": sharedid
     };
     final token = await AuthLocalDataSource().getLogToken();
     NotSoldSelling? notSoldSelling;
@@ -184,12 +193,15 @@ class SellerRepository {
   Future<SoldSelling?> sendSoldSelling(
       {required String details,
       required String fullName,
+      required String? sharedid,
       required String phoneNumber,
       required double price,
       required String id,
       required String? whereFrom,
       required bool? report}) async {
     final data = {
+      "report": report,
+      "shared_seller": sharedid,
       "notification": id,
       "where_come_from": whereFrom,
       "details": details,

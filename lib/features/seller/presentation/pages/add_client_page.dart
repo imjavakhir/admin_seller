@@ -173,6 +173,14 @@ class AddClientpage extends StatelessWidget {
                           buttonName: 'Оформить',
                           onTap: !_isLoading
                               ? () async {
+                                  final String? reporShareId =
+                                      client.shared_seller != null &&
+                                              client.shared_seller!.isNotEmpty
+                                          ? client.shared_seller
+                                          : '';
+                                  debugPrint(
+                                      '${state.isReported}++++++++$reporShareId');
+
                                   print(client.id);
                                   if (soldInfo == Sold.notSold) {
                                     final isValidatedPhone =
@@ -192,6 +200,7 @@ class AddClientpage extends StatelessWidget {
                                       if (_isLoading) {
                                         await _sellerRepository
                                             .sendNotSoldSelling(
+                                                sharedid: reporShareId,
                                                 report: state.isReported,
                                                 id: client.id!,
                                                 whereFrom:
@@ -249,6 +258,7 @@ class AddClientpage extends StatelessWidget {
                                       if (_isLoading) {
                                         final soldSelling = await _sellerRepository
                                             .sendSoldSelling(
+                                                sharedid: reporShareId,
                                                 report: state.isReported,
                                                 whereFrom:
                                                     _textEditingControllerID

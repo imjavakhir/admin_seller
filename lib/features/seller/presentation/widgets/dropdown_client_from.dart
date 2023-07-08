@@ -147,13 +147,13 @@ class DropDownClientFrom extends StatelessWidget {
                       ),
                       ScreenUtil().setHorizontalSpacing(16.w),
                       Text(
-                        'Recommended',
+                        'Посоветовали',
                         style: Styles.headline4,
                       ),
                     ],
                   ),
                 ),
-                    DropdownMenuItem(
+                DropdownMenuItem(
                   value: 'olx',
                   child: Row(
                     children: [
@@ -181,7 +181,7 @@ class DropDownClientFrom extends StatelessWidget {
                       ),
                       ScreenUtil().setHorizontalSpacing(16.w),
                       Text(
-                        'Banner',
+                        'Баннер',
                         style: Styles.headline4,
                       ),
                     ],
@@ -198,7 +198,7 @@ class DropDownClientFrom extends StatelessWidget {
                       ),
                       ScreenUtil().setHorizontalSpacing(16.w),
                       Text(
-                        'Other',
+                        'Прохожие',
                         style: Styles.headline4,
                       ),
                     ],
