@@ -37,11 +37,11 @@ class _AdminSellerPageState extends State<AdminSellerPage> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    SocketIOService().disconnectSocket();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   SocketIOService().disconnectSocket();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

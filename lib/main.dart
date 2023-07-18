@@ -7,6 +7,7 @@ import 'package:admin_seller/services/firebase_push_notification.dart';
 import 'package:admin_seller/services/local_notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 
@@ -22,6 +23,10 @@ void main() async {
   await FirebaseNotificationService().initNotifications();
   LocalNotificationService().initialize();
   String? localToken = await AuthLocalDataSource().getLogToken();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(MyApp(
     savedToken: localToken,

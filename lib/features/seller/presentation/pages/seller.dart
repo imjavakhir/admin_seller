@@ -74,7 +74,6 @@ class _SellerPageState extends State<SellerPage> {
           child: state.clientInfoList.isEmpty
               ? ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
                   children: [
                     ScreenUtil().setVerticalSpacing(
                         (MediaQuery.of(context).size.height - 56) / 2),
@@ -141,8 +140,6 @@ class _SellerPageState extends State<SellerPage> {
                                 ? state.clientInfoList[index]!.shared_seller
                                 : '';
 
-
-                                
                         debugPrint("${reporShareId!}-------reportsharedid");
                         debugPrint("$reportStatus-------reportstatus");
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(
