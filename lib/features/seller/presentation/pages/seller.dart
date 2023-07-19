@@ -97,7 +97,6 @@ class _SellerPageState extends State<SellerPage> {
               : ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   physics: const AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
                   itemCount: state.clientInfoList.length,
                   itemBuilder: (context, index) {
                     if (state.loadingdata) {

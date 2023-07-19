@@ -34,6 +34,8 @@ class DropDownClientFrom extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: DropdownButtonFormField2(
+              isExpanded: true,
+              isDense: false,
               hint: Text(
                 'Откуда узнал о нас',
                 style:
@@ -74,7 +76,9 @@ class DropDownClientFrom extends StatelessWidget {
               menuItemStyleData: MenuItemStyleData(
                   padding: EdgeInsets.symmetric(horizontal: 16.w)),
               buttonStyleData: ButtonStyleData(
-                height: 50,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+                height: 56.h,
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 // decoration: BoxDecoration(
                 //     borderRadius: BorderRadius.circular(10.r),
