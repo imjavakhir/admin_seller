@@ -6,6 +6,7 @@ import 'package:admin_seller/firebase_options.dart';
 import 'package:admin_seller/services/firebase_push_notification.dart';
 import 'package:admin_seller/services/local_notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -20,7 +21,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Future.delayed(Duration(seconds: 2));
   await FirebaseNotificationService().initNotifications();
+
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // await AuthLocalDataSource().saveFcmToken(fcmToken!);
   LocalNotificationService().initialize();
   String? localToken = await AuthLocalDataSource().getLogToken();
   SystemChrome.setPreferredOrientations([

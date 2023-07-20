@@ -22,7 +22,7 @@ class SocketServiceImpl implements SocketService {
   @override
   void connect(String logToken) {
     socket = IO.io(
-        remoteTest,
+        remote,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setQuery({'token': logToken})
@@ -75,7 +75,7 @@ class SocketIOService {
 
     final fcmTokenLocal = await AuthLocalDataSource().getFcmToken();
     socket = IO.io(
-        remoteTest,
+        remote,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setQuery({'token': logToken})

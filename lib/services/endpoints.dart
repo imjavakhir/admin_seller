@@ -1,10 +1,10 @@
 abstract class AppEndPoints {
-  static const String testBaseUrl = 'http://64.226.90.160:9999';
+  // static const String testBaseUrl = 'http://64.226.90.160:9999';
 
-  static const String baseUrl = testBaseUrl;
+  // static const String baseUrl = testBaseUrl;
 
-  // // real baseurl
-  // static const String baseUrl = 'https://callcenter.backend4devs.uz';
+  // real baseurl
+  static const String baseUrl = 'https://callcenter.backend4devs.uz';
 
   static const String loginApi = '$baseUrl/auth/login';
 
