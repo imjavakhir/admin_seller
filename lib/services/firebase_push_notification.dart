@@ -9,14 +9,13 @@ class FirebaseNotificationService {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
+    await _firebaseMessaging.requestPermission();
     String? fcmToken = await _firebaseMessaging.getToken();
     await AuthLocalDataSource().saveFcmToken(fcmToken!);
 
     // final apnToken = await _firebaseMessaging.getAPNSToken();
     // // await AuthLocalDataSource().saveFcmToken(apnToken!);
     // debugPrint("{$apnToken}----------");
-
-    await _firebaseMessaging.requestPermission();
 
     if (Platform.isIOS) {
       _firebaseMessaging.setForegroundNotificationPresentationOptions(

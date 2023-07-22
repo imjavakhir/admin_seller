@@ -24,7 +24,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // await FirebaseNotificationService().initNotifications();
+  await FirebaseNotificationService().initNotifications();
   // final fcmToken = await FirebaseMessaging.instance.getToken();
   // await AuthLocalDataSource().saveFcmToken(fcmToken!);
   LocalNotificationService().initialize();
