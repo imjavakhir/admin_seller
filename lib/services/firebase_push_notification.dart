@@ -9,14 +9,14 @@ class FirebaseNotificationService {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
+    await _firebaseMessaging.requestPermission();
+
     String? fcmToken = await _firebaseMessaging.getToken();
     await AuthLocalDataSource().saveFcmToken(fcmToken!);
 
     // final apnToken = await _firebaseMessaging.getAPNSToken();
     // // await AuthLocalDataSource().saveFcmToken(apnToken!);
     // debugPrint("{$apnToken}----------");
-
-    await _firebaseMessaging.requestPermission();
 
     if (Platform.isIOS) {
       _firebaseMessaging.setForegroundNotificationPresentationOptions(
@@ -25,19 +25,19 @@ class FirebaseNotificationService {
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     _firebaseMessaging.getInitialMessage().then((message) {
-      print('app is terminated');
+      debugPrint('app is terminated');
       if (message != null) {
-        print('New Notification');
+        debugPrint('New Notification');
       }
     });
 
     if (Platform.isAndroid) {
       FirebaseMessaging.onMessage.listen((message) {
-        print('app is on onMessage');
+        debugPrint('app is on onMessage');
         if (message.notification != null) {
-          print('New Notification');
-          print(message.notification!.title);
-          print(message.notification!.body);
+          debugPrint('New Notification');
+          debugPrint(message.notification!.title);
+          debugPrint(message.notification!.body);
 
           LocalNotificationService().createNotification(message);
         }
@@ -59,13 +59,14 @@ class FirebaseNotificationService {
   }
 }
 
+@pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
-    print('New Notification');
-    print(message.notification!.title);
-    print(message.notification!.body);
+    debugPrint('New Notification');
+    debugPrint(message.notification!.title);
+    debugPrint(message.notification!.body);
 
-    // LocalNotificationService().createNotification(message);
+    LocalNotificationService().createNotification(message);
   }
 }
 

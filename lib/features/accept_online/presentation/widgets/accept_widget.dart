@@ -12,6 +12,8 @@ class AcceptWidget extends StatelessWidget {
   final bool? isLoading;
   final int? selectedItem;
   final int? index;
+  final bool isVerfied;
+  final bool isOnline;
 
   // final VoidCallback onTapClose;
   const AcceptWidget(
@@ -21,7 +23,9 @@ class AcceptWidget extends StatelessWidget {
       required this.onTapTick,
       this.isLoading = false,
       this.selectedItem,
-      this.index
+      this.index,
+      this.isVerfied = false,
+      this.isOnline = false
       // required this.onTapClose,
       });
 
@@ -32,7 +36,9 @@ class AcceptWidget extends StatelessWidget {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
           decoration: BoxDecoration(
-              color: AppColors.white,
+              color: isVerfied
+                  ? AppColors.primaryColor.withOpacity(0.3)
+                  : AppColors.white,
               borderRadius: BorderRadius.circular(10.r),
               boxShadow: [
                 BoxShadow(
@@ -45,6 +51,7 @@ class AcceptWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 children: [
@@ -63,22 +70,23 @@ class AcceptWidget extends StatelessWidget {
                   ),
                   const Spacer(),
 
-                  Material(
-                    type: MaterialType.button,
-                    color: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100.r)),
-                    child: IconButton(
-                        splashColor: Colors.transparent,
-                        splashRadius: 24,
-                        onPressed: onTapTick,
-                        icon: SvgPicture.asset(
-                          AppIcons.tick,
-                          height: 36.h,
-                          width: 36.h,
-                          color: AppColors.green,
-                        )),
-                  ),
+                  if (!isVerfied && isOnline)
+                    Material(
+                      type: MaterialType.button,
+                      color: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.r)),
+                      child: IconButton(
+                          splashColor: Colors.transparent,
+                          splashRadius: 24,
+                          onPressed: onTapTick,
+                          icon: SvgPicture.asset(
+                            AppIcons.tick,
+                            height: 36.h,
+                            width: 36.h,
+                            color: AppColors.green,
+                          )),
+                    ),
                   // Material(
                   //   color: Colors.transparent,
                   //   type: MaterialType.button,

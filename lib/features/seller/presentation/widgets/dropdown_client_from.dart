@@ -54,7 +54,6 @@ class DropDownClientFrom extends StatelessWidget {
                 focusedErrorBorder: Decorations.errorBorder,
               ),
               enableFeedback: false,
-              autofocus: true,
               barrierColor: Colors.grey.withOpacity(0.8),
               iconStyleData: IconStyleData(
                   iconEnabledColor: AppColors.borderColor,

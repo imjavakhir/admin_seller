@@ -31,6 +31,7 @@
 // }
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotificationService {
@@ -39,16 +40,7 @@ class LocalNotificationService {
 
   void initialize() async {
     AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    //   InitializationSettings initializationSettings =
-    //       const InitializationSettings(
-    //           iOS: DarwinInitializationSettings(),
-    //           android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-    //   notificationsPlugin.initialize(initializationSettings);
-    //   notificationsPlugin
-    //       .resolvePlatformSpecificImplementation<
-    //           AndroidFlutterLocalNotificationsPlugin>()!
-    //       .requestPermission();
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
 
     var initializationSettingIOS = DarwinInitializationSettings(
         requestAlertPermission: true,
@@ -69,15 +61,19 @@ class LocalNotificationService {
 
   void createNotification(RemoteMessage message) async {
     final id = DateTime.now().millisecond ~/ 1000;
+
     NotificationDetails notificationDetails = const NotificationDetails(
         iOS: DarwinNotificationDetails(),
         android: AndroidNotificationDetails(
             'pushnotificationapp', 'pushnotificationappchanel',
-            importance: Importance.high, priority: Priority.high));
+            importance: Importance.high,
+            priority: Priority.high,
+            playSound: true,
+            sound: RawResourceAndroidNotificationSound('alarm')));
     await notificationsPlugin.show(id, message.notification!.title,
         message.notification!.body, notificationDetails);
     try {} catch (e) {
-      print('-----------------localnotif $e');
+      debugPrint('-----------------localnotif $e');
     }
   }
 }

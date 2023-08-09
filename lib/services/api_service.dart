@@ -298,7 +298,7 @@ class ApiService {
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
         print(
-            'verified-----------------success-----${userOnlineModel.isVerified}---${userOnlineModel.id}');
+            'verified-----------------success-----${userOnlineModel.isVerified}---${userOnlineModel.user}');
         return userOnlineModel;
       }
     } catch (error) {
@@ -322,7 +322,7 @@ class ApiService {
       if (response.statusCode == 200) {
         userUnverified = userUnverifiedFromJson(response.data);
         print(
-            'unverified-----------------success-----${userUnverified.first!.id}');
+            'unverified-----------------success-----${userUnverified.first!.user}');
         return userUnverified;
       }
     } catch (error) {

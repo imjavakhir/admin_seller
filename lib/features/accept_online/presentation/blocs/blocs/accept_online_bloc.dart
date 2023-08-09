@@ -6,7 +6,7 @@ part 'accept_online_event.dart';
 part 'accept_online_state.dart';
 
 class AcceptOnlineBloc extends Bloc<AcceptOnlineEvent, AcceptOnlineState> {
-  AcceptOnlineBloc() : super( AcceptOnlineState()) {
+  AcceptOnlineBloc() : super(AcceptOnlineState()) {
     on<GetUsersUnverifiedEvent>(_getUsersUnverifiedEvent);
     on<AcceptUserEvent>(_acceptUserEvent);
   }
@@ -29,8 +29,7 @@ class AcceptOnlineBloc extends Bloc<AcceptOnlineEvent, AcceptOnlineState> {
     await _acceptOnlineRepository.verifyUser(seller: event.id);
     final userOnlineModelList =
         await _acceptOnlineRepository.getAllUnverified();
-  // emit(state.copyWith(loading: false));
+    // emit(state.copyWith(loading: false));
     emit(AcceptOnlineStateLoaded(userUnverifiedList: userOnlineModelList));
-  
   }
 }

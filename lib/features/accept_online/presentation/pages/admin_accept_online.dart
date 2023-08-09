@@ -50,16 +50,20 @@ class _AcceptOnlineAcceptState extends State<AcceptOnlineAccept> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: state.userUnverifiedList.length,
                     itemBuilder: (context, index) => AcceptWidget(
+                      isOnline: state.userUnverifiedList[index]!.isOnline!,
+                      isVerfied: state.userUnverifiedList[index]!.isVerified!,
                       // selectedItem: state.selectedItem,
                       // index: index,
                       // isLoading: state.loading,
-                      fullname: state.userUnverifiedList[index]!.fullname!,
+                      fullname:
+                          state.userUnverifiedList[index]!.user!.fullname!,
                       phoneNumber:
-                          '+998${state.userUnverifiedList[index]!.phoneNumber!}',
+                          '+998${state.userUnverifiedList[index]!.user!.phoneNumber}',
                       onTapTick: () {
                         BlocProvider.of<AcceptOnlineBloc>(context).add(
                             AcceptUserEvent(
-                                state.userUnverifiedList[index]!.id!, index));
+                                state.userUnverifiedList[index]!.user!.id!,
+                                index));
                       },
                     ),
                   );

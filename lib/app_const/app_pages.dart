@@ -4,7 +4,7 @@ import 'package:admin_seller/features/auth_feature/presentation/pages/auth_page.
 import 'package:admin_seller/features/seller/presentation/pages/add_client_page.dart';
 import 'package:admin_seller/features/main_feature/presentation/pages/main_page.dart';
 import 'package:admin_seller/features/seller/presentation/pages/notification_page.dart';
-
+import 'package:admin_seller/features/seller_admin/presentation/pages/admin_clients.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,6 +23,10 @@ abstract class AppPages {
       case AppRoutes.notification:
         return PageAnimation.animatedPageRoute(
             settings, const NotificationPage());
+      case AppRoutes.adminclients:
+        return PageAnimation.animatedPageRoute(
+            settings, const AdminClientsPage());
+     
 
       default:
         return MaterialPageRoute(

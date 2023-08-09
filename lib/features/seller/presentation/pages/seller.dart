@@ -19,6 +19,8 @@ class SellerPage extends StatefulWidget {
 }
 
 class _SellerPageState extends State<SellerPage> {
+  final isConnected = false;
+
   @override
   void initState() {
     BlocProvider.of<SellerBloc>(context).add(GetClientsFromApi());
@@ -26,6 +28,7 @@ class _SellerPageState extends State<SellerPage> {
 
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +98,10 @@ class _SellerPageState extends State<SellerPage> {
                   ],
                 )
               : ListView.builder(
+                  controller:
+                      BlocProvider.of<SellerBloc>(context).scrollController,
+                  shrinkWrap: true,
+                  reverse: true,
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: state.clientInfoList.length,
@@ -102,56 +109,116 @@ class _SellerPageState extends State<SellerPage> {
                     if (state.loadingdata) {
                       return const SellerCardShimmer();
                     }
+
                     return SellerCard(
-                      isShared: state.isShared,
-                      shareId:
-                          state.clientInfoList[index]!.shared_seller != null
-                              ? state.clientInfoList[index]!.shared_seller!
-                              : '',
-                      sharePress: () {
-                        BlocProvider.of<SellerBloc>(context)
-                            .add(ShareClientBUtton(index));
-                      },
-                      selectedItem: state.selectedIndex,
-                      index: index,
+                      isAcceptedFromApi:
+                          state.clientInfoList[index]!.isAccepted!,
                       showLoading: state.showLoading,
-                      parametrs: state.clientInfoList[index]!.details!,
-                      ontapGreenR: () {
+                      selectedItem: state.selectedIndex,
+                      timestamp: state.clientInfoList[index]!.sentAt.toString(),
+                      index: index,
+                      dateSec: state.clientInfoList[index]!.sentAt!,
+                      param: state.clientInfoList[index]!.details!,
+                      onTapAccept: () {
+                        BlocProvider.of<SellerBloc>(context).add(
+                            AcceptVisitEvent(state.clientInfoList[index]!.id!));
+                      },
+                      onTapCheckout: () {
                         Navigator.of(context).pushNamed(AppRoutes.addClient,
                             arguments: state.clientInfoList[index]);
                         debugPrint(state.clientInfoList[index]!.details!);
-                        debugPrint(state.clientInfoList[index]!.details!);
                       },
-                      ontapRedR: () async {
-                        final bool reportStatus =
-                            state.clientInfoList[index]!.shared_seller !=
-                                        null &&
-                                    state.clientInfoList[index]!.shared_seller!
-                                        .isNotEmpty
-                                ? true
-                                : false;
+                      onTapEmpty: () {
+                        debugPrint('oustiy');
+                        // final bool reportStatus =
+                        //     state.clientInfoList[index]!.shared_seller !=
+                        //                 null &&
+                        //             state.clientInfoList[index]!.shared_seller!
+                        //                 .isNotEmpty
+                        //         ? true
+                        //         : false;
 
-                        final String? reporShareId =
-                            state.clientInfoList[index]!.shared_seller !=
-                                        null &&
-                                    state.clientInfoList[index]!.shared_seller!
-                                        .isNotEmpty
-                                ? state.clientInfoList[index]!.shared_seller
-                                : '';
+                        // final String? reporShareId =
+                        //     state.clientInfoList[index]!.shared_seller !=
+                        //                 null &&
+                        //             state.clientInfoList[index]!.shared_seller!
+                        //                 .isNotEmpty
+                        //         ? state.clientInfoList[index]!.shared_seller
+                        //         : '';
 
-                        debugPrint("${reporShareId!}-------reportsharedid");
-                        debugPrint("$reportStatus-------reportstatus");
+                        // debugPrint("${reporShareId!}-------reportsharedid");
+                        // debugPrint("$reportStatus-------reportstatus");
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(
                             index,
                             state.clientInfoList[index]!.id!,
-                            reportStatus,
-                            reporShareId));
-                        debugPrint('${reportStatus}ssssssss');
-
-                        // _sellerRepository
-                        // .sendEmptySelling(id: state.clientInfoList[index]!.id!);
+                            false,
+                            ''));
+                        // debugPrint('${reportStatus}ssssssss');
+                      },
+                      onTapDecline: () {
+                        BlocProvider.of<SellerBloc>(context).add(
+                            DeclineVisitEvent(
+                                state.clientInfoList[index]!.id!));
                       },
                     );
+                    // return SellerCard(
+                    //   date: DateTime.now()
+                    //       .difference(DateTime.fromMillisecondsSinceEpoch(
+                    //         state.clientInfoList[index]!.sentAt!,
+                    //       ))
+                    //       .inSeconds,
+                    //   ontapGreen: () {},
+                    //   ontapRed: () {},
+                    //   isShared: state.isShared,
+                    //   shareId:
+                    //       /* state.clientInfoList[index]!.shared_seller != null
+                    //           ? state.clientInfoList[index]!.shared_seller!
+                    //           :  */
+                    //       '',
+                    //   sharePress: () {
+                    //     BlocProvider.of<SellerBloc>(context)
+                    //         .add(ShareClientBUtton(index));
+                    //   },
+                    //   selectedItem: state.selectedIndex,
+                    //   index: index,
+                    //   showLoading: state.showLoading,
+                    //   parametrs: state.clientInfoList[index]!.details!,
+                    //   ontapGreenR: () {
+                    //     Navigator.of(context).pushNamed(AppRoutes.addClient,
+                    //         arguments: state.clientInfoList[index]);
+                    //     debugPrint(state.clientInfoList[index]!.details!);
+                    //     debugPrint(state.clientInfoList[index]!.details!);
+                    //   },
+                    //   ontapRedR: () async {
+                    //     // final bool reportStatus =
+                    //     //     state.clientInfoList[index]!.shared_seller !=
+                    //     //                 null &&
+                    //     //             state.clientInfoList[index]!.shared_seller!
+                    //     //                 .isNotEmpty
+                    //     //         ? true
+                    //     //         : false;
+
+                    //     // final String? reporShareId =
+                    //     //     state.clientInfoList[index]!.shared_seller !=
+                    //     //                 null &&
+                    //     //             state.clientInfoList[index]!.shared_seller!
+                    //     //                 .isNotEmpty
+                    //     //         ? state.clientInfoList[index]!.shared_seller
+                    //     //         : '';
+
+                    //     // debugPrint("${reporShareId!}-------reportsharedid");
+                    //     // debugPrint("$reportStatus-------reportstatus");
+                    //     // BlocProvider.of<SellerBloc>(context).add(ClearVisits(
+                    //     //     index,
+                    //     //     state.clientInfoList[index]!.id!,
+                    //     //     reportStatus,
+                    //     //     reporShareId));
+                    //     // debugPrint('${reportStatus}ssssssss');
+
+                    //     // _sellerRepository
+                    //     // .sendEmptySelling(id: state.clientInfoList[index]!.id!);
+                    //   },
+                    // );
                   }),
         ),
         // bottomSheet: SizedBox(

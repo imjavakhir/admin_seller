@@ -22,7 +22,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
       leading: leading,
       systemOverlayStyle: const SystemUiOverlayStyle(
           systemNavigationBarContrastEnforced: true,
-          statusBarColor: Colors.white,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.black,
           systemNavigationBarIconBrightness: Brightness.dark),

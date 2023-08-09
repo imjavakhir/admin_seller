@@ -6,7 +6,6 @@ import 'package:admin_seller/firebase_options.dart';
 import 'package:admin_seller/services/firebase_push_notification.dart';
 import 'package:admin_seller/services/local_notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

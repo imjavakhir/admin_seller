@@ -21,7 +21,7 @@ class SellerCardShimmer extends StatelessWidget {
                   color: AppColors.cardShadow,
                   offset: const Offset(0, 0))
             ]),
-        height: 164.h,
+        height: 200.h,
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         child: Shimmer.fromColors(

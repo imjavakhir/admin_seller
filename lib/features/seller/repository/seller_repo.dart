@@ -36,7 +36,7 @@ class SellerRepository {
           }));
       if (response.statusCode == 200) {
         clientInfoList = clientsInfoFromJson(response.data);
-
+        // debugPrint("${clientInfoList.first!.sentAt!}-------------");
         return clientInfoList;
       }
     } on DioError catch (error) {
@@ -61,13 +61,14 @@ class SellerRepository {
       "is_paused": isPaused,
     };
     try {
-      Response response = await _dio!.put(AppEndPoints.userOnlineStatusApi,
-          data: data,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          }));
+      Response response =
+          await _dio!.put(AppEndPoints.userOnlineStatusUpdateApi,
+              data: data,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
         print(

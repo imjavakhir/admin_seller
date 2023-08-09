@@ -24,4 +24,18 @@ class SelectedSellerEvent extends SellerAdminEvent {
 
 class SendClient extends SellerAdminEvent {}
 
+class GetAdminVisitSellers extends SellerAdminEvent {
+  final String id;
 
+  GetAdminVisitSellers(this.id);
+}
+
+class GetAdminVisits extends SellerAdminEvent {}
+
+class GetAdminVisitStored extends SellerAdminEvent {}
+
+class ChangePageView extends SellerAdminEvent {
+  final int pageIndex;
+
+  ChangePageView(this.pageIndex);
+}

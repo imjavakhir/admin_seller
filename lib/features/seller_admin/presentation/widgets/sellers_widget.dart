@@ -48,8 +48,49 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                 height: 0,
               ),
               Flexible(
-                child: state.sellerList!.isEmpty
-                    ? Center(
+                child: state.sellerList != null
+                    ? state.sellerList!.isEmpty
+                        ? Center(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 24.w, vertical: 16.h),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 6.h, horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    100.r,
+                                  ),
+                                  color:
+                                      AppColors.primaryColor.withOpacity(0.5)),
+                              child: Text(
+                                'Пока нет онлайн продавцов',
+                                style: Styles.headline4,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: scrollController,
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            shrinkWrap: true,
+                            itemCount: state.sellerList!.length,
+                            itemBuilder: (context, index) {
+                              if (state.showLoading) {
+                                return const SellersShimmer();
+                              }
+                              return SellerTile(
+                                onTap: () {
+                                  BlocProvider.of<SellerAdminBloc>(context).add(
+                                      SelectedSellerEvent(
+                                          selectedSeller:
+                                              state.sellerList![index]!));
+                                  Navigator.of(context).pop();
+                                },
+                                title: state.sellerList![index]!.fullname!,
+                                subtitle:
+                                    state.sellerList![index]!.phoneNumber!,
+                              );
+                            })
+                    : Center(
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               horizontal: 24.w, vertical: 16.h),
@@ -65,28 +106,7 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                             style: Styles.headline4,
                           ),
                         ),
-                      )
-                    : ListView.builder(
-                        controller: scrollController,
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        shrinkWrap: true,
-                        itemCount: state.sellerList!.length,
-                        itemBuilder: (context, index) {
-                          if (state.showLoading) {
-                            return const SellersShimmer();
-                          }
-                          return SellerTile(
-                            onTap: () {
-                              BlocProvider.of<SellerAdminBloc>(context).add(
-                                  SelectedSellerEvent(
-                                      selectedSeller:
-                                          state.sellerList![index]!));
-                              Navigator.of(context).pop();
-                            },
-                            title: state.sellerList![index]!.fullname!,
-                            subtitle: state.sellerList![index]!.phoneNumber!,
-                          );
-                        }),
+                      ),
               )
             ],
           ),

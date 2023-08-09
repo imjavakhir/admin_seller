@@ -1,6 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -8,56 +9,80 @@ abstract class SocketService {
   void connect(String logToken);
 
   void disconnect();
-
+  void emitEventAck(
+      String eventName, dynamic data, ValueChanged receiveAckData);
   void emitEvent(String eventName, dynamic data);
   void offEvent(String eventName);
   void onEvent(String eventName, void Function(dynamic) callback);
 }
 
 class SocketServiceImpl implements SocketService {
-  late IO.Socket socket;
+  late IO.Socket _socket;
+  final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
 
   @override
-  void connect(String logToken) {
-    socket = IO.io(
-        remote,
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .setQuery({'token': logToken})
-            .disableAutoConnect()
-            .build());
+  void connect(String logToken) async {
+    debugPrint("${logToken}_____________before connecting socket--------");
+    final options = IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .enableForceNewConnection()
+        .setQuery({'token': logToken})
+        .disableAutoConnect()
+        .build();
+    _socket = IO.io(localTestUrl, options);
 
-    socket.connect();
+    _socket.connect();
 
-    print('new-socket-connect---------}');
+    _socket.onConnect((_) {
+      debugPrint('Connection established');
+    });
+    // _socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
+    // _socket.onConnectError((err) => debugPrint(err.toString()));
+    // _socket.onError((err) => debugPrint(err));
+    // _socket.on('javohir', (data) {
+    //   debugPrint(data + "    response from socket");
+    // });
   }
 
   @override
   void disconnect() {
-    if (socket.connected) {
-      socket.disconnect();
-      print('disconnected-------------------------------------------------}');
+    if (_socket.connected) {
+      // socket.dispose();
+      // debugPrint("disposed--------------------");
+      _socket.disconnect();
+      _socket.dispose();
+
+      _socket.onDisconnect((data) => debugPrint('disconnected from socket'));
+      debugPrint(
+          'disconnected-------------------------------------------------}');
     }
   }
 
   @override
   void emitEvent(String eventName, dynamic data) {
-    if (socket.connected) {
-      socket.emit(eventName, data);
-      print(data);
+    if (_socket.connected) {
+      _socket.emit(eventName, data);
+      debugPrint(data);
     }
   }
 
   @override
   void onEvent(String eventName, void Function(dynamic) callback) {
-    socket.on(eventName, callback);
+    _socket.on(eventName, callback);
   }
 
   @override
   void offEvent(String eventName) {
-    socket.off(eventName);
+    if (_socket.connected) {
+      _socket.off(eventName);
+    }
+  }
+
+  @override
+  void emitEventAck(eventName, data, valueChanged) {
+    _socket.emitWithAck(eventName, data, ack: valueChanged);
   }
 }
 
@@ -66,40 +91,42 @@ class SocketServiceImpl implements SocketService {
 IO.Socket? socket;
 
 class SocketIOService {
+  final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
   final local = 'http://192.168.100.214:3000/';
   final List<ClientInfo?> clientInfos = [];
   void connectSocket() async {
     final logToken = await AuthLocalDataSource().getLogToken();
+    debugPrint("${logToken}_____________socket");
 
-    final fcmTokenLocal = await AuthLocalDataSource().getFcmToken();
     socket = IO.io(
-        remote,
+        localTestUrl,
         IO.OptionBuilder()
             .setTransports(['websocket'])
+            .enableForceNewConnection()
             .setQuery({'token': logToken})
             .disableAutoConnect()
             .build());
 
     socket!.connect();
-    socket!.on('new-order', (data) {
-      clientInfos.add(ClientInfo.fromJson(data));
-      print('clientinfos----------$clientInfos');
-      print('--------------------------Received response: $data');
+    debugPrint("socket_connected");
+    socket!.on('javohir', (data) {
+      debugPrint(data + "    response from socket");
     });
-    socket!.onConnect((_) {
-      print('connected--------------------------------');
-      print('--------------------------${socket!.connected}');
-      if (socket == null) {
-        print('nobullllll--------');
-      }
-    });
+    // socket!.on('new-order', (data) {
+    //   clientInfos.add(ClientInfo.fromJson(data));
+    //   print('clientinfos----------$clientInfos');
+    //   print('--------------------------Received response: $data');
+    // });
+    // socket!.onConnect((_) {
+    //   print('connected--------------------------------');
+    // });
   }
 
   void sendnotification(String sellerId, String details) {
     if (socket != null) {
-      socket!.emit('new-visit', {"details": details, "seller": sellerId});
+      socket!.emit('new-visit-2', {"details": details, "seller": sellerId});
       Fluttertoast.showToast(
         msg: 'Успешно отправлено',
         backgroundColor: AppColors.grey,
@@ -108,14 +135,36 @@ class SocketIOService {
         fontSize: 16,
         textColor: AppColors.white,
       );
-      print('sended');
+      debugPrint('sended');
+    } else {}
+  }
+
+  void sendnotificationAck(
+      {required String sellerId, required String clientId, required ValueChanged receiveAckData}) {
+    if (socket != null) {
+      socket!.emitWithAck(
+          'force-sent',
+          {
+            "visit": clientId,
+            "seller": sellerId,
+          },
+          ack: receiveAckData);
+      Fluttertoast.showToast(
+        msg: 'Успешно переадресовона',
+        backgroundColor: AppColors.grey,
+        timeInSecForIosWeb: 2,
+        gravity: ToastGravity.CENTER,
+        fontSize: 16,
+        textColor: AppColors.white,
+      );
+      debugPrint('sended');
     } else {}
   }
 
   void disconnectSocket() {
     if (socket != null) {
       socket!.disconnect();
-      print('diconccecd--------------------------${socket!.disconnected}');
+      debugPrint('diconccecd--------------------------${socket!.disconnected}');
     }
 
     // socket!.onDisconnect((_) {

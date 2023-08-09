@@ -13,7 +13,7 @@ class HiveDataSource {
       ..fullName = fullName
       ..branch = branch
       ..type = type;
-    box.add(userModelHive);
+    box.put('user',userModelHive);
 
     print(userModelHive.fullName);
     print('savedhive---------------');

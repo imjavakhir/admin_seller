@@ -16,7 +16,7 @@ class DioExceptions implements Exception {
       case DioErrorType.receiveTimeout:
         message = "Тайм-аут получения в связи с сервером API";
         break;
-      case DioErrorType.badResponse:
+      case DioExceptionType.badResponse:
         message = _handleError(
             dioError.response!.statusCode!, dioError.response!.data);
         break;
