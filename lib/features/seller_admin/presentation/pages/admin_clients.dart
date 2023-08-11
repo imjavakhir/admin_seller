@@ -9,8 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AdminClientsPage extends StatelessWidget {
+class AdminClientsPage extends StatefulWidget {
   const AdminClientsPage({super.key});
+
+  @override
+  State<AdminClientsPage> createState() => _AdminClientsPageState();
+}
+
+class _AdminClientsPageState extends State<AdminClientsPage> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +31,7 @@ class AdminClientsPage extends StatelessWidget {
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
+             
               },
               icon: const Icon(
                 CupertinoIcons.chevron_back,
@@ -39,6 +50,7 @@ class AdminClientsPage extends StatelessWidget {
                     color: AppColors.textfieldBackground),
                 margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
                 child: TabBar(
+                  enableFeedback: false,
                   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
                   indicator: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.r),
@@ -87,9 +99,23 @@ class _AcceptedWaitingClientsWidgetState
     extends State<AcceptedWaitingClientsWidget> {
   @override
   void initState() {
-    BlocProvider.of<SellerAdminBloc>(context).add(GetAdminVisits());
+    final bloc = BlocProvider.of<SellerAdminBloc>(context);
+    bloc.add(GetAdminVisits());
+
+    bloc.scrollController.addListener(() {
+      if (bloc.scrollController.position.maxScrollExtent ==
+          bloc.scrollController.offset) {
+        bloc.add(LoadMoreAdminVisits());
+      }
+    });
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   BlocProvider.of<SellerAdminBloc>(context).scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,31 +152,56 @@ class _AcceptedWaitingClientsWidgetState
                         ),
                       ],
                     )
-                  : ListView.builder(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      itemCount: state.adminVisist!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = state.adminVisist![index];
-                        if (state.showLoadingVisits) {
-                          return const AdminVisitsShimmer();
-                        }
-                        return AdminVisitsCard(
-                          isStored: item!.isStored!,
-                          seller: item.seller != null ? item.seller! : null,
-                          id: item.id!,
-                          fullname:
-                              item.seller != null ? item.seller!.fullname! : '',
-                          dateTime: item.createdAt!,
-                          isAccepted:
-                              item.seller != null ? item.isAccepted! : false,
-                          isCanceled:
-                              item.seller != null ? item.isCanceled! : false,
-                          details: item.details!,
-                          phoneNumber: item.seller != null
-                              ? item.seller!.phoneNumber!
-                              : '',
-                        );
-                      },
+                  : Scrollbar(
+                      radius: Radius.circular(100.r),
+                      thickness: 4,
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: state.adminVisist!.length + 1,
+                        controller: BlocProvider.of<SellerAdminBloc>(context)
+                            .scrollController,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (state.showLoadingVisits) {
+                            return const AdminVisitsShimmer();
+                          } else if (index < state.adminVisist!.length) {
+                            final item = state.adminVisist![index];
+                            return AdminVisitsCard(
+                              isStored: item!.isStored!,
+                              seller: item.seller != null ? item.seller! : null,
+                              id: item.id!,
+                              fullname: item.seller != null
+                                  ? item.seller!.fullname!
+                                  : '',
+                              dateTime: item.createdAt!,
+                              isAccepted: item.seller != null
+                                  ? item.isAccepted!
+                                  : false,
+                              isCanceled: item.seller != null
+                                  ? item.isCanceled!
+                                  : false,
+                              details: item.details!,
+                              phoneNumber: item.seller != null
+                                  ? item.seller!.phoneNumber!
+                                  : '',
+                            );
+                          } else {
+                            return Center(
+                                child: state.hasReached
+                                    ? Text(
+                                        'Больше нет клиентов',
+                                        style: Styles.headline4Reg,
+                                      )
+                                    : Transform.scale(
+                                        scale: 0.8,
+                                        child: const CircularProgressIndicator(
+                                          color: AppColors.primaryColor,
+                                          strokeWidth: 2,
+                                        ),
+                                      ));
+                          }
+                        },
+                      ),
                     )
               : ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -231,32 +282,37 @@ class _StoredClientsWidgetState extends State<StoredClientsWidget> {
                         ),
                       ],
                     )
-                  : ListView.builder(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      itemCount: state.adminVisitStored!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = state.adminVisitStored![index];
-                        if (state.showLoadingVisitsStored) {
-                          return const AdminVisitsShimmer();
-                        }
-                        return AdminVisitsCard(
-                          isStoredClients: true,
-                          isStored: item!.isStored!,
-                          seller: item.seller != null ? item.seller! : null,
-                          id: item.id!,
-                          fullname:
-                              item.seller != null ? item.seller!.fullname! : '',
-                          dateTime: item.createdAt!,
-                          isAccepted:
-                              item.seller != null ? item.isAccepted! : false,
-                          isCanceled:
-                              item.seller != null ? item.isCanceled! : false,
-                          details: item.details!,
-                          phoneNumber: item.seller != null
-                              ? item.seller!.phoneNumber!
-                              : '',
-                        );
-                      },
+                  : Scrollbar(
+                      radius: Radius.circular(100.r),
+                      thickness: 4,
+                      child: ListView.builder(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        itemCount: state.adminVisitStored!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final item = state.adminVisitStored![index];
+                          if (state.showLoadingVisitsStored) {
+                            return const AdminVisitsShimmer();
+                          }
+                          return AdminVisitsCard(
+                            isStoredClients: true,
+                            isStored: item!.isStored!,
+                            seller: item.seller != null ? item.seller! : null,
+                            id: item.id!,
+                            fullname: item.seller != null
+                                ? item.seller!.fullname!
+                                : '',
+                            dateTime: item.createdAt!,
+                            isAccepted:
+                                item.seller != null ? item.isAccepted! : false,
+                            isCanceled:
+                                item.seller != null ? item.isCanceled! : false,
+                            details: item.details!,
+                            phoneNumber: item.seller != null
+                                ? item.seller!.phoneNumber!
+                                : '',
+                          );
+                        },
+                      ),
                     )
               : ListView(
                   physics: const AlwaysScrollableScrollPhysics(),

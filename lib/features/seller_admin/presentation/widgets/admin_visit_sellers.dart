@@ -445,6 +445,9 @@ class _AdminSellerVisitSellersWidgetState
                                                                     'Да',
                                                                 fontsize: 12,
                                                                 onTap: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
                                                                   SocketIOService()
                                                                       .sendnotificationAck(
                                                                           sellerId: state
@@ -456,7 +459,6 @@ class _AdminSellerVisitSellersWidgetState
                                                                           receiveAckData:
                                                                               (value) {
                                                                             debugPrint(value.toString());
-                                                                            Navigator.of(context).pop();
                                                                           });
                                                                   BlocProvider.of<
                                                                               SellerAdminBloc>(

@@ -80,21 +80,22 @@ class SellerAdminRepository {
     return sellerModel;
   }
 
-  Future<List<AdminVisitsInfo?>> getAdminSellerVisits() async {
+  Future<AdminSellerVisits?> getAdminSellerVisits(
+      {required int page, required int size}) async {
     final token = await AuthLocalDataSource().getLogToken();
-    List<AdminVisitsInfo?> adminSellerVisits = [];
+    AdminSellerVisits? adminSellerVisits;
     try {
-      Response response = await _dio!.get(AppEndPoints.adminSellerVisits,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          }));
+      Response response = await _dio!
+          .get("${AppEndPoints.adminSellerVisits}?page=$page&size=$size",
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
       if (response.statusCode == 200) {
-        adminSellerVisits = adminVisitsInfoFromJson(response.data);
-        if (adminSellerVisits.isNotEmpty) {
-          debugPrint(
-              '${adminSellerVisits.first!.isAccepted}  }-----------------success-------');
+        adminSellerVisits = AdminSellerVisits.fromJson(response.data);
+        if (adminSellerVisits.data!.isNotEmpty) {
+          debugPrint(adminSellerVisits.data!.last.details);
         }
         return adminSellerVisits;
       }

@@ -32,6 +32,8 @@ class GetAdminVisitSellers extends SellerAdminEvent {
 
 class GetAdminVisits extends SellerAdminEvent {}
 
+class GetAdminVisitsRefresh extends SellerAdminEvent {}
+
 class GetAdminVisitStored extends SellerAdminEvent {}
 
 class ChangePageView extends SellerAdminEvent {
@@ -39,3 +41,5 @@ class ChangePageView extends SellerAdminEvent {
 
   ChangePageView(this.pageIndex);
 }
+
+class LoadMoreAdminVisits extends SellerAdminEvent{}

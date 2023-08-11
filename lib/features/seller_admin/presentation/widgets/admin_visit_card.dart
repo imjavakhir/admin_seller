@@ -54,6 +54,7 @@ class AdminVisitsCard extends StatelessWidget {
                 offset: const Offset(0, 0))
           ]),
       child: MaterialButton(
+        enableFeedback: false,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),

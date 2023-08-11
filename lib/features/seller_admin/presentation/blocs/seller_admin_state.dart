@@ -13,10 +13,14 @@ class SellerAdminState {
   final List<AdminVisitsInfo?>? adminVisist;
   final List<AdminVisitsInfo?>? adminVisitStored;
   final int pageIndex;
+  final bool hasReached;
+   int page;
 
-  const SellerAdminState(
+   SellerAdminState(
       {this.sellerList,
-      this.pageIndex=0, 
+      this.hasReached = false,
+      this.pageIndex = 0,
+      this.page =1,
       this.adminVisist,
       this.adminVisitStored,
       this.showLoadingVisitsStored = false,
@@ -30,6 +34,8 @@ class SellerAdminState {
 
   SellerAdminState copyWith(
       {final bool? showLoading,
+       int? page,
+      final bool? hasReached,
       final int? pageIndex,
       final List<AdminVisitsInfo?>? adminVisitStored,
       final List<AdminVisitsInfo?>? adminVisist,
@@ -42,7 +48,9 @@ class SellerAdminState {
       final Seller? sellerType,
       final Sellers? selectedSeller}) {
     return SellerAdminState(
-      pageIndex: pageIndex??this.pageIndex,
+      page: page??this.page,
+        hasReached: hasReached ?? this.hasReached,
+        pageIndex: pageIndex ?? this.pageIndex,
         adminVisitStored: adminVisitStored ?? this.adminVisitStored,
         showLoadingVisitsStored:
             showLoadingVisitsStored ?? this.showLoadingVisitsStored,
