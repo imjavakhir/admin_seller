@@ -207,12 +207,15 @@ class _AdminSellerVisitSellersWidgetState
                                                                     fontsize:
                                                                         12,
                                                                     onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
                                                                       SocketIOService().sendnotificationAck(
                                                                           sellerId: state.adminVisitSellers![index]!.id!,
                                                                           clientId: widget.id,
                                                                           receiveAckData: (value) {
                                                                             debugPrint(value.toString());
-                                                                            Navigator.of(context).pop();
+                                                                            // Navigator.of(context).pop();
                                                                           });
                                                                       BlocProvider.of<SellerAdminBloc>(
                                                                               context)
