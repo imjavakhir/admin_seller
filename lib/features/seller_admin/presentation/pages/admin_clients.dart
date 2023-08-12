@@ -31,7 +31,7 @@ class _AdminClientsPageState extends State<AdminClientsPage> {
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
-             
+               
               },
               icon: const Icon(
                 CupertinoIcons.chevron_back,
@@ -110,12 +110,6 @@ class _AcceptedWaitingClientsWidgetState
     });
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   BlocProvider.of<SellerAdminBloc>(context).scrollController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

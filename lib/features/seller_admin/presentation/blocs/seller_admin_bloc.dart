@@ -28,7 +28,6 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
 
   int page = 1;
 
-
   void _changePageView(ChangePageView event, Emitter<SellerAdminState> emit) {
     emit(state.copyWith(pageIndex: event.pageIndex));
   }
@@ -61,6 +60,8 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
 
   Future<void> _loadMoreAdminVisits(
       LoadMoreAdminVisits event, Emitter<SellerAdminState> emit) async {
+    if (state.loadMoreLoading) return;
+    emit(state.copyWith(loadMoreLoading: true));
     if (!state.hasReached) {
       page++;
       debugPrint(page.toString());
@@ -71,7 +72,7 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
       emit(state.copyWith(hasReached: true));
     }
     adminVisitList.addAll(loadMoreVisits.data!);
-    emit(state.copyWith(adminVisist: adminVisitList));
+    emit(state.copyWith(adminVisist: adminVisitList, loadMoreLoading: false));
   }
 
   Future<void> _getAdminVisits(
