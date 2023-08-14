@@ -63,7 +63,7 @@ class LocalNotificationService {
     final id = DateTime.now().millisecond ~/ 1000;
 
     NotificationDetails notificationDetails = const NotificationDetails(
-        iOS: DarwinNotificationDetails(sound: 'alarm.caf'),
+        iOS: DarwinNotificationDetails(sound: 'alarm.wav'),
         android: AndroidNotificationDetails(
             'pushnotificationapp', 'pushnotificationappchanel',
             importance: Importance.high,
