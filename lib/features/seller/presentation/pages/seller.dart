@@ -5,6 +5,7 @@ import 'package:admin_seller/features/seller/presentation/widgets/pause_button.d
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
 import 'package:admin_seller/src/shimmers/seller_card_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +30,6 @@ class _SellerPageState extends State<SellerPage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SellerBloc, SellerState>(builder: (context, state) {
@@ -44,7 +44,16 @@ class _SellerPageState extends State<SellerPage> {
             isPaused: state.isPaused,
           ),
           title: 'Клиенты',
-          actions: const [
+          actions: [
+            IconButton(
+                splashRadius: 24.r,
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AppRoutes.orders);
+                },
+                icon: const Icon(
+                  CupertinoIcons.bag,
+                  color: AppColors.black,
+                ))
             // IconButton(
             //     enableFeedback: false,
             //     splashRadius: 24.r,

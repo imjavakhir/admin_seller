@@ -4,6 +4,7 @@ import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 
 class LongButton extends StatelessWidget {
+  final bool isDisabled;
   final String buttonName;
   final VoidCallback? onTap;
   final double width;
@@ -14,6 +15,7 @@ class LongButton extends StatelessWidget {
   const LongButton({
     Key? key,
     required this.buttonName,
+    this.isDisabled = false,
     required this.onTap,
     this.width = double.maxFinite,
     this.height = 56,
@@ -30,7 +32,9 @@ class LongButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: AppColors.primaryColor),
+          color: isDisabled
+              ? AppColors.primaryColor.withOpacity(0.2)
+              : AppColors.primaryColor),
       width: width,
       height: height.h,
       child: MaterialButton(
@@ -38,7 +42,11 @@ class LongButton extends StatelessWidget {
         enableFeedback: false,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-        onPressed: !isloading ? onTap : null,
+        onPressed: isDisabled
+            ? null
+            : !isloading
+                ? onTap
+                : null,
         child: isloading
             ? Transform.scale(
                 scale: 0.7,
@@ -48,7 +56,11 @@ class LongButton extends StatelessWidget {
               )
             : Text(
                 buttonName,
-                style: Styles.headline3.copyWith(fontSize: fontsize.sp),
+                style: Styles.headline3.copyWith(
+                    fontSize: fontsize.sp,
+                    color: isDisabled
+                        ? AppColors.black.withOpacity(0.2)
+                        : AppColors.black),
               ),
       ),
     );

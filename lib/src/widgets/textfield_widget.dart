@@ -96,7 +96,7 @@ class TextfieldWidget extends StatelessWidget {
                   ? IconButton(
                       enableFeedback: false,
                       onPressed: eyeTap,
-                      splashRadius: 24,
+                      splashRadius: 24.r,
                       icon: Icon(
                         obsecure
                             ? CupertinoIcons.eye_slash_fill

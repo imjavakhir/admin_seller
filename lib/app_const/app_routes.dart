@@ -5,4 +5,8 @@ abstract class AppRoutes {
   static const String notification = '/notification';
   static const String share = '/share';
   static const String adminclients = '/adminClients';
+  static const String orders = '/orders';
+  static const String acceptOrder = '/acceptOrder';
+  static const String addOrder = '/addOrder';
+  static const String sellingWarehouse = '/sellingWarehouse';
 }

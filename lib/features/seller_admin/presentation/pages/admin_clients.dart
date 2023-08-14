@@ -31,7 +31,6 @@ class _AdminClientsPageState extends State<AdminClientsPage> {
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
-               
               },
               icon: const Icon(
                 CupertinoIcons.chevron_back,
@@ -50,6 +49,7 @@ class _AdminClientsPageState extends State<AdminClientsPage> {
                     color: AppColors.textfieldBackground),
                 margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
                 child: TabBar(
+                  splashBorderRadius: BorderRadius.circular(10.r),
                   enableFeedback: false,
                   padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
                   indicator: BoxDecoration(

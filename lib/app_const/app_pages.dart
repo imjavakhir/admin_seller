@@ -1,9 +1,13 @@
 import 'package:admin_seller/app_const/app_page_animation.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
 import 'package:admin_seller/features/auth_feature/presentation/pages/auth_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/add_client_page.dart';
 import 'package:admin_seller/features/main_feature/presentation/pages/main_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/add_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/notification_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/orders_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/selling_warehouse.dart';
 import 'package:admin_seller/features/seller_admin/presentation/pages/admin_clients.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +30,16 @@ abstract class AppPages {
       case AppRoutes.adminclients:
         return PageAnimation.animatedPageRoute(
             settings, const AdminClientsPage());
-     
+      case AppRoutes.orders:
+        return PageAnimation.animatedPageRoute(settings, const OrdersPage());
+      case AppRoutes.acceptOrder:
+        return PageAnimation.animatedPageRoute(
+            settings, const AcceptOrderPage());
+      case AppRoutes.addOrder:
+        return PageAnimation.animatedPageRoute(settings, const AddOrderPage());
+      case AppRoutes.sellingWarehouse:
+        return PageAnimation.animatedPageRoute(
+            settings, const SellingWareHouse());
 
       default:
         return MaterialPageRoute(

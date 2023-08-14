@@ -73,6 +73,7 @@ class DropDownClientFrom extends StatelessWidget {
                     color: AppColors.white),
               ),
               menuItemStyleData: MenuItemStyleData(
+                  height: 56.h,
                   padding: EdgeInsets.symmetric(horizontal: 16.w)),
               buttonStyleData: ButtonStyleData(
                 decoration:
