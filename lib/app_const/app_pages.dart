@@ -5,8 +5,11 @@ import 'package:admin_seller/features/seller/presentation/pages/accept_order.dar
 import 'package:admin_seller/features/seller/presentation/pages/add_client_page.dart';
 import 'package:admin_seller/features/main_feature/presentation/pages/main_page.dart';
 import 'package:admin_seller/features/seller/presentation/pages/add_order.dart';
+import 'package:admin_seller/features/seller/presentation/pages/add_payment.dart';
+import 'package:admin_seller/features/seller/presentation/pages/check_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/notification_page.dart';
 import 'package:admin_seller/features/seller/presentation/pages/orders_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/payment_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/selling_warehouse.dart';
 import 'package:admin_seller/features/seller_admin/presentation/pages/admin_clients.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
@@ -37,9 +40,18 @@ abstract class AppPages {
             settings, const AcceptOrderPage());
       case AppRoutes.addOrder:
         return PageAnimation.animatedPageRoute(settings, const AddOrderPage());
+      case AppRoutes.checkOrder:
+        return PageAnimation.animatedPageRoute(
+            settings, const CheckOrderPage());
+      case AppRoutes.paymentOrder:
+        return PageAnimation.animatedPageRoute(
+            settings, const PaymentOrderPage());
       case AppRoutes.sellingWarehouse:
         return PageAnimation.animatedPageRoute(
             settings, const SellingWareHouse());
+      case AppRoutes.addPayment:
+        return PageAnimation.animatedPageRoute(
+            settings, const AddPaymentPage());
 
       default:
         return MaterialPageRoute(

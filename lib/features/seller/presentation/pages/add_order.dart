@@ -48,7 +48,7 @@ class AddOrderPage extends StatelessWidget {
                     const Spacer(),
                     Text(
                       '3526189',
-                      style: Styles.headline4,
+                      style: Styles.headline4Reg,
                     )
                   ],
                 ),

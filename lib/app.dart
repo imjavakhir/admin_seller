@@ -46,7 +46,8 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppPages.generateRoute,
-          initialRoute: savedToken == null ? AppRoutes.auth : AppRoutes.main,
+          initialRoute:
+              savedToken == null ? AppRoutes.auth : AppRoutes.sellingWarehouse,
           theme: ThemeData(
               scaffoldBackgroundColor: AppColors.white,
               colorScheme: ColorScheme.fromSwatch(accentColor: Colors.white)),

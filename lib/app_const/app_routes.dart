@@ -9,4 +9,7 @@ abstract class AppRoutes {
   static const String acceptOrder = '/acceptOrder';
   static const String addOrder = '/addOrder';
   static const String sellingWarehouse = '/sellingWarehouse';
+  static const String paymentOrder = '/paymentOrder';
+  static const String checkOrder = '/checkOrder';
+  static const String addPayment = '/addPayment';
 }

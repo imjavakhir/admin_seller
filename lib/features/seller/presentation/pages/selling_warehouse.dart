@@ -1,5 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
+import 'package:admin_seller/features/seller/data/selling_data/selling_warehouse_model.dart';
 import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
+import 'package:admin_seller/features/seller/repository/selling_repo.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -7,8 +9,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SellingWareHouse extends StatelessWidget {
+class SellingWareHouse extends StatefulWidget {
   const SellingWareHouse({super.key});
+
+  @override
+  State<SellingWareHouse> createState() => _SellingWareHouseState();
+}
+
+class _SellingWareHouseState extends State<SellingWareHouse> {
+  final SellingRepository _sellingRepository = SellingRepository();
+  SellingWarehouseModel? sellingWarehouseModel;
+
+  getSellingWarehouseModels() async {
+    sellingWarehouseModel =
+        await _sellingRepository.getWarehouseProducts('', '', '');
+  }
+
+  @override
+  void initState() {
+    getSellingWarehouseModels();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +87,22 @@ List<Widget?> listWarehouse = [
 ];
 
 class WarehouseCardWidget extends StatelessWidget {
+  final String? id;
+  final String? warehouse;
+  final String? furnitureType;
+  final String? tissue;
+  final String? details;
+  final String? furnitureModel;
   final bool isBooked;
   const WarehouseCardWidget({
     this.isBooked = false,
     super.key,
+    this.id,
+    this.warehouse,
+    this.furnitureType,
+    this.tissue,
+    this.details,
+    this.furnitureModel,
   });
 
   @override
@@ -168,18 +201,20 @@ class WarehouseCardWidget extends StatelessWidget {
             children: [
               Expanded(
                   child: LongButton(
+                paddingW: 8,
                 buttonName: 'Бронь',
                 onTap: () {},
-                height: 40,
-                fontsize: 16,
+                height: 36,
+                fontsize: 14,
               )),
               Expanded(
                   child: LongButton(
+                paddingW: 8,
                 isDisabled: true,
                 buttonName: 'Выбрать',
-                fontsize: 16,
+                fontsize: 14,
                 onTap: () {},
-                height: 40,
+                height: 36,
               )),
             ],
           )

@@ -25,9 +25,11 @@ class TextfieldWidget extends StatelessWidget {
   final List<TextInputFormatter>? listFormater;
   final GlobalKey? textFieldKey = GlobalKey(debugLabel: 'textFfieldKey');
   final String? Function(String?)? validator;
+  final bool isSum;
   TextfieldWidget({
     Key? key,
     required this.hintext,
+    this.isSum = true,
     this.textInputType = TextInputType.text,
     required this.textEditingController,
     this.obsecure = false,
@@ -88,8 +90,8 @@ class TextfieldWidget extends StatelessWidget {
               disabledBorder: Decorations.disabledBorder,
               suffix: isSoldField
                   ? Text(
-                      'Сум',
-                      style: Styles.headline6,
+                      isSum ? 'Сум' : '\$',
+                      style: Styles.headline5,
                     )
                   : null,
               suffixIcon: isPasswordField

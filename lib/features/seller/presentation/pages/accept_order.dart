@@ -6,6 +6,7 @@ import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AcceptOrderPage extends StatelessWidget {
   const AcceptOrderPage({super.key});
@@ -34,76 +35,109 @@ class AcceptOrderPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10.h),
               itemCount: 3,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 20.r,
-                            color: AppColors.cardShadow,
-                            offset: const Offset(0, 0))
+                return Slidable(
+                  endActionPane: ActionPane(
+                      extentRatio: 1 / 2,
+                      motion: const ScrollMotion(),
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 24.w),
+                            child: TextButton(
+                                style: TextButton.styleFrom(
+                                    foregroundColor: Colors.red),
+                                onPressed: () {
+                                  debugPrint('statement');
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.delete,
+                                      color: AppColors.red,
+                                    ),
+                                    Text(
+                                      'Удалить',
+                                      style: Styles.headline4
+                                          .copyWith(color: AppColors.red),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        )
                       ]),
-                  height: 300.h,
-                  width: double.maxFinite,
-                  margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const OrderCardTile(
-                        leading: 'Категория',
-                        trailing: 'Заказ',
-                      ),
-                      const OrderCardTile(
-                        leading: 'ID',
-                        trailing: '3526849',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Вид мебели',
-                        trailing: 'Матрас',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Модель',
-                        trailing: 'Муга',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Ткань',
-                        trailing: 'Хопе',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Примечание',
-                        trailing: 'Криса',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Цена',
-                        trailing: '1 000 000 сум',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Цена со скидкой',
-                        trailing: '950 000 сум',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Скидка',
-                        trailing: '5%',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Количество',
-                        trailing: '1',
-                      ),
-                      const OrderCardTile(
-                        leading: 'Сумма',
-                        trailing: '950 000 сум',
-                      ),
-                      const Spacer(),
-                      LongButton(
-                        buttonName: 'Изменить',
-                        onTap: () {},
-                        height: 36,
-                        fontsize: 16,
-                      )
-                    ],
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                    decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 20.r,
+                              color: AppColors.cardShadow,
+                              offset: const Offset(0, 0))
+                        ]),
+                    height: 300.h,
+                    width: double.maxFinite,
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const OrderCardTile(
+                          leading: 'Категория',
+                          trailing: 'Заказ',
+                        ),
+                        const OrderCardTile(
+                          leading: 'ID',
+                          trailing: '3526849',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Вид мебели',
+                          trailing: 'Матрас',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Модель',
+                          trailing: 'Муга',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Ткань',
+                          trailing: 'Хопе',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Примечание',
+                          trailing: 'Криса',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Цена',
+                          trailing: '1 000 000 сум',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Цена со скидкой',
+                          trailing: '950 000 сум',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Скидка',
+                          trailing: '5%',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Количество',
+                          trailing: '1',
+                        ),
+                        const OrderCardTile(
+                          leading: 'Сумма',
+                          trailing: '950 000 сум',
+                        ),
+                        const Spacer(),
+                        LongButton(
+                          buttonName: 'Изменить',
+                          onTap: () {},
+                          height: 36,
+                          fontsize: 14,
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
@@ -122,7 +156,11 @@ class AcceptOrderPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: LongButton(buttonName: 'Подвердить', onTap: () {}),
+              child: LongButton(
+                  buttonName: 'Подвердить',
+                  onTap: () {
+                    Navigator.of(context).pushNamed(AppRoutes.checkOrder);
+                  }),
             ),
             Container(
               height: 56.h,

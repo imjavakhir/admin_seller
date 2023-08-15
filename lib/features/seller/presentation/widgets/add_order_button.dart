@@ -1,9 +1,5 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/textfield_widget.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +9,8 @@ class AddOrderButtonWidget extends StatelessWidget {
   final String hint;
   const AddOrderButtonWidget({
     super.key,
-    required this.hint, required this.onPress,
+    required this.hint,
+    required this.onPress,
   });
 
   @override
