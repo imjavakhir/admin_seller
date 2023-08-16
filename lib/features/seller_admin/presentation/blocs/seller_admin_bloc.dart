@@ -67,7 +67,7 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
       debugPrint(page.toString());
     }
     final loadMoreVisits =
-        await _sellerAdminRepository.getAdminSellerVisits(page: page, size: 5);
+        await _sellerAdminRepository.getAdminSellerVisits(page: page, size: 10);
     if (loadMoreVisits!.data!.isEmpty) {
       emit(state.copyWith(hasReached: true));
     }
@@ -80,7 +80,7 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
     emit(state.copyWith(showLoadingVisits: true));
 
     final adminSellerVisit =
-        await _sellerAdminRepository.getAdminSellerVisits(page: 1, size: 5);
+        await _sellerAdminRepository.getAdminSellerVisits(page: 1, size: 10);
     adminVisitList = adminSellerVisit!.data!;
     page = 1;
     // if (!state.hasReached) {
