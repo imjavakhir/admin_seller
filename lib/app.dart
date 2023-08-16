@@ -5,7 +5,9 @@ import 'package:admin_seller/features/accept_online/presentation/blocs/blocs/acc
 import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.dart';
 import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
+
+import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
+import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,9 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => ProfileBloc(),
+          ),
+          BlocProvider(
+            create: (context) => SellingBloc(),
           ),
           BlocProvider(
             create: (context) => MainFeatureBloc(),

@@ -6,7 +6,7 @@ import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_us
 import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/online_tile.dart';
 import 'package:admin_seller/features/profile/presentation/widgets/profile_tile.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
+import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/pages/admin_seller.dart';
 import 'package:admin_seller/services/socket_io_client_service.dart';
 import 'package:admin_seller/src/widgets/transparent_longbutton.dart';

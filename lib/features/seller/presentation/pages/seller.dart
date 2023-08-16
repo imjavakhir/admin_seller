@@ -1,6 +1,6 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
+
 import 'package:admin_seller/features/seller/presentation/widgets/pause_button.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/seller_card.dart';
 import 'package:admin_seller/src/shimmers/seller_card_shimmer.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 
 class SellerPage extends StatefulWidget {

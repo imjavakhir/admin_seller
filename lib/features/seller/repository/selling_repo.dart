@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'dart:convert';
+
 class SellingRepository {
   Dio? _dio;
 
@@ -24,7 +26,8 @@ class SellingRepository {
     SellingWarehouseModel? sellingWarehouseModel;
 
     try {
-      Response response = await _dio!.get(ApiSelling.warehouseProducts,
+      Response response = await _dio!.get(
+          "${ApiSelling.warehouseProducts}?page=$page&limit=$size&search=$searchItem",
           options: Options(headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',

@@ -1,5 +1,6 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller/data/selling_data/selling_warehouse_model.dart';
+import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
 import 'package:admin_seller/features/seller/repository/selling_repo.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
@@ -7,6 +8,7 @@ import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellingWareHouse extends StatefulWidget {
@@ -20,61 +22,64 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
   final SellingRepository _sellingRepository = SellingRepository();
   SellingWarehouseModel? sellingWarehouseModel;
 
-  getSellingWarehouseModels() async {
-    sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts('', '', '');
-  }
-
   @override
   void initState() {
-    getSellingWarehouseModels();
+    BlocProvider.of<SellingBloc>(context).add(GetWarehouseProducts());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(
-        title: 'Продажа со склада',
-        leading: IconButton(
-            enableFeedback: false,
-            splashRadius: 24.r,
-            iconSize: 24.h,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              CupertinoIcons.chevron_left,
-              color: AppColors.black,
-            )),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              itemCount: listWarehouse.length,
-              itemBuilder: (BuildContext context, int index) {
-                return listWarehouse[index];
-              },
+    return BlocBuilder<SellingBloc, SellingState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBarWidget(
+            title: 'Продажа со склада',
+            leading: IconButton(
+                enableFeedback: false,
+                splashRadius: 24.r,
+                iconSize: 24.h,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  CupertinoIcons.chevron_left,
+                  color: AppColors.black,
+                )),
+          ),
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  itemCount: listWarehouse.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (state.showLoadingWarehouseProducts) {
+                      return const CircularProgressIndicator();
+                    }
+                    return listWarehouse[index];
+                  },
+                ),
+              ),
+              ScreenUtil().setVerticalSpacing(96),
+            ],
+          ),
+          bottomSheet: Container(
+            alignment: Alignment.center,
+            height: 96.h,
+            width: double.maxFinite,
+            decoration: const BoxDecoration(
+                color: AppColors.white,
+                border:
+                    Border(top: BorderSide(width: 0, color: AppColors.grey))),
+            child: LongButton(
+              buttonName: 'Сохранить',
+              onTap: () {},
             ),
           ),
-          ScreenUtil().setVerticalSpacing(96),
-        ],
-      ),
-      bottomSheet: Container(
-        alignment: Alignment.center,
-        height: 96.h,
-        width: double.maxFinite,
-        decoration: const BoxDecoration(
-            color: AppColors.white,
-            border: Border(top: BorderSide(width: 0, color: AppColors.grey))),
-        child: LongButton(
-          buttonName: 'Сохранить',
-          onTap: () {},
-        ),
-      ),
+        );
+      },
     );
   }
 }
