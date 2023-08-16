@@ -68,14 +68,12 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       ClientInfoListEvent event, Emitter<SellerState> emit) async {
     final logToken = await AuthLocalDataSource().getLogToken();
     debugPrint("${logToken}_____________socketBloc");
-  
 
     if (!_isSocketConnected) {
       _socketService.connect(logToken!);
 
       debugPrint(logToken);
       _isSocketConnected = true;
-     
     }
 
     if (_isSocketConnected) {

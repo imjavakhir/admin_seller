@@ -146,11 +146,11 @@ class _SellerCardState extends State<SellerCard> {
                 children: [
                   LongButton(
                     paddingW: 0,
-                    buttonName: !(!isAccepted != widget.isAcceptedFromApi)
+                    buttonName: (widget.isAcceptedFromApi || isAccepted)
                         ? "Оформить"
                         : 'Принимать',
                     fontsize: 12,
-                    onTap: !(!isAccepted != widget.isAcceptedFromApi)
+                    onTap: (widget.isAcceptedFromApi || isAccepted)
                         ? widget.onTapCheckout
                         : () {
                             setState(() {
@@ -169,10 +169,10 @@ class _SellerCardState extends State<SellerCard> {
                       width: 120,
                       height: 32,
                       fontsize: 12,
-                      buttonName: !(!isAccepted != widget.isAcceptedFromApi)
+                      buttonName: (widget.isAcceptedFromApi || isAccepted)
                           ? "Пустой"
                           : 'Отменить',
-                      onTap: !(!isAccepted != widget.isAcceptedFromApi)
+                      onTap: (widget.isAcceptedFromApi || isAccepted)
                           ? widget.onTapEmpty
                           : () {
                               setState(() {
