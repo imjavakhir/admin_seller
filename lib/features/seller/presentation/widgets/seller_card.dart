@@ -18,9 +18,11 @@ class SellerCard extends StatefulWidget {
   final int dateSec;
   final int index;
   final String timestamp;
+  final bool isDone;
   const SellerCard({
     super.key,
     required this.onTapAccept,
+    this.isDone = false,
     required this.onTapDecline,
     required this.param,
     required this.dateSec,
@@ -47,8 +49,9 @@ class _SellerCardState extends State<SellerCard> {
   @override
   void initState() {
     if (widget.isAcceptedFromApi) {
-      timeOut = true;
-      setState(() {});
+      setState(() {
+        timeOut = true;
+      });
     }
     if (time -
             DateTime.now()
@@ -61,8 +64,9 @@ class _SellerCardState extends State<SellerCard> {
               .inSeconds;
       setState(() {});
     } else {
-      timeOut = true;
-      setState(() {});
+      setState(() {
+        timeOut = true;
+      });
     }
 
     super.initState();
@@ -153,12 +157,11 @@ class _SellerCardState extends State<SellerCard> {
                     onTap: (widget.isAcceptedFromApi || isAccepted)
                         ? widget.onTapCheckout
                         : () {
+                            widget.onTapAccept();
                             setState(() {
                               isAccepted = true;
                               controller.reset();
                             });
-
-                            widget.onTapAccept();
                           },
                     height: 32,
                     width: 120,
@@ -175,19 +178,18 @@ class _SellerCardState extends State<SellerCard> {
                       onTap: (widget.isAcceptedFromApi || isAccepted)
                           ? widget.onTapEmpty
                           : () {
+                              widget.onTapDecline();
                               setState(() {
                                 isCancelled = true;
                                 controller.reset();
                               });
-
-                              widget.onTapDecline();
                             })
                 ],
               )
             ],
           ),
         ),
-        if (timeOut && !isAccepted != widget.isAcceptedFromApi)
+        if (timeOut && !(widget.isAcceptedFromApi || isAccepted))
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
             decoration: BoxDecoration(
@@ -219,13 +221,16 @@ class _SellerCardState extends State<SellerCard> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.white.withOpacity(0.8),
               borderRadius: BorderRadius.circular(10.r),
             ),
             height: 200.h,
             width: double.maxFinite,
             child: const Center(
-              child: CircularProgressIndicator(color: AppColors.white),
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+                strokeWidth: 2,
+              ),
             ),
           )
       ],

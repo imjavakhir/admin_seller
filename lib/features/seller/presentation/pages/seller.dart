@@ -100,7 +100,7 @@ class _SellerPageState extends State<SellerPage> {
                   controller:
                       BlocProvider.of<SellerBloc>(context).scrollController,
                   shrinkWrap: true,
-                  // reverse: true,
+                  reverse: true,
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   physics: const AlwaysScrollableScrollPhysics(),
                   itemCount: state.clientInfoList.length,

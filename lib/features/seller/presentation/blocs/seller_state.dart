@@ -14,8 +14,10 @@ class SellerState {
   List<HelpClientInfo?> helpClients;
   final bool loadingdata;
 
-  SellerState(
+
+  SellerState( 
       {required this.clientInfoList,
+
       this.isReported = false,
       required this.helpClients,
       required this.sellerList,
@@ -26,11 +28,12 @@ class SellerState {
       this.showLoading = false,
       this.showLoadingBottomSheet = false,
       this.selectedIndex = -1,
-      this.loadingdata=false});
+      this.loadingdata = false});
 
   SellerState copyWith(
       {final List<ClientInfo?>? clientInfoList,
       final bool? isPaused,
+   
       final bool? isReported,
       final String? whereFrom,
       final bool? showLoading,
@@ -43,7 +46,8 @@ class SellerState {
       final bool? loadingdata}) {
     // debugPrint('Error ------------- $error');
     return SellerState(
-      loadingdata: loadingdata??this.loadingdata,
+  
+        loadingdata: loadingdata ?? this.loadingdata,
         helpClients: helpClients ?? this.helpClients,
         isReported: isReported ?? this.isReported,
         isPaused: isPaused ?? this.isPaused,
@@ -58,4 +62,3 @@ class SellerState {
         isShared: isShared ?? this.isShared);
   }
 }
-

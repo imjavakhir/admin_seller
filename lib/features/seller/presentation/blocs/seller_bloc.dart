@@ -142,16 +142,15 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     await _sellerRepository.sendEmptySelling(
         id: event.id, report: event.report, sharedId: event.sharedId);
 
-    final value = await AuthLocalDataSource().getUserPause();
     visits = await _sellerRepository.getAllUserVisits();
+    final value = await AuthLocalDataSource().getUserPause();
+    emit(state.copyWith(
+        showLoading: false, isPaused: value, clientInfoList: visits));
 
     // debugPrint(visits.first!.sentAt!.toString());
     // debugPrint(visits.first!.isAccepted!.toString());
     // debugPrint(visits.first!.isCanceled!.toString());
     // debugPrint(visits.first!.details!.toString());
-
-    emit(state.copyWith(
-        clientInfoList: visits, showLoading: false, isPaused: value));
   }
 
   Future<void> _savePauseInfo(
