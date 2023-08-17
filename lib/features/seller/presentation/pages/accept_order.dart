@@ -213,9 +213,14 @@ class OrderCardTile extends StatelessWidget {
             style: Styles.headline5.copyWith(color: AppColors.grey),
           ),
           const Spacer(),
-          Text(
-            trailing,
-            style: Styles.headline5M.copyWith(color: AppColors.black),
+          SizedBox(
+            width: 180.w,
+            child: Text(
+              trailing,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.headline5M.copyWith(color: AppColors.black),
+            ),
           )
         ],
       ),

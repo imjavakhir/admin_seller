@@ -5,8 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'dart:convert';
-
 class SellingRepository {
   Dio? _dio;
 
@@ -35,7 +33,8 @@ class SellingRepository {
           }));
       if (response.statusCode == 200) {
         sellingWarehouseModel = SellingWarehouseModel.fromJson(response.data);
-        debugPrint(response.data.toString());
+        debugPrint(
+            sellingWarehouseModel.products!.first.order!.title!.toString());
         // debugPrint("${clientInfoList.first!.sentAt!}-------------");
         return sellingWarehouseModel;
       }

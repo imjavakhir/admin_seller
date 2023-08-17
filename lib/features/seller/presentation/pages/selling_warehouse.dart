@@ -3,6 +3,7 @@ import 'package:admin_seller/features/seller/data/selling_data/selling_warehouse
 import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
 import 'package:admin_seller/features/seller/repository/selling_repo.dart';
+import 'package:admin_seller/src/shimmers/selling_warehouse_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
@@ -10,6 +11,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+abstract class ProductStatus {
+  static const String booked = 'BOOKED';
+  static const String active = 'ACTIVE';
+}
 
 class SellingWareHouse extends StatefulWidget {
   const SellingWareHouse({super.key});
@@ -47,23 +53,41 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                   color: AppColors.black,
                 )),
           ),
-          body: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  itemCount: listWarehouse.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (state.showLoadingWarehouseProducts) {
-                      return const CircularProgressIndicator();
-                    }
-                    return listWarehouse[index];
-                  },
-                ),
-              ),
-              ScreenUtil().setVerticalSpacing(96),
-            ],
+          body: RefreshIndicator(
+            backgroundColor: AppColors.primaryColor,
+            color: AppColors.black,
+            onRefresh: () async {
+              return BlocProvider.of<SellingBloc>(context)
+                  .add(GetWarehouseProducts());
+            },
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(top: 10.h, bottom: 96.h),
+              itemCount: state.sellingWarehouseModel != null
+                  ? state.sellingWarehouseModel!.products!.length
+                  : 0,
+              itemBuilder: (BuildContext context, int index) {
+                if (state.showLoadingWarehouseProducts) {
+                  return const SellingWarehouseCardShimmer();
+                }
+                final item = state.sellingWarehouseModel!.products![index];
+
+                return WarehouseCardWidget(
+                  canChange: item.order!.canChange!,
+                  tissue: item.order!.tissue!,
+                  details: item.order!.title!,
+                  furnitureType: item.order!.model != null
+                      ? item.order!.model!.furnitureType!.name!
+                      : "- - -",
+                  furnitureModel: item.order!.model != null
+                      ? item.order!.model!.name!
+                      : "- - -",
+                  id: item.order!.orderId!,
+                  warehouse: item.warehouse!.name!,
+                  productStatus: item.order!.status!,
+                );
+              },
+            ),
           ),
           bottomSheet: Container(
             alignment: Alignment.center,
@@ -84,30 +108,26 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
   }
 }
 
-List<Widget?> listWarehouse = [
-  const WarehouseCardWidget(
-    isBooked: true,
-  ),
-  const WarehouseCardWidget(),
-];
-
 class WarehouseCardWidget extends StatelessWidget {
-  final String? id;
-  final String? warehouse;
-  final String? furnitureType;
-  final String? tissue;
-  final String? details;
-  final String? furnitureModel;
-  final bool isBooked;
+  final String id;
+  final String warehouse;
+  final String furnitureType;
+  final String tissue;
+  final String details;
+  final String furnitureModel;
+  final String productStatus;
+  final bool canChange;
+
   const WarehouseCardWidget({
-    this.isBooked = false,
+    this.productStatus = ProductStatus.active,
     super.key,
-    this.id,
-    this.warehouse,
-    this.furnitureType,
-    this.tissue,
-    this.details,
-    this.furnitureModel,
+    required this.id,
+    required this.warehouse,
+    required this.furnitureType,
+    required this.tissue,
+    required this.details,
+    required this.furnitureModel,
+    this.canChange = false,
   });
 
   @override
@@ -129,7 +149,7 @@ class WarehouseCardWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isBooked)
+          if (productStatus == ProductStatus.booked)
             Container(
               padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
               decoration: BoxDecoration(
@@ -152,7 +172,7 @@ class WarehouseCardWidget extends StatelessWidget {
                 ],
               ),
             ),
-          if (!isBooked)
+          if (productStatus == ProductStatus.active)
             Container(
               padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
               decoration: BoxDecoration(
@@ -176,29 +196,29 @@ class WarehouseCardWidget extends StatelessWidget {
               ),
             ),
           ScreenUtil().setVerticalSpacing(6),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'ID',
-            trailing: '848484',
+            trailing: id,
           ),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'Склад',
-            trailing: 'Чиланзарский склад',
+            trailing: warehouse,
           ),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'Вид мебели',
-            trailing: 'Диван Прямой',
+            trailing: furnitureType,
           ),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'Модель',
-            trailing: 'Оливия',
+            trailing: furnitureModel,
           ),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'Ткань',
-            trailing: 'Хопе',
+            trailing: tissue,
           ),
-          const OrderCardTile(
+          OrderCardTile(
             leading: 'Примичение',
-            trailing: 'Криса',
+            trailing: details,
           ),
           const Spacer(),
           Row(
@@ -206,8 +226,11 @@ class WarehouseCardWidget extends StatelessWidget {
             children: [
               Expanded(
                   child: LongButton(
+                isDisabled: !canChange && productStatus == ProductStatus.booked,
                 paddingW: 8,
-                buttonName: 'Бронь',
+                buttonName: productStatus == ProductStatus.active
+                    ? 'Бронь'
+                    : 'Отменить',
                 onTap: () {},
                 height: 36,
                 fontsize: 14,
@@ -215,7 +238,7 @@ class WarehouseCardWidget extends StatelessWidget {
               Expanded(
                   child: LongButton(
                 paddingW: 8,
-                isDisabled: true,
+                isDisabled: !canChange || productStatus != ProductStatus.booked,
                 buttonName: 'Выбрать',
                 fontsize: 14,
                 onTap: () {},
