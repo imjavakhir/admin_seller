@@ -5,7 +5,8 @@ import 'package:admin_seller/features/accept_online/presentation/blocs/blocs/acc
 import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.dart';
 import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
 import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
 import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
@@ -49,15 +50,25 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          supportedLocales: const [Locale('ru', 'RU'), Locale('en', 'US')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            DefaultCupertinoLocalizations.delegate
+          ],
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppPages.generateRoute,
-          initialRoute:
-              savedToken == null ? AppRoutes.auth : AppRoutes.sellingWarehouse,
+          initialRoute: savedToken == null ? AppRoutes.auth : AppRoutes.orders,
           theme: ThemeData(
+              timePickerTheme: TimePickerThemeData(
+                  backgroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.r))),
               scaffoldBackgroundColor: AppColors.white,
               colorScheme: ColorScheme.fromSwatch(accentColor: Colors.white)),
           builder: (context, child) => MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context)
+                  .copyWith(textScaleFactor: 1.0, alwaysUse24HourFormat: true),
               child: child!),
         ),
       ),

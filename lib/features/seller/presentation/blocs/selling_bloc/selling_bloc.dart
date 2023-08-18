@@ -8,18 +8,35 @@ part 'selling_state.dart';
 class SellingBloc extends Bloc<SellingEvent, SellingState> {
   SellingBloc() : super(SellingState()) {
     on<GetWarehouseProducts>(_getWarehouseProducts);
+    on<BookWarehouseProduct>(_bookWarehouseProduct);
+    on<UnbookWarehouseProduct>(_unbookWarehouseProduct);
   }
 
   final SellingRepository _sellingRepository = SellingRepository();
   Future<void> _getWarehouseProducts(
       GetWarehouseProducts event, Emitter<SellingState> emit) async {
-    SellingWarehouseModel? sellingWarehouseModel;
     emit(state.copyWith(showLoadingWarehouseProducts: true));
-    sellingWarehouseModel =
+    final sellingWarehouseModel =
         await _sellingRepository.getWarehouseProducts('', '', '');
 
     emit(state.copyWith(
         sellingWarehouseModel: sellingWarehouseModel,
         showLoadingWarehouseProducts: false));
+  }
+
+  Future<void> _bookWarehouseProduct(
+      BookWarehouseProduct event, Emitter<SellingState> emit) async {
+    await _sellingRepository.bookWareHouseProduct(event.dateTime, event.id);
+    final sellingWarehouseModel =
+        await _sellingRepository.getWarehouseProducts('', '', '');
+    emit(state.copyWith(sellingWarehouseModel: sellingWarehouseModel));
+  }
+
+  Future<void> _unbookWarehouseProduct(
+      UnbookWarehouseProduct event, Emitter<SellingState> emit) async {
+    await _sellingRepository.unbookWareHouseProduct(event.id);
+    final sellingWarehouseModel =
+        await _sellingRepository.getWarehouseProducts('', '', '');
+    emit(state.copyWith(sellingWarehouseModel: sellingWarehouseModel));
   }
 }

@@ -7,10 +7,14 @@ import 'package:admin_seller/src/shimmers/selling_warehouse_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
 import 'package:admin_seller/src/widgets/longbutton.dart';
+import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
+
+DateTime _currentDate = DateTime.now();
 
 abstract class ProductStatus {
   static const String booked = 'BOOKED';
@@ -73,6 +77,90 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                 final item = state.sellingWarehouseModel!.products![index];
 
                 return WarehouseCardWidget(
+                  onTapThird: () {},
+                  onTapFirst: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.r)),
+                              child: StatefulBuilder(builder: (context, set) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ScreenUtil().setVerticalSpacing(24),
+                                    Text(
+                                      'Виберите дату и время',
+                                      style: Styles.headline2,
+                                    ),
+                                    SizedBox(
+                                      height: 250.h,
+                                      width: double.maxFinite,
+                                      child: CupertinoDatePicker(
+                                          minuteInterval: 15,
+                                          minimumDate: DateTime.now(),
+                                          initialDateTime: DateTime.now().add(
+                                              Duration(
+                                                  minutes: 15 -
+                                                      DateTime.now().minute %
+                                                          15)),
+                                          mode: CupertinoDatePickerMode
+                                              .dateAndTime,
+                                          use24hFormat: true,
+                                          backgroundColor: AppColors.white,
+                                          onDateTimeChanged: (value) {
+                                            set(() {
+                                              _currentDate = value;
+                                            });
+                                          }),
+                                    ),
+                                    Text(
+                                      "Дата и время: ${DateFormat('HH:mm  dd/MM').format(_currentDate.toLocal())}",
+                                      style: Styles.headline4,
+                                    ),
+                                    ScreenUtil().setVerticalSpacing(20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        LongButton(
+                                          paddingW: 0,
+                                          buttonName: 'Подвердить',
+                                          fontsize: 12,
+                                          onTap: () async {
+                                            BlocProvider.of<SellingBloc>(
+                                                    context)
+                                                .add(BookWarehouseProduct(
+                                                    item.order!.id!,
+                                                    _currentDate));
+                                            Navigator.of(context).pop();
+                                          },
+                                          height: 40,
+                                          width: 120,
+                                        ),
+                                        ScreenUtil().setHorizontalSpacing(20),
+                                        TransparentLongButton(
+                                          paddingW: 0,
+                                          width: 120,
+                                          height: 40,
+                                          fontsize: 12,
+                                          buttonName: 'Отменить',
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    ScreenUtil().setVerticalSpacing(24),
+                                  ],
+                                );
+                              }),
+                            ));
+                  },
+                  onTapSecond: () {
+                    BlocProvider.of<SellingBloc>(context)
+                        .add(UnbookWarehouseProduct(item.order!.id!));
+                  },
                   canChange: item.order!.canChange!,
                   tissue: item.order!.tissue!,
                   details: item.order!.title!,
@@ -109,6 +197,9 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
 }
 
 class WarehouseCardWidget extends StatelessWidget {
+  final VoidCallback onTapFirst;
+  final VoidCallback onTapSecond;
+  final VoidCallback onTapThird;
   final String id;
   final String warehouse;
   final String furnitureType;
@@ -128,6 +219,9 @@ class WarehouseCardWidget extends StatelessWidget {
     required this.details,
     required this.furnitureModel,
     this.canChange = false,
+    required this.onTapFirst,
+    required this.onTapSecond,
+    required this.onTapThird,
   });
 
   @override
@@ -231,7 +325,9 @@ class WarehouseCardWidget extends StatelessWidget {
                 buttonName: productStatus == ProductStatus.active
                     ? 'Бронь'
                     : 'Отменить',
-                onTap: () {},
+                onTap: productStatus == ProductStatus.active
+                    ? onTapFirst
+                    : onTapSecond,
                 height: 36,
                 fontsize: 14,
               )),
@@ -241,7 +337,7 @@ class WarehouseCardWidget extends StatelessWidget {
                 isDisabled: !canChange || productStatus != ProductStatus.booked,
                 buttonName: 'Выбрать',
                 fontsize: 14,
-                onTap: () {},
+                onTap: onTapThird,
                 height: 36,
               )),
             ],
@@ -251,3 +347,73 @@ class WarehouseCardWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+
+//////////////
+///  showDialog(
+                    //   context: context,
+                    //   builder: (context) {
+                    //     return Dialog(
+                    //       insetPadding: EdgeInsets.symmetric(
+                    //           horizontal: 24.w, vertical: 24.h),
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(20.r)),
+                    //       child: Padding(
+                    //         padding: EdgeInsets.symmetric(
+                    //             vertical: 16.h, horizontal: 16.w),
+                    //         child: CalendarDatePicker2WithActionButtons(
+                    //           onValueChanged: (value) {},
+                    //           onCancelTapped: () {
+                    //             Navigator.of(context).pop();
+                    //           },
+                    //           onOkTapped: () {
+                    //             Navigator.of(context).pop();
+
+                              
+                    //           },
+                    //           config:
+                    //               CalendarDatePicker2WithActionButtonsConfig(
+                    //                   disableModePicker: true,
+                    //                   centerAlignModePicker: true,
+                    //                   lastMonthIcon: Icon(
+                    //                     CupertinoIcons.chevron_back,
+                    //                     size: 20.h,
+                    //                   ),
+                    //                   nextMonthIcon: Icon(
+                    //                     CupertinoIcons.chevron_forward,
+                    //                     size: 20.h,
+                    //                   ),
+                    //                   selectedYearTextStyle: Styles.headline5M,
+                    //                   controlsTextStyle: Styles.headline4,
+                    //                   firstDate: DateTime.now(),
+                    //                   lastDate: DateTime(2099),
+                    //                   currentDate: DateTime.now(),
+                    //                   firstDayOfWeek: 0,
+                    //                   yearTextStyle: Styles.headline5M,
+                    //                   yearBorderRadius:
+                    //                       BorderRadius.circular(10.r),
+                    //                   selectedDayHighlightColor:
+                    //                       AppColors.primaryColor,
+                    //                   selectedDayTextStyle: Styles.headline6,
+                    //                   weekdayLabelTextStyle: Styles.headline6
+                    //                       .copyWith(
+                    //                           color: AppColors.grey,
+                    //                           fontSize: 14.sp),
+                    //                   weekdayLabels: [
+                    //                     'Пон.',
+                    //                     'Вт.',
+                    //                     'Ср.',
+                    //                     'Чет.',
+                    //                     'Пят.',
+                    //                     'Суб.',
+                    //                     'Вос.'
+                    //                   ],
+                    //                   dayTextStyle: Styles.headline6),
+                    //           value: [DateTime.now()],
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // );

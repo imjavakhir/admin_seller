@@ -42,9 +42,13 @@ class AcceptOrderPage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(right: 24.w),
+                            padding: EdgeInsets.only(
+                                right: 24.w, top: 5.h, bottom: 5.h),
                             child: TextButton(
                                 style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r)),
                                     foregroundColor: Colors.red),
                                 onPressed: () {
                                   debugPrint('statement');

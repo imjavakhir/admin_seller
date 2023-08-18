@@ -42,7 +42,7 @@ class PauseButton extends StatelessWidget {
                               : 'Вы на перерыве, хотите вернуться к работе?',
                           style: Styles.headline3,
                         ),
-                        ScreenUtil().setVerticalSpacing(20.h),
+                        ScreenUtil().setVerticalSpacing(20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

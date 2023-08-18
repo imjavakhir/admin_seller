@@ -16,11 +16,11 @@ class SellingRepository {
         sendTimeout: const Duration(milliseconds: 10000));
     _dio = Dio(options);
   }
+  final token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiZGEyYzMzLWVkZGUtNDkxMy1hYzVlLWRlYTcwMjVhNGViZSIsImlhdCI6MTY5MjEwMjMwOX0.HG9UShebI69tCZ4wGAsx7lc7XMHtRi5hxwRfu8Q8zy8';
 
   Future<SellingWarehouseModel?> getWarehouseProducts(
       String size, String page, String searchItem) async {
-    const token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiZGEyYzMzLWVkZGUtNDkxMy1hYzVlLWRlYTcwMjVhNGViZSIsImlhdCI6MTY5MjEwMjMwOX0.HG9UShebI69tCZ4wGAsx7lc7XMHtRi5hxwRfu8Q8zy8';
     SellingWarehouseModel? sellingWarehouseModel;
 
     try {
@@ -31,7 +31,7 @@ class SellingRepository {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           }));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         sellingWarehouseModel = SellingWarehouseModel.fromJson(response.data);
         debugPrint(
             sellingWarehouseModel.products!.first.order!.title!.toString());
@@ -51,9 +51,63 @@ class SellingRepository {
     }
     return sellingWarehouseModel;
   }
+
+  Future<void> bookWareHouseProduct(DateTime dateTime, String id) async {
+    final data = {'end_date': dateTime.toIso8601String()};
+    try {
+      Response response = await _dio!.put("${ApiSelling.bookOrder}/$id",
+          data: data,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint(response.data);
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+  }
+
+  Future<void> unbookWareHouseProduct(String id) async {
+    try {
+      Response response = await _dio!.put("${ApiSelling.unbookOrder}/$id",
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint(response.data);
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+  }
 }
 
 class ApiSelling {
+  static const baseUrl = 'http://64.226.90.160:3005';
   static const warehouseProducts =
-      'http://64.226.90.160:3005/warehouse-products-search-with-seller';
+      '$baseUrl/warehouse-products-search-with-seller';
+
+  static const bookOrder = '$baseUrl/booked-order';
+  static const unbookOrder = '$baseUrl/unbooked-order';
 }
