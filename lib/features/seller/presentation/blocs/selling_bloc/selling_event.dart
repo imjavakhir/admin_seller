@@ -16,3 +16,4 @@ class UnbookWarehouseProduct extends SellingEvent {
 
   UnbookWarehouseProduct(this.id);
 }
+class GetSellingMyOrders extends SellingEvent{}

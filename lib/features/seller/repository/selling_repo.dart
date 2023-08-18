@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_colors.dart';
+import 'package:admin_seller/features/seller/data/selling_data/selling_my_orders_model.dart';
 import 'package:admin_seller/features/seller/data/selling_data/selling_warehouse_model.dart';
 import 'package:admin_seller/services/dio_exceptions.dart';
 import 'package:dio/dio.dart';
@@ -50,6 +51,36 @@ class SellingRepository {
       debugPrint('---------------------------------------$error-------');
     }
     return sellingWarehouseModel;
+  }
+
+  Future<List<SellingMyOrders?>> getSellingMyOrders() async {
+    List<SellingMyOrders?> sellingMyOrders = [];
+
+    try {
+      Response response = await _dio!.get(ApiSelling.sellingMyOrders,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        sellingMyOrders = sellingMyOrdersFromJson(response.data);
+        debugPrint(sellingMyOrders.first!.client!.name!);
+        // debugPrint("${clientInfoList.first!.sentAt!}-------------");
+        return sellingMyOrders;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+    return sellingMyOrders;
   }
 
   Future<void> bookWareHouseProduct(DateTime dateTime, String id) async {
@@ -110,4 +141,5 @@ class ApiSelling {
 
   static const bookOrder = '$baseUrl/booked-order';
   static const unbookOrder = '$baseUrl/unbooked-order';
+  static const sellingMyOrders = '$baseUrl/seller-orders';
 }
