@@ -32,7 +32,7 @@ class SocketServiceImpl implements SocketService {
         .setQuery({'token': logToken})
         .disableAutoConnect()
         .build();
-    _socket = IO.io(mongoUrl, options);
+    _socket = IO.io(remote, options);
 
     _socket.connect();
 
@@ -103,7 +103,7 @@ class SocketIOService {
     debugPrint("${logToken}_____________socket");
 
     socket = IO.io(
-        mongoUrl,
+        remote,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .enableForceNewConnection()
