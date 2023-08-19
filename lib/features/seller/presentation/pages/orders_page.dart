@@ -51,26 +51,31 @@ class _OrdersPageState extends State<OrdersPage> {
               return BlocProvider.of<SellingBloc>(context)
                   .add(GetSellingMyOrders());
             },
-            child: ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              itemCount: state.sellingMyOrders!.length,
-              itemBuilder: (BuildContext context, int index) {
-                final item = state.sellingMyOrders![index];
-                if (state.showLoadingSellingMyOrders) {
-                  return const MyOrdersCardShimmer();
-                }
-                return MyOrdersCard(
-                  status: item!.copied!,
-                  clientName: item.client!.name!,
-                  idList: [
-                    for (int i = 0; i < item.orders!.length; i++)
-                      item.orders![i].orderId!
-                  ].join(', '),
-                  onTap: () {},
-                  rest: item.rest!,
-                );
-              },
-            ),
+            child: state.sellingMyOrders != null &&
+                    state.sellingMyOrders!.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    itemCount: state.sellingMyOrders!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final item = state.sellingMyOrders![index];
+                      if (state.showLoadingSellingMyOrders) {
+                        return const MyOrdersCardShimmer();
+                      }
+                      return MyOrdersCard(
+                        status: item!.copied!,
+                        clientName: item.client!.name!,
+                        idList: [
+                          for (int i = 0; i < item.orders!.length; i++)
+                            item.orders![i].orderId!
+                        ].join(', '),
+                        onTap: () {},
+                        rest: item.rest!,
+                      );
+                    },
+                  )
+                : const Center(
+                    child: Text('Empty'),
+                  ),
           ),
         );
       },
@@ -139,7 +144,12 @@ class MyOrdersCard extends StatelessWidget {
                       foregroundColor: AppColors.primaryColor,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100.r))),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const Dialog(),
+                    );
+                  },
                   child: Text(
                     'Подробнее',
                     style: Styles.headline5M
