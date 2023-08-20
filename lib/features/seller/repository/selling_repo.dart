@@ -19,7 +19,6 @@ class SellingRepository {
   }
   final token =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiZGEyYzMzLWVkZGUtNDkxMy1hYzVlLWRlYTcwMjVhNGViZSIsImlhdCI6MTY5MjEwMjMwOX0.HG9UShebI69tCZ4wGAsx7lc7XMHtRi5hxwRfu8Q8zy8';
-
   Future<SellingWarehouseModel?> getWarehouseProducts(
       String size, String page, String searchItem) async {
     SellingWarehouseModel? sellingWarehouseModel;
