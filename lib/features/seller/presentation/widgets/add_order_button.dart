@@ -7,8 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AddOrderButtonWidget extends StatelessWidget {
   final VoidCallback onPress;
   final String hint;
+  final isSelected;
   const AddOrderButtonWidget({
     super.key,
+    this.isSelected = false,
     required this.hint,
     required this.onPress,
   });
@@ -34,7 +36,9 @@ class AddOrderButtonWidget extends StatelessWidget {
             children: [
               Text(
                 hint,
-                style: Styles.headline4.copyWith(color: AppColors.borderColor),
+                style: Styles.headline4.copyWith(
+                    color:
+                        isSelected ? AppColors.black : AppColors.textfieldText),
               ),
               const Spacer(),
               Icon(

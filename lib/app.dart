@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppPages.generateRoute,
           initialRoute: /* savedToken == null ? AppRoutes.auth : */
-              AppRoutes.addOrder,
+              AppRoutes.acceptOrder,
           theme: ThemeData(
               timePickerTheme: TimePickerThemeData(
                   backgroundColor: AppColors.white,

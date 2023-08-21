@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../data/selling_data/furniture_model_type_model.dart';
+
 class SellingRepository {
   Dio? _dio;
 
@@ -131,14 +133,79 @@ class SellingRepository {
       debugPrint('---------------------------------------$error-------');
     }
   }
+
+  Future<List<FurnitureModelTypeModel?>> searchFurnitureModel(
+      String searchText) async {
+    List<FurnitureModelTypeModel?> furnitureModelList = [];
+
+    try {
+      Response response =
+          await _dio!.get("${ApiSelling.searchFurnitureModel}?name=$searchText",
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        furnitureModelList = furnitureModelTypeModelFromJson(response.data);
+        if (furnitureModelList.isNotEmpty) {
+          debugPrint(furnitureModelList.first!.name!);
+        }
+        return furnitureModelList;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+      return furnitureModelList;
+    }
+    return furnitureModelList;
+  }
+
+  Future<String> sellingGetId() async {
+    String id = '';
+
+    try {
+      Response response = await _dio!.get(ApiSelling.sellingGetId,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        id = (response.data);
+        debugPrint(id);
+        return id;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+      return id;
+    }
+    return id;
+  }
 }
 
 class ApiSelling {
   static const baseUrl = 'http://64.226.90.160:3005';
   static const warehouseProducts =
       '$baseUrl/warehouse-products-search-with-seller';
-
+  static const searchFurnitureModel = '$baseUrl/search-model';
   static const bookOrder = '$baseUrl/booked-order';
   static const unbookOrder = '$baseUrl/unbooked-order';
   static const sellingMyOrders = '$baseUrl/seller-orders';
+  static const sellingGetId = "$baseUrl/getId";
 }

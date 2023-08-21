@@ -18,7 +18,7 @@ class TextfieldWidget extends StatelessWidget {
   final double paddingW;
   final bool isSoldField;
   final bool isDisabled;
-  final FocusNode? focusNode;
+
   final Function()? onEditingComplete;
   final ValueChanged? valueChanged;
   final bool isPhoneNumber;
@@ -39,7 +39,6 @@ class TextfieldWidget extends StatelessWidget {
     this.paddingW = 24,
     this.isSoldField = false,
     this.isDisabled = false,
-    this.focusNode,
     this.onEditingComplete,
     this.valueChanged,
     this.initialValue,
@@ -63,7 +62,6 @@ class TextfieldWidget extends StatelessWidget {
           enableSuggestions: false,
           style: Styles.headline4,
           onEditingComplete: onEditingComplete,
-          focusNode: focusNode,
           enabled: !isDisabled,
           inputFormatters: listFormater,
           obscureText: obsecure,

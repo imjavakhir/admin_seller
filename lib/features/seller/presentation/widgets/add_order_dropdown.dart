@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DropDownOrderWidget extends StatelessWidget {
-
   final ValueChanged valueChanged;
+  final String? value;
   const DropDownOrderWidget({
     super.key,
-  
-   required this.valueChanged,
+    required this.valueChanged,
+    required this.value,
   });
 
   @override
@@ -25,7 +25,7 @@ class DropDownOrderWidget extends StatelessWidget {
         menuItemStyleData: MenuItemStyleData(height: 56.h),
         hint: Text(
           'Выберите категорию',
-          style: Styles.headline4.copyWith(color: AppColors.borderColor),
+          style: Styles.headline4.copyWith(color: AppColors.textfieldText),
         ),
         enableFeedback: false,
         underline: const SizedBox(),
@@ -52,18 +52,17 @@ class DropDownOrderWidget extends StatelessWidget {
                 border: Border.all(width: 1, color: AppColors.borderColor))),
         isExpanded: true,
         onChanged: valueChanged,
+        value: value,
         items: [
           DropdownMenuItem(
-     
-            value: 'order',
+            value: 'Заказ',
             child: Text(
               'Заказ',
               style: Styles.headline4,
             ),
           ),
           DropdownMenuItem(
-   
-            value: 'warehouse',
+            value: 'Продажа со склада',
             child: Text(
               'Продажа со склада',
               style: Styles.headline4,

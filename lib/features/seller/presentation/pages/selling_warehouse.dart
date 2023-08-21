@@ -171,7 +171,9 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                       ? item.order!.model!.name!
                       : "- - -",
                   id: item.order!.orderId!,
-                  warehouse: item.warehouse!.name!,
+                  warehouse: item.warehouse!.name != null
+                      ? item.warehouse!.name!
+                      : '- - -',
                   productStatus: item.order!.status!,
                 );
               },

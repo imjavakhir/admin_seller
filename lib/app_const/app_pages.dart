@@ -12,6 +12,7 @@ import 'package:admin_seller/features/seller/presentation/pages/orders_page.dart
 import 'package:admin_seller/features/seller/presentation/pages/payment_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/selling_warehouse.dart';
 import 'package:admin_seller/features/seller_admin/presentation/pages/admin_clients.dart';
+
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,6 +26,7 @@ abstract class AppPages {
         return PageAnimation.animatedPageRoute(settings, AuthPage());
       case AppRoutes.addClient:
         return PageAnimation.animatedPageRoute(settings, AddClientpage());
+
       // case AppRoutes.share:
       //   return PageAnimation.animatedPageRoute(settings, const SharePage());
       case AppRoutes.notification:
@@ -39,7 +41,7 @@ abstract class AppPages {
         return PageAnimation.animatedPageRoute(
             settings, const AcceptOrderPage());
       case AppRoutes.addOrder:
-        return PageAnimation.animatedPageRoute(settings, const AddOrderPage());
+        return PageAnimation.animatedPageRoute(settings, AddOrderPage());
       case AppRoutes.checkOrder:
         return PageAnimation.animatedPageRoute(
             settings, const CheckOrderPage());

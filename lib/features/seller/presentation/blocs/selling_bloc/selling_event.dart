@@ -16,4 +16,25 @@ class UnbookWarehouseProduct extends SellingEvent {
 
   UnbookWarehouseProduct(this.id);
 }
-class GetSellingMyOrders extends SellingEvent{}
+
+class GetSellingMyOrders extends SellingEvent {}
+
+class SearchFurnitureTypeModel extends SellingEvent {
+  final String searchText;
+
+  SearchFurnitureTypeModel(this.searchText);
+}
+
+class GetIdSelling extends SellingEvent {}
+
+class CategorySelling extends SellingEvent {
+  final String? category;
+
+  CategorySelling(this.category);
+}
+
+class SelectFurnitureTypeAndModel extends SellingEvent {
+  final String furnitureTypeAndModel;
+
+  SelectFurnitureTypeAndModel(this.furnitureTypeAndModel);
+}
