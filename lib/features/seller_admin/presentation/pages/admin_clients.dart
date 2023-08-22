@@ -180,19 +180,22 @@ class _AcceptedWaitingClientsWidgetState
                                   : '',
                             );
                           } else {
-                            return Center(
-                                child: state.hasReached
-                                    ? Text(
-                                        'Больше нет клиентов',
-                                        style: Styles.headline4Reg,
-                                      )
-                                    : Transform.scale(
-                                        scale: 0.8,
-                                        child: const CircularProgressIndicator(
-                                          color: AppColors.primaryColor,
-                                          strokeWidth: 2,
-                                        ),
-                                      ));
+                            return state.adminVisist!.length > 9
+                                ? Center(
+                                    child: state.hasReached
+                                        ? Text(
+                                            'Больше нет клиентов',
+                                            style: Styles.headline4Reg,
+                                          )
+                                        : Transform.scale(
+                                            scale: 0.8,
+                                            child:
+                                                const CircularProgressIndicator(
+                                              color: AppColors.primaryColor,
+                                              strokeWidth: 2,
+                                            ),
+                                          ))
+                                : const SizedBox();
                           }
                         },
                       ),

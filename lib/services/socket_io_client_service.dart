@@ -18,6 +18,7 @@ abstract class SocketService {
 
 class SocketServiceImpl implements SocketService {
   late IO.Socket _socket;
+  final mongoUrl = 'http://64.226.90.160:5555';
   final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
@@ -31,7 +32,7 @@ class SocketServiceImpl implements SocketService {
         .setQuery({'token': logToken})
         .disableAutoConnect()
         .build();
-    _socket = IO.io(localTestUrl, options);
+    _socket = IO.io(remote, options);
 
     _socket.connect();
 
@@ -91,6 +92,7 @@ class SocketServiceImpl implements SocketService {
 IO.Socket? socket;
 
 class SocketIOService {
+  final mongoUrl = 'http://64.226.90.160:5555';
   final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
@@ -101,7 +103,7 @@ class SocketIOService {
     debugPrint("${logToken}_____________socket");
 
     socket = IO.io(
-        localTestUrl,
+        remote,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .enableForceNewConnection()
@@ -140,7 +142,9 @@ class SocketIOService {
   }
 
   void sendnotificationAck(
-      {required String sellerId, required String clientId, required ValueChanged receiveAckData}) {
+      {required String sellerId,
+      required String clientId,
+      required ValueChanged receiveAckData}) {
     if (socket != null) {
       socket!.emitWithAck(
           'force-sent',

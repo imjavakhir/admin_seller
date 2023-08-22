@@ -117,7 +117,9 @@ class _SellerPageState extends State<SellerPage> {
                     if (state.loadingdata) {
                       return const SellerCardShimmer();
                     }
-
+                    debugPrint("${state.clientInfoList.length}___________");
+                    debugPrint(
+                        "${state.clientInfoList[index]!.isAccepted!}||||||||||||");
                     return SellerCard(
                       isAcceptedFromApi:
                           state.clientInfoList[index]!.isAccepted!,
@@ -130,6 +132,8 @@ class _SellerPageState extends State<SellerPage> {
                       onTapAccept: () {
                         BlocProvider.of<SellerBloc>(context).add(
                             AcceptVisitEvent(state.clientInfoList[index]!.id!));
+                        // BlocProvider.of<SellerBloc>(context)
+                        //     .add(GetClientsFromApi());
                       },
                       onTapCheckout: () {
                         Navigator.of(context).pushNamed(AppRoutes.addClient,
@@ -156,11 +160,14 @@ class _SellerPageState extends State<SellerPage> {
 
                         // debugPrint("${reporShareId!}-------reportsharedid");
                         // debugPrint("$reportStatus-------reportstatus");
+                        debugPrint(index.toString());
                         BlocProvider.of<SellerBloc>(context).add(ClearVisits(
                             index,
                             state.clientInfoList[index]!.id!,
                             false,
                             ''));
+                        // BlocProvider.of<SellerBloc>(context)
+                        //     .add(GetClientsFromApi());
                         // debugPrint('${reportStatus}ssssssss');
                       },
                       onTapDecline: () {

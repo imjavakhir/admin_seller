@@ -105,158 +105,6 @@ class _AdminSellerVisitSellersWidgetState
                                       return const SellersShimmer();
                                     }
                                     return SellerTile(
-                                      onTap: widget.isStoredClients
-                                          ? () {
-                                              Navigator.of(context).pop();
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) => Dialog(
-                                                        backgroundColor:
-                                                            AppColors.white,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.r)),
-                                                        child: Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      24.w,
-                                                                  vertical:
-                                                                      12.h),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              ScreenUtil()
-                                                                  .setVerticalSpacing(
-                                                                      10.h),
-                                                              Text(
-                                                                'Xотите переадресовать клиента?',
-                                                                style: Styles
-                                                                    .headline3,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                              ScreenUtil()
-                                                                  .setVerticalSpacing(
-                                                                      20.h),
-                                                              Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                decoration: const BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    color: AppColors
-                                                                        .blue),
-                                                                margin: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            24.w),
-                                                                height: 75.h,
-                                                                width: 75.h,
-                                                                child: Text(
-                                                                  state
-                                                                      .adminVisitSellers![
-                                                                          index]!
-                                                                      .fullname!
-                                                                      .characters
-                                                                      .first,
-                                                                  style: Styles
-                                                                      .headline2
-                                                                      .copyWith(
-                                                                          color:
-                                                                              AppColors.white),
-                                                                ),
-                                                              ),
-                                                              ScreenUtil()
-                                                                  .setVerticalSpacing(
-                                                                      15.h),
-                                                              Text(
-                                                                state
-                                                                    .adminVisitSellers![
-                                                                        index]!
-                                                                    .fullname!,
-                                                                style: Styles
-                                                                    .headline3M,
-                                                              ),
-                                                              Text(
-                                                                "+998${state.adminVisitSellers![index]!.phoneNumber!}",
-                                                                style: Styles
-                                                                    .headline4,
-                                                              ),
-                                                              ScreenUtil()
-                                                                  .setVerticalSpacing(
-                                                                      20),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  LongButton(
-                                                                    paddingW: 0,
-                                                                    buttonName:
-                                                                        'Да',
-                                                                    fontsize:
-                                                                        12,
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                      SocketIOService().sendnotificationAck(
-                                                                          sellerId: state.adminVisitSellers![index]!.id!,
-                                                                          clientId: widget.id,
-                                                                          receiveAckData: (value) {
-                                                                            debugPrint(value.toString());
-                                                                            // Navigator.of(context).pop();
-                                                                          });
-                                                                      BlocProvider.of<SellerAdminBloc>(
-                                                                              context)
-                                                                          .add(
-                                                                              GetAdminVisitStored());
-                                                                      BlocProvider.of<SellerAdminBloc>(
-                                                                              context)
-                                                                          .add(GetAdminVisitSellers(
-                                                                              widget.id));
-                                                                    },
-                                                                    height: 32,
-                                                                    width: 96,
-                                                                  ),
-                                                                  ScreenUtil()
-                                                                      .setHorizontalSpacing(
-                                                                          20),
-                                                                  TransparentLongButton(
-                                                                    paddingW: 0,
-                                                                    width: 96,
-                                                                    height: 32,
-                                                                    fontsize:
-                                                                        12,
-                                                                    buttonName:
-                                                                        'Нет',
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  )
-                                                                ],
-                                                              ),
-                                                              ScreenUtil()
-                                                                  .setVerticalSpacing(
-                                                                      10),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ));
-                                            }
-                                          : null,
                                       title: state
                                           .adminVisitSellers![index]!.fullname!,
                                       subtitle: state.adminVisitSellers![index]!
@@ -537,3 +385,159 @@ class _AdminSellerVisitSellersWidgetState
     );
   }
 }
+
+
+
+
+  // onTap: widget.isStoredClients
+  //                                         ? () {
+  //                                             Navigator.of(context).pop();
+  //                                             showDialog(
+  //                                                 context: context,
+  //                                                 builder: (context) => Dialog(
+  //                                                       backgroundColor:
+  //                                                           AppColors.white,
+  //                                                       shape: RoundedRectangleBorder(
+  //                                                           borderRadius:
+  //                                                               BorderRadius
+  //                                                                   .circular(
+  //                                                                       10.r)),
+  //                                                       child: Padding(
+  //                                                         padding: EdgeInsets
+  //                                                             .symmetric(
+  //                                                                 horizontal:
+  //                                                                     24.w,
+  //                                                                 vertical:
+  //                                                                     12.h),
+  //                                                         child: Column(
+  //                                                           crossAxisAlignment:
+  //                                                               CrossAxisAlignment
+  //                                                                   .center,
+  //                                                           mainAxisSize:
+  //                                                               MainAxisSize
+  //                                                                   .min,
+  //                                                           children: [
+  //                                                             ScreenUtil()
+  //                                                                 .setVerticalSpacing(
+  //                                                                     10.h),
+  //                                                             Text(
+  //                                                               'Xотите переадресовать клиента?',
+  //                                                               style: Styles
+  //                                                                   .headline3,
+  //                                                               textAlign:
+  //                                                                   TextAlign
+  //                                                                       .center,
+  //                                                             ),
+  //                                                             ScreenUtil()
+  //                                                                 .setVerticalSpacing(
+  //                                                                     20.h),
+  //                                                             Container(
+  //                                                               alignment:
+  //                                                                   Alignment
+  //                                                                       .center,
+  //                                                               decoration: const BoxDecoration(
+  //                                                                   shape: BoxShape
+  //                                                                       .circle,
+  //                                                                   color: AppColors
+  //                                                                       .blue),
+  //                                                               margin: EdgeInsets
+  //                                                                   .symmetric(
+  //                                                                       horizontal:
+  //                                                                           24.w),
+  //                                                               height: 75.h,
+  //                                                               width: 75.h,
+  //                                                               child: Text(
+  //                                                                 state
+  //                                                                     .adminVisitSellers![
+  //                                                                         index]!
+  //                                                                     .fullname!
+  //                                                                     .characters
+  //                                                                     .first,
+  //                                                                 style: Styles
+  //                                                                     .headline2
+  //                                                                     .copyWith(
+  //                                                                         color:
+  //                                                                             AppColors.white),
+  //                                                               ),
+  //                                                             ),
+  //                                                             ScreenUtil()
+  //                                                                 .setVerticalSpacing(
+  //                                                                     15.h),
+  //                                                             Text(
+  //                                                               state
+  //                                                                   .adminVisitSellers![
+  //                                                                       index]!
+  //                                                                   .fullname!,
+  //                                                               style: Styles
+  //                                                                   .headline3M,
+  //                                                             ),
+  //                                                             Text(
+  //                                                               "+998${state.adminVisitSellers![index]!.phoneNumber!}",
+  //                                                               style: Styles
+  //                                                                   .headline4,
+  //                                                             ),
+  //                                                             ScreenUtil()
+  //                                                                 .setVerticalSpacing(
+  //                                                                     20),
+  //                                                             Row(
+  //                                                               mainAxisAlignment:
+  //                                                                   MainAxisAlignment
+  //                                                                       .center,
+  //                                                               children: [
+  //                                                                 LongButton(
+  //                                                                   paddingW: 0,
+  //                                                                   buttonName:
+  //                                                                       'Да',
+  //                                                                   fontsize:
+  //                                                                       12,
+  //                                                                   onTap: () {
+  //                                                                     Navigator.of(
+  //                                                                             context)
+  //                                                                         .pop();
+  //                                                                     SocketIOService().sendnotificationAck(
+  //                                                                         sellerId: state.adminVisitSellers![index]!.id!,
+  //                                                                         clientId: widget.id,
+  //                                                                         receiveAckData: (value) {
+  //                                                                           debugPrint(value.toString());
+  //                                                                           // Navigator.of(context).pop();
+  //                                                                         });
+  //                                                                     BlocProvider.of<SellerAdminBloc>(
+  //                                                                             context)
+  //                                                                         .add(
+  //                                                                             GetAdminVisitStored());
+  //                                                                     BlocProvider.of<SellerAdminBloc>(
+  //                                                                             context)
+  //                                                                         .add(GetAdminVisitSellers(
+  //                                                                             widget.id));
+  //                                                                   },
+  //                                                                   height: 32,
+  //                                                                   width: 96,
+  //                                                                 ),
+  //                                                                 ScreenUtil()
+  //                                                                     .setHorizontalSpacing(
+  //                                                                         20),
+  //                                                                 TransparentLongButton(
+  //                                                                   paddingW: 0,
+  //                                                                   width: 96,
+  //                                                                   height: 32,
+  //                                                                   fontsize:
+  //                                                                       12,
+  //                                                                   buttonName:
+  //                                                                       'Нет',
+  //                                                                   onTap: () {
+  //                                                                     Navigator.of(
+  //                                                                             context)
+  //                                                                         .pop();
+  //                                                                   },
+  //                                                                 )
+  //                                                               ],
+  //                                                             ),
+  //                                                             ScreenUtil()
+  //                                                                 .setVerticalSpacing(
+  //                                                                     10),
+  //                                                           ],
+  //                                                         ),
+  //                                                       ),
+  //                                                     ));
+  //                                           }
+  //                                         : null,
