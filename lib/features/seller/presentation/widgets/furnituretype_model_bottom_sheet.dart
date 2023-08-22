@@ -1,9 +1,7 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
-
 import 'package:admin_seller/src/decoration/input_decoration.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,7 +100,11 @@ class ModelBottomSheetWidget extends StatelessWidget {
                                     onTap: () {
                                       BlocProvider.of<SellingBloc>(context).add(
                                           SelectFurnitureTypeAndModel(
-                                              '${state.furnitureModelTypeModelList![index]!.furnitureType!.name}--${state.furnitureModelTypeModelList![index]!.name!}'));
+                                              '${state.furnitureModelTypeModelList![index]!.furnitureType!.name}--${state.furnitureModelTypeModelList![index]!.name!}',
+                                              state
+                                                  .furnitureModelTypeModelList![
+                                                      index]!
+                                                  .id!));
                                       Navigator.of(context).pop();
                                     },
                                     contentPadding: EdgeInsets.symmetric(

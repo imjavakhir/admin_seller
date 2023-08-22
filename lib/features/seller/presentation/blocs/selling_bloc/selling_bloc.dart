@@ -24,11 +24,13 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
 
   void _selectFurnitureTypeAndModel(
       SelectFurnitureTypeAndModel event, Emitter<SellingState> emit) {
-    emit(state.copyWith(furnitureTypeAndModel: event.furnitureTypeAndModel));
+    emit(state.copyWith(
+        furnitureTypeAndModel: event.furnitureTypeAndModel,
+        idModel: event.idModel));
   }
 
   void _categorySelling(CategorySelling event, Emitter<SellingState> emit) {
-    emit(state.copyWith(category: event.category!));
+    emit(state.copyWith(category: event.category));
   }
 
   Future<void> _getIdSelling(

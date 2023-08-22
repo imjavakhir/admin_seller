@@ -3,6 +3,7 @@ part of 'selling_bloc.dart';
 class SellingState {
   final String furnitureTypeAndModel;
   final String? category;
+  final String? idModel;
   final String idSelling;
   final SellingWarehouseModel? sellingWarehouseModel;
   final bool showLoadingWarehouseProducts;
@@ -13,6 +14,7 @@ class SellingState {
 
   SellingState(
       {this.sellingWarehouseModel,
+      this.idModel,
       this.category,
       this.idSelling = '',
       this.furnitureTypeAndModel = '',
@@ -28,11 +30,13 @@ class SellingState {
       final bool? showLoadingSellingMyOrders,
       final String? idSelling,
       final String? category,
+      final String? idModel,
       final String? furnitureTypeAndModel,
       final List<SellingMyOrders?>? sellingMyOrders,
       final bool? showSearchLoading,
       final bool? showLoadingWarehouseProducts}) {
     return SellingState(
+      idModel: idModel??this.idModel,
         furnitureTypeAndModel:
             furnitureTypeAndModel ?? this.furnitureTypeAndModel,
         category: category ?? this.category,

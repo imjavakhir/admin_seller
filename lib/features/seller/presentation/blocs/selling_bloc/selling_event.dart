@@ -35,6 +35,7 @@ class CategorySelling extends SellingEvent {
 
 class SelectFurnitureTypeAndModel extends SellingEvent {
   final String furnitureTypeAndModel;
+  final String idModel;
 
-  SelectFurnitureTypeAndModel(this.furnitureTypeAndModel);
+  SelectFurnitureTypeAndModel(this.furnitureTypeAndModel,this.idModel);
 }

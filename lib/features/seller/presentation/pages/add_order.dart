@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+List<OrderListModel> orderList = [];
+
 class AddOrderPage extends StatefulWidget {
   const AddOrderPage({super.key});
 
@@ -217,7 +219,42 @@ class _AddOrderPageState extends State<AddOrderPage> {
                       Border(top: BorderSide(width: 0, color: AppColors.grey))),
               child: LongButton(
                 buttonName: 'Добавить',
-                onTap: () {},
+                onTap: () {
+                  final order = OrderListModel(
+                      id: state.idSelling,
+                      salePercent: salePercent,
+                      total: total,
+                      category: state.category!,
+                      idModel: state.idModel!,
+                      furnitureType:
+                          state.furnitureTypeAndModel.split('--').first,
+                      furnitureModel:
+                          state.furnitureTypeAndModel.split('--').last,
+                      tissue: _tissueTextEditingController.text,
+                      price: double.parse(_priceTextEditingController.text),
+                      priceSale: double.parse(
+                          _priceWithSaleTextEditingController.text),
+                      count: int.parse(_countTextEditingController.text),
+                      details: _reportDetailTextEdtingController.text);
+
+                  debugPrint(order.id);
+                  debugPrint(order.category);
+                  debugPrint(order.furnitureType);
+                  debugPrint(order.furnitureModel);
+                  debugPrint(order.tissue);
+                  debugPrint(order.price.toString());
+                  debugPrint(order.priceSale.toString());
+                  debugPrint(order.details);
+                  debugPrint(order.salePercent.toString());
+                  debugPrint(order.total.toString());
+
+                  orderList.add(order);
+                  BlocProvider.of<SellingBloc>(context)
+                      .add(CategorySelling(null));
+                  BlocProvider.of<SellingBloc>(context)
+                      .add(SelectFurnitureTypeAndModel('', ''));
+                  Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                },
               ),
             ),
           );
@@ -264,4 +301,33 @@ class AddOrderFields extends StatelessWidget {
       ],
     );
   }
+}
+
+class OrderListModel {
+  final String id;
+  final String category;
+  final String idModel;
+  final String furnitureType;
+  final String furnitureModel;
+  final String tissue;
+  final double price;
+  final double priceSale;
+  final int count;
+  final String details;
+  final double salePercent;
+  final double total;
+
+  OrderListModel(
+      {required this.id,
+      required this.salePercent,
+      required this.total,
+      required this.category,
+      required this.idModel,
+      required this.furnitureType,
+      required this.furnitureModel,
+      required this.tissue,
+      required this.price,
+      required this.priceSale,
+      required this.count,
+      required this.details});
 }
