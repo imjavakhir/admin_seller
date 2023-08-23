@@ -211,7 +211,7 @@ class SellerRepository {
       "is_empty": false,
       "is_sold": true,
       "selling_price": price,
-      "report": report
+     
     };
     final token = await AuthLocalDataSource().getLogToken();
     SoldSelling? soldSelling;

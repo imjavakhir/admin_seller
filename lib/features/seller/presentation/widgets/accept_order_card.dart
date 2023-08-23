@@ -22,6 +22,7 @@ class AcceptOrderCard extends StatelessWidget {
   final double salePercent;
   final double total;
   final OrderListModel orderListModelItem;
+  final VoidCallback onDeleteTap;
 
   const AcceptOrderCard({
     super.key,
@@ -38,11 +39,13 @@ class AcceptOrderCard extends StatelessWidget {
     required this.salePercent,
     required this.total,
     required this.orderListModelItem,
+    required this.onDeleteTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
+      key: Key(id),
       endActionPane: ActionPane(
           extentRatio: 1 / 2,
           motion: const ScrollMotion(),
@@ -55,9 +58,7 @@ class AcceptOrderCard extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.r)),
                         foregroundColor: Colors.red),
-                    onPressed: () {
-                      debugPrint('statement');
-                    },
+                    onPressed: onDeleteTap,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

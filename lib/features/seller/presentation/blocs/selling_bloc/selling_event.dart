@@ -24,6 +24,11 @@ class SearchFurnitureTypeModel extends SellingEvent {
 
   SearchFurnitureTypeModel(this.searchText);
 }
+class SearchWarehouseProduct extends SellingEvent {
+  final String searchText;
+
+  SearchWarehouseProduct(this.searchText);
+}
 
 class GetIdSelling extends SellingEvent {}
 
@@ -38,4 +43,7 @@ class SelectFurnitureTypeAndModel extends SellingEvent {
   final String idModel;
 
   SelectFurnitureTypeAndModel(this.furnitureTypeAndModel,this.idModel);
+}
+class SearchHasEvent extends SellingEvent{
+  
 }

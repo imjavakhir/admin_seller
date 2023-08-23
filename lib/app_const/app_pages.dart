@@ -25,7 +25,7 @@ abstract class AppPages {
         return PageAnimation.animatedPageRoute(settings, AuthPage());
       case AppRoutes.addClient:
         return PageAnimation.animatedPageRoute(settings, AddClientpage());
-
+     
       // case AppRoutes.share:
       //   return PageAnimation.animatedPageRoute(settings, const SharePage());
       case AppRoutes.notification:

@@ -2,7 +2,6 @@ import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller/data/client_info_model.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
-import 'package:admin_seller/features/seller/repository/seller_repo.dart';
 import 'package:admin_seller/src/decoration/input_text_mask.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/validators/validators.dart';
@@ -23,7 +22,6 @@ Sold soldInfo = Sold.notSold;
 bool isSoldInfo = true;
 
 class AddClientpage extends StatelessWidget {
-  final SellerRepository _sellerRepository = SellerRepository();
   final TextEditingController _detailsController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();

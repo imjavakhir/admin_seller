@@ -8,9 +8,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AcceptOrderPage extends StatelessWidget {
+class AcceptOrderPage extends StatefulWidget {
   const AcceptOrderPage({super.key});
 
+  @override
+  State<AcceptOrderPage> createState() => _AcceptOrderPageState();
+}
+
+class _AcceptOrderPageState extends State<AcceptOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +42,10 @@ class AcceptOrderPage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 final item = orderList[index];
                 return AcceptOrderCard(
+                    onDeleteTap: () {
+                      orderList.removeAt(index);
+                      setState(() {});
+                    },
                     orderListModelItem: item,
                     id: item.id,
                     category: item.category,

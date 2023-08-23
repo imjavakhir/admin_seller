@@ -1,5 +1,4 @@
 import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
 import 'package:admin_seller/features/seller/presentation/pages/add_payment.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/order_tile_widget.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';

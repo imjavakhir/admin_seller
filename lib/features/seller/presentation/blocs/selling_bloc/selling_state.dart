@@ -2,20 +2,24 @@ part of 'selling_bloc.dart';
 
 class SellingState {
   final String furnitureTypeAndModel;
+  final String searchText;
   final String? category;
   final String? idModel;
   final String idSelling;
-  final SellingWarehouseModel? sellingWarehouseModel;
+  final List<Product?> sellingWarehouseModel;
   final bool showLoadingWarehouseProducts;
   final List<SellingMyOrders?>? sellingMyOrders;
   final bool showLoadingSellingMyOrders;
   final bool showSearchLoading;
   final List<FurnitureModelTypeModel?>? furnitureModelTypeModelList;
+  final bool isHasSearch;
 
   SellingState(
-      {this.sellingWarehouseModel,
+      {required this.sellingWarehouseModel,
       this.idModel,
+      this.searchText = '',
       this.category,
+      this.isHasSearch = false,
       this.idSelling = '',
       this.furnitureTypeAndModel = '',
       this.showSearchLoading = false,
@@ -25,18 +29,22 @@ class SellingState {
       this.sellingMyOrders});
 
   SellingState copyWith(
-      {final SellingWarehouseModel? sellingWarehouseModel,
+      {final List<Product?>? sellingWarehouseModel,
+      final String? searchText,
       final List<FurnitureModelTypeModel?>? furnitureModelTypeModelList,
       final bool? showLoadingSellingMyOrders,
       final String? idSelling,
       final String? category,
+      final bool? isHasSearch,
       final String? idModel,
       final String? furnitureTypeAndModel,
       final List<SellingMyOrders?>? sellingMyOrders,
       final bool? showSearchLoading,
       final bool? showLoadingWarehouseProducts}) {
     return SellingState(
-      idModel: idModel??this.idModel,
+        searchText: searchText ?? this.searchText,
+        isHasSearch: isHasSearch ?? this.isHasSearch,
+        idModel: idModel ?? this.idModel,
         furnitureTypeAndModel:
             furnitureTypeAndModel ?? this.furnitureTypeAndModel,
         category: category ?? this.category,

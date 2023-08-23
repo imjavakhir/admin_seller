@@ -35,8 +35,7 @@ class SellingRepository {
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         sellingWarehouseModel = SellingWarehouseModel.fromJson(response.data);
-        debugPrint(
-            sellingWarehouseModel.products!.first.order!.title!.toString());
+        debugPrint(sellingWarehouseModel.products!.length.toString());
         // debugPrint("${clientInfoList.first!.sentAt!}-------------");
         return sellingWarehouseModel;
       }

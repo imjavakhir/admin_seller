@@ -62,7 +62,7 @@ class ModelBottomSheetWidget extends StatelessWidget {
                             .copyWith(color: AppColors.textfieldText),
                         prefixIconConstraints: const BoxConstraints(),
                         contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.w, vertical: 16.h),
+                            horizontal: 16.w, vertical: 10.h),
                         filled: true,
                         isDense: true,
                         isCollapsed: true,

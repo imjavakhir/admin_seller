@@ -1,8 +1,6 @@
 import 'package:admin_seller/app_const/app_colors.dart';
 import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
-import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/order_tile_widget.dart';
-import 'package:admin_seller/features/seller/repository/selling_repo.dart';
 import 'package:admin_seller/src/shimmers/my_orders_shimmer.dart';
 import 'package:admin_seller/src/theme/text_styles.dart';
 import 'package:admin_seller/src/widgets/appbar_widget.dart';
@@ -19,7 +17,6 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  final SellingRepository _sellingRepository = SellingRepository();
   @override
   void initState() {
     BlocProvider.of<SellingBloc>(context).add(GetSellingMyOrders());
