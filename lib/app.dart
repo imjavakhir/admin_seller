@@ -1,5 +1,4 @@
 import 'package:admin_seller/app_const/app_exports.dart';
-import 'package:flutter/cupertino.dart';
 
 class MyApp extends StatelessWidget {
   final String? savedToken;
@@ -36,15 +35,16 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+          locale: const Locale('ru', 'RU'),
           supportedLocales: const [Locale('ru', 'RU'), Locale('en', 'US')],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
-            DefaultCupertinoLocalizations.delegate
+            GlobalCupertinoLocalizations.delegate
           ],
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppPages.generateRoute,
-          initialRoute: /* savedToken == null ? AppRoutes.auth : */
+          initialRoute: /*savedToken == null ? AppRoutes.auth :*/
               AppRoutes.acceptOrder,
           theme: ThemeData(
               timePickerTheme: TimePickerThemeData(

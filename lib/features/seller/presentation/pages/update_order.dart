@@ -2,11 +2,10 @@ import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 
 class UpdateOrderPage extends StatefulWidget {
-  final bool isNew;
   final OrderListModel? order;
   final int? index;
 
-  const UpdateOrderPage({super.key, this.isNew = true, this.order, this.index});
+  const UpdateOrderPage({super.key, this.order, this.index});
 
   @override
   State<UpdateOrderPage> createState() => _UpdateOrderPageState();
@@ -52,7 +51,7 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBarWidget(
-              title: 'Добавить заказ',
+              title: 'Изменить заказ',
               leading: IconButton(
                   enableFeedback: false,
                   splashRadius: 24.r,
@@ -80,7 +79,7 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                         ),
                         const Spacer(),
                         Text(
-                          !widget.isNew ? widget.order!.id : state.idSelling,
+                          widget.order!.id,
                           style: Styles.headline4Reg,
                         )
                       ],
@@ -225,7 +224,7 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                   border:
                       Border(top: BorderSide(width: 0, color: AppColors.grey))),
               child: LongButton(
-                buttonName: 'Добавить',
+                buttonName: 'Сохранить',
                 onTap: () {
                   final order = OrderListModel(
                       id: widget.order!.id,

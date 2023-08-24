@@ -1,5 +1,4 @@
 import 'package:admin_seller/app_const/app_exports.dart';
-
 import 'package:flutter/cupertino.dart';
 
 class AcceptOrderPage extends StatefulWidget {
@@ -48,7 +47,7 @@ class _AcceptOrderPageState extends State<AcceptOrderPage> {
                           pageBuilder:
                               (context, animation, secondaryAnimation) =>
                                   UpdateOrderPage(
-                            isNew: false,
+                            index: index,
                             order: orderList[index],
                           ),
                         ),

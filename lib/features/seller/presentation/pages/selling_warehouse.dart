@@ -2,7 +2,6 @@ import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-
 DateTime _currentDate = DateTime.now();
 List<OrderListModel> orderModelListWare = [];
 
