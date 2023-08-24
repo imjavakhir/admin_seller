@@ -1,9 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 abstract class UITools {
   static SnackBar customSnackBar({required String title}) => SnackBar(

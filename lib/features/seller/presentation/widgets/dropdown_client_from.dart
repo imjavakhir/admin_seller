@@ -1,13 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/src/decoration/input_decoration.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/validators/validators.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DropDownClientFrom extends StatelessWidget {
   final ValueChanged? valueChanged;

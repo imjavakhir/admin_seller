@@ -1,8 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/decoration/input_decoration.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class BigTextFieldWidget extends StatelessWidget {
   final String hintext;

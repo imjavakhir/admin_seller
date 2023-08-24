@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class TransparentLongButton extends StatelessWidget {
   final String buttonName;
@@ -16,7 +13,8 @@ class TransparentLongButton extends StatelessWidget {
     this.fontsize = 20,
     required this.onTap,
     this.width = double.maxFinite,
-    this.height = 56,  this.paddingW=24,
+    this.height = 56,
+    this.paddingW = 24,
   }) : super(key: key);
 
   @override

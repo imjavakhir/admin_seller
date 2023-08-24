@@ -2,7 +2,8 @@
 //
 //     final clientInfo = clientInfoFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 List<ClientInfo> clientsInfoFromJson(List str) =>
     List<ClientInfo>.from(str.map((x) => ClientInfo.fromJson(x)));

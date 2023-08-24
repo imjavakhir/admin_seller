@@ -1,10 +1,4 @@
-import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/services/api_service.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -50,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     }
     if (userModel != null) {
-      print('TOKEN--------${userModel.token}');
+      debugPrint('TOKEN--------${userModel.token}');
       await AuthLocalDataSource().saveLogToken(userModel.token);
       await HiveDataSource().saveUserDetails(
           branch: userModel.branch,
@@ -59,7 +53,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final user = HiveDataSource().box.values.toList().first;
 
-      print(user.type);
+      debugPrint(user.type);
 
       emit(state.copyWith(showLoginButtonLoading: false, error: 'No'));
     } else {

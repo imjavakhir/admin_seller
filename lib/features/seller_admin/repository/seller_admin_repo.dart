@@ -1,13 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
-import 'package:admin_seller/features/seller_admin/data/admin_seller_visits.dart';
-import 'package:admin_seller/features/seller_admin/data/admin_seller_visits_sellers.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class SellerAdminRepository {
   Dio? _dio;
@@ -33,7 +24,7 @@ class SellerAdminRepository {
           }));
       if (response.statusCode == 200) {
         sellersModel = sellerFromJson(response.data);
-        print('-----------------success ------ ${response.data}');
+        debugPrint('-----------------success ------ ${response.data}');
         return sellersModel;
       }
     } on DioError catch (error) {
@@ -45,7 +36,7 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return sellersModel;
   }
@@ -62,7 +53,7 @@ class SellerAdminRepository {
           }));
       if (response.statusCode == 200) {
         sellerModel = Sellers.fromJson(response.data);
-        print(
+        debugPrint(
             '${sellerModel.phoneNumber}   ${sellerModel.id}-----------------success-------${sellerModel.fullname}');
         return sellerModel;
       }
@@ -75,7 +66,7 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return sellerModel;
   }
@@ -108,7 +99,7 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return adminSellerVisits;
   }
@@ -176,7 +167,7 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return adminSellerVisitSellers;
   }

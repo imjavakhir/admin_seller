@@ -1,20 +1,4 @@
-import 'package:admin_seller/app_const/app_page_animation.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/auth_feature/presentation/pages/auth_page.dart';
-import 'package:admin_seller/features/main_feature/presentation/pages/main_page.dart';
-import 'package:admin_seller/features/seller/presentation/pages/accept_order.dart';
-import 'package:admin_seller/features/seller/presentation/pages/add_client_page.dart';
-import 'package:admin_seller/features/seller/presentation/pages/add_order.dart';
-import 'package:admin_seller/features/seller/presentation/pages/add_payment.dart';
-import 'package:admin_seller/features/seller/presentation/pages/check_order.dart';
-import 'package:admin_seller/features/seller/presentation/pages/notification_page.dart';
-import 'package:admin_seller/features/seller/presentation/pages/orders_page.dart';
-import 'package:admin_seller/features/seller/presentation/pages/payment_order.dart';
-import 'package:admin_seller/features/seller/presentation/pages/selling_warehouse.dart';
-import 'package:admin_seller/features/seller_admin/presentation/pages/admin_clients.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'app_exports.dart';
 
 abstract class AppPages {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -25,7 +9,10 @@ abstract class AppPages {
         return PageAnimation.animatedPageRoute(settings, AuthPage());
       case AppRoutes.addClient:
         return PageAnimation.animatedPageRoute(settings, AddClientpage());
-     
+      case AppRoutes.updateOrder:
+        return PageAnimation.animatedPageRoute(
+            settings, const UpdateOrderPage());
+
       // case AppRoutes.share:
       //   return PageAnimation.animatedPageRoute(settings, const SharePage());
       case AppRoutes.notification:

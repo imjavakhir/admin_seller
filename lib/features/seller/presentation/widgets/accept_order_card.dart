@@ -1,12 +1,7 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/seller/presentation/pages/add_order.dart';
-import 'package:admin_seller/features/seller/presentation/widgets/order_tile_widget.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 
 class AcceptOrderCard extends StatelessWidget {
   final String id;
@@ -23,24 +18,25 @@ class AcceptOrderCard extends StatelessWidget {
   final double total;
   final OrderListModel orderListModelItem;
   final VoidCallback onDeleteTap;
+  final VoidCallback onChangeTap;
 
-  const AcceptOrderCard({
-    super.key,
-    required this.id,
-    required this.category,
-    required this.idModel,
-    required this.furnitureType,
-    required this.furnitureModel,
-    required this.tissue,
-    required this.price,
-    required this.priceSale,
-    required this.count,
-    required this.details,
-    required this.salePercent,
-    required this.total,
-    required this.orderListModelItem,
-    required this.onDeleteTap,
-  });
+  const AcceptOrderCard(
+      {super.key,
+      required this.id,
+      required this.category,
+      required this.idModel,
+      required this.furnitureType,
+      required this.furnitureModel,
+      required this.tissue,
+      required this.price,
+      required this.priceSale,
+      required this.count,
+      required this.details,
+      required this.salePercent,
+      required this.total,
+      required this.orderListModelItem,
+      required this.onDeleteTap,
+      required this.onChangeTap});
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +136,7 @@ class AcceptOrderCard extends StatelessWidget {
             const Spacer(),
             LongButton(
               buttonName: 'Изменить',
-              onTap: () {},
+              onTap: onChangeTap,
               height: 36,
               fontsize: 14,
             )

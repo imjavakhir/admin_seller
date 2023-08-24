@@ -1,8 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/seller/data/client_info_model.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 abstract class SocketService {

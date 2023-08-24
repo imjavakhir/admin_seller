@@ -2,7 +2,7 @@
 //
 //     final userUnverified = userUnverifiedFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 List<UserUnverified?> userUnverifiedFromJson(List str) =>
     List<UserUnverified>.from(str.map((x) => UserUnverified.fromJson(x)));

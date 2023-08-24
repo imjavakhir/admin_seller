@@ -1,12 +1,6 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/seller/presentation/pages/add_order.dart';
-import 'package:admin_seller/features/seller/presentation/widgets/accept_order_card.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AcceptOrderPage extends StatefulWidget {
   const AcceptOrderPage({super.key});
@@ -42,6 +36,24 @@ class _AcceptOrderPageState extends State<AcceptOrderPage> {
               itemBuilder: (BuildContext context, int index) {
                 final item = orderList[index];
                 return AcceptOrderCard(
+                    onChangeTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) =>
+                                  FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  UpdateOrderPage(
+                            isNew: false,
+                            order: orderList[index],
+                          ),
+                        ),
+                      );
+                    },
                     onDeleteTap: () {
                       orderList.removeAt(index);
                       setState(() {});

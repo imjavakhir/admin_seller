@@ -2,7 +2,8 @@
 //
 //     final adminVisitsInfo = adminVisitsInfoFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 List<AdminVisitsInfo> adminVisitsInfoFromJson(List str) =>
     List<AdminVisitsInfo>.from(str.map((x) => AdminVisitsInfo.fromJson(x)));

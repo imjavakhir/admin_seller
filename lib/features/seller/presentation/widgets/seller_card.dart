@@ -1,10 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SellerCard extends StatefulWidget {
   final VoidCallback onTapAccept;

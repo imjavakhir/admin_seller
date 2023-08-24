@@ -1,15 +1,4 @@
-import 'package:admin_seller/features/accept_online/data/models/user_unverified_model.dart';
-import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
-import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/empty_selling.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_selling.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
-import 'package:admin_seller/features/seller/data/client_info_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:dio/dio.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class ApiService {
   final dio = Dio(BaseOptions(
@@ -46,13 +35,13 @@ class ApiService {
       Response response = await dio.post(loginApi, data: data);
       if (response.statusCode == 200) {
         userModel = UserModel.fromJson(response.data);
-        print('-----------------success');
+        debugPrint('-----------------success');
         return userModel;
       }
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
 
-      print('---------------------------------------$errorMessage');
+      debugPrint('---------------------------------------$errorMessage');
     }
     return userModel;
   }
@@ -70,11 +59,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         sellerModel = Sellers.fromJson(response.data);
-        print('-----------------success');
+        debugPrint('-----------------success');
         return sellerModel;
       }
     } catch (error) {
-      print('seller ---------------------------------------$error');
+      debugPrint('seller ---------------------------------------$error');
     }
     return sellerModel;
   }
@@ -93,11 +82,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         searchedCustomers = searchedCustomersFromJson(response.data);
-        print('-----------------success $searchedCustomers');
+        debugPrint('-----------------success $searchedCustomers');
         return searchedCustomers;
       }
     } catch (error) {
-      print('searchedCustomer ---------------------------------------$error');
+      debugPrint('searchedCustomer ---------------------------------------$error');
     }
     return searchedCustomers;
   }
@@ -115,11 +104,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         sellersModel = sellerFromJson(response.data);
-        print('-----------------success ------ ${response.data}');
+        debugPrint('-----------------success ------ ${response.data}');
         return sellersModel;
       }
     } catch (error) {
-      print('sellers ---------------------------------------$error');
+      debugPrint('sellers ---------------------------------------$error');
     }
     return sellersModel;
   }
@@ -143,11 +132,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         emptySelling = EmptySelling.fromJson(response.data);
-        print('-----------------success-----${emptySelling.branch}');
+        debugPrint('-----------------success-----${emptySelling.branch}');
         return emptySelling;
       }
     } catch (error) {
-      print('848484 ---------------------------------------$error-------');
+      debugPrint('848484 ---------------------------------------$error-------');
     }
     return emptySelling;
   }
@@ -182,11 +171,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         soldSelling = SoldSelling.fromJson(response.data);
-        print('-----------------success-----${soldSelling.sellingPrice}');
+        debugPrint('-----------------success-----${soldSelling.sellingPrice}');
         return soldSelling;
       }
     } catch (error) {
-      print(
+      debugPrint(
           '${data['phone_number']} ---------------------------------------$error-------');
     }
     return soldSelling;
@@ -221,11 +210,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         notSoldSelling = NotSoldSelling.fromJson(response.data);
-        print('-----------------success-----${notSoldSelling.isSold}');
+        debugPrint('-----------------success-----${notSoldSelling.isSold}');
         return notSoldSelling;
       }
     } catch (error) {
-      print('848484 ---------------------------------------$error-------');
+      debugPrint('848484 ---------------------------------------$error-------');
     }
     return notSoldSelling;
   }
@@ -243,11 +232,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print('-----------------success-----${userOnlineModel.isOnline}');
+        debugPrint('-----------------success-----${userOnlineModel.isOnline}');
         return userOnlineModel;
       }
     } catch (error) {
-      print('hahah------------------------------------$error-------');
+      debugPrint('hahah------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -272,12 +261,12 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print(
+        debugPrint(
             'after put-----------------success-----${userOnlineModel.isOnline}');
         return userOnlineModel;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -297,12 +286,12 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print(
+        debugPrint(
             'verified-----------------success-----${userOnlineModel.isVerified}---${userOnlineModel.user}');
         return userOnlineModel;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -321,12 +310,12 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         userUnverified = userUnverifiedFromJson(response.data);
-        print(
+        debugPrint(
             'unverified-----------------success-----${userUnverified.first!.user}');
         return userUnverified;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userUnverified;
   }
@@ -349,12 +338,12 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print(
+        debugPrint(
             'after put-----------------success-----${userOnlineModel.isPaused}');
         return userOnlineModel;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -373,11 +362,11 @@ class ApiService {
           }));
       if (response.statusCode == 200) {
         clientInfoList = clientsInfoFromJson(response.data);
-        print('visits-----------------success-----${clientInfoList.first!.id}');
+        debugPrint('visits-----------------success-----${clientInfoList.first!.id}');
         return clientInfoList;
       }
     } catch (error) {
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return clientInfoList;
   }

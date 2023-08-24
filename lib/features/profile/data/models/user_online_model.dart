@@ -2,7 +2,7 @@
 //
 //     final userOnlineModel = userOnlineModelFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 UserOnlineModel userOnlineModelFromJson(String str) =>
     UserOnlineModel.fromJson(json.decode(str));

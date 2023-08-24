@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'app_exports.dart';
 
 abstract class PageAnimation {
   static PageRouteBuilder<dynamic> animatedPageRoute(

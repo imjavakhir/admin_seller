@@ -1,13 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/features/seller_admin/data/admin_seller_visits.dart';
-import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:admin_seller/features/seller_admin/presentation/widgets/admin_visit_sellers.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class AdminVisitsCard extends StatelessWidget {

@@ -1,5 +1,4 @@
-import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
-import 'package:hive/hive.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class HiveDataSource {
   late UserModelHive user;
@@ -13,7 +12,7 @@ class HiveDataSource {
       ..fullName = fullName
       ..branch = branch
       ..type = type;
-    box.put('user',userModelHive);
+    box.put('user', userModelHive);
 
     print(userModelHive.fullName);
     print('savedhive---------------');

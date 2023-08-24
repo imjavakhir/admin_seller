@@ -1,16 +1,6 @@
-import 'dart:io';
-import 'package:admin_seller/app.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
-import 'package:admin_seller/firebase_options.dart';
-import 'package:admin_seller/services/firebase_push_notification.dart';
-import 'package:admin_seller/services/local_notification_service.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
+
+import 'app_const/app_exports.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

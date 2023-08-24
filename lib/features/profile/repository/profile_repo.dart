@@ -1,12 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
-import 'package:admin_seller/features/profile/data/models/user_profile_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class ProfileRepository {
   Dio? _dio;
@@ -46,7 +38,7 @@ class ProfileRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print(
+        debugPrint(
             'after put-----------------success-----${userOnlineModel.isVerified}===========');
         return userOnlineModel;
       }
@@ -59,7 +51,7 @@ class ProfileRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -76,7 +68,7 @@ class ProfileRepository {
           }));
       if (response.statusCode == 200) {
         userOnlineModel = UserProfileModel.fromJson(response.data);
-        print(
+        debugPrint(
             '-----------------success-----${userOnlineModel.user!.phoneNumber!}=============');
         return userOnlineModel;
       }
@@ -90,7 +82,7 @@ class ProfileRepository {
           fontSize: 16,
           backgroundColor: AppColors.grey);
 
-      print('hahah------------------------------------$error-------');
+      debugPrint('hahah------------------------------------$error-------');
     }
     return userOnlineModel;
   }

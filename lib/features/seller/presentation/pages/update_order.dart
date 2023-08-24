@@ -1,51 +1,46 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 
-List<OrderListModel> orderList = [];
-
-class AddOrderPage extends StatefulWidget {
+class UpdateOrderPage extends StatefulWidget {
   final bool isNew;
   final OrderListModel? order;
+  final int? index;
 
-  const AddOrderPage({super.key, this.isNew = true, this.order});
+  const UpdateOrderPage({super.key, this.isNew = true, this.order, this.index});
 
   @override
-  State<AddOrderPage> createState() => _AddOrderPageState();
+  State<UpdateOrderPage> createState() => _UpdateOrderPageState();
 }
 
-class _AddOrderPageState extends State<AddOrderPage> {
-  final TextEditingController _tissueTextEditingController =
-      TextEditingController();
-  final TextEditingController _priceTextEditingController =
-      TextEditingController();
-  final TextEditingController _priceWithSaleTextEditingController =
-      TextEditingController();
-  final TextEditingController _countTextEditingController =
-      TextEditingController();
-  final TextEditingController _reportDetailTextEdtingController =
-      TextEditingController();
+class _UpdateOrderPageState extends State<UpdateOrderPage> {
+  late TextEditingController _tissueTextEditingController;
+
+  late TextEditingController _priceTextEditingController;
+
+  late TextEditingController _priceWithSaleTextEditingController;
+
+  late TextEditingController _countTextEditingController;
+
+  late TextEditingController _reportDetailTextEdtingController;
 
   double salePercent = 0;
   double total = 0;
   @override
   void initState() {
-    if (widget.isNew) {
-      BlocProvider.of<SellingBloc>(context).add(GetIdSelling());
-    }
-    // if (!widget.isNew) {
-    //   _tissueTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.tissue));
-    //   _countTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.count.toString()));
-    //   _priceTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.price.toString()));
-    //   _priceWithSaleTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.priceSale.toString()));
-    //   _reportDetailTextEdtingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.details));
-    //   total = widget.order!.total;
-    //   setState(() {});
-    // }
+    _tissueTextEditingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.order!.tissue));
+    _countTextEditingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.order!.count.toString()));
+    _priceTextEditingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.order!.price.toString()));
+    _priceWithSaleTextEditingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.order!.priceSale.toString()));
+    _reportDetailTextEdtingController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.order!.details));
+    total = widget.order!.total;
+    salePercent = widget.order!.salePercent;
+    setState(() {});
+
     super.initState();
   }
 
@@ -233,10 +228,10 @@ class _AddOrderPageState extends State<AddOrderPage> {
                 buttonName: 'Добавить',
                 onTap: () {
                   final order = OrderListModel(
-                      id: state.idSelling,
+                      id: widget.order!.id,
                       salePercent: salePercent,
                       total: total,
-                      category: state.category!,
+                      category: widget.order!.category,
                       idModel: state.idModel!,
                       furnitureType:
                           state.furnitureTypeAndModel.split('--').first,
@@ -260,11 +255,10 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   debugPrint(order.salePercent.toString());
                   debugPrint(order.total.toString());
 
-                  orderList.add(order);
-                  BlocProvider.of<SellingBloc>(context)
-                      .add(CategorySelling(null));
-                  BlocProvider.of<SellingBloc>(context)
-                      .add(SelectFurnitureTypeAndModel('', ''));
+                  // BlocProvider.of<SellingBloc>(context)
+                  //     .add(CategorySelling(null));
+                  // BlocProvider.of<SellingBloc>(context)
+                  //     .add(SelectFurnitureTypeAndModel('', ''));
                   Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
                 },
               ),
@@ -274,72 +268,4 @@ class _AddOrderPageState extends State<AddOrderPage> {
       ),
     );
   }
-}
-
-class AddOrderFields extends StatelessWidget {
-  final String title;
-  final String hint;
-  final TextEditingController textEditingController;
-  final ValueChanged? valueChanged;
-  final TextInputType textInputType;
-  const AddOrderFields(
-      {super.key,
-      required this.title,
-      required this.hint,
-      required this.textEditingController,
-      this.valueChanged,
-      this.textInputType = TextInputType.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            title,
-            style: Styles.headline4,
-          ),
-        ),
-        ScreenUtil().setVerticalSpacing(10),
-        TextfieldWidget(
-            textInputType: textInputType,
-            valueChanged: valueChanged,
-            hintext: hint,
-            textEditingController: textEditingController),
-        ScreenUtil().setVerticalSpacing(10),
-      ],
-    );
-  }
-}
-
-class OrderListModel {
-  final String id;
-  final String category;
-  final String idModel;
-  final String furnitureType;
-  final String furnitureModel;
-  final String tissue;
-  final double price;
-  final double priceSale;
-  final int count;
-  final String details;
-  final double salePercent;
-  final double total;
-
-  OrderListModel(
-      {required this.id,
-      required this.salePercent,
-      required this.total,
-      required this.category,
-      required this.idModel,
-      required this.furnitureType,
-      required this.furnitureModel,
-      required this.tissue,
-      required this.price,
-      required this.priceSale,
-      required this.count,
-      required this.details});
 }

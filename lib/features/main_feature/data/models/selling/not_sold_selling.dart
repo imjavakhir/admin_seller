@@ -2,7 +2,7 @@
 //
 //     final notSoldSelling = notSoldSellingFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 NotSoldSelling notSoldSellingFromJson(String str) => NotSoldSelling.fromJson(json.decode(str));
 

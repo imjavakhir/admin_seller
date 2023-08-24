@@ -1,21 +1,19 @@
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/textfield_widget.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class LabelTextField extends StatelessWidget {
   final String label;
   final String? initialValue;
   final ValueChanged? valueChanged;
-    final String? Function(String?)? validator;
+  final String? Function(String?)? validator;
 
   final TextEditingController textEditingController;
   const LabelTextField({
     super.key,
     required this.label,
     required this.textEditingController,
-    this.initialValue, this.valueChanged, this.validator,
+    this.initialValue,
+    this.valueChanged,
+    this.validator,
   });
 
   @override

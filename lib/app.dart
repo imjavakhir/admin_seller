@@ -1,19 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_pages.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/accept_online/presentation/blocs/blocs/accept_online_bloc.dart';
-import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.dart';
-import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
-import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc/seller_bloc.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/selling_bloc/selling_bloc.dart';
-import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
-import 'package:admin_seller/services/socket_io_client_service.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyApp extends StatelessWidget {
   final String? savedToken;

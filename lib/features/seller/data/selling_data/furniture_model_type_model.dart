@@ -2,7 +2,7 @@
 //
 //     final furnitureModelTypeModel = furnitureModelTypeModelFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 List<FurnitureModelTypeModel?> furnitureModelTypeModelFromJson(List str) =>
     List<FurnitureModelTypeModel?>.from(

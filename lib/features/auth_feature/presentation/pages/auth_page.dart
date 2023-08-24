@@ -1,22 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
-import 'package:admin_seller/features/auth_feature/presentation/blocs/auth_bloc.dart';
-import 'package:admin_seller/features/auth_feature/repository/auth_repo.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/src/decoration/input_text_mask.dart';
-import 'package:admin_seller/src/validators/validators.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/textfield_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 bool isLoading = false;
 
@@ -154,9 +136,9 @@ class AuthPage extends StatelessWidget {
                           role: role,
                           fireBaseToken: fcmLocal!,
                         );
-                        print(MaskFormat.mask.getMaskedText());
+                        debugPrint(MaskFormat.mask.getMaskedText());
                         if (userModel != null) {
-                          print('TOKEN--------${userModel.token}');
+                          debugPrint('TOKEN--------${userModel.token}');
                           await AuthLocalDataSource()
                               .saveLogToken(userModel.token);
                           await HiveDataSource().saveUserDetails(
@@ -168,7 +150,8 @@ class AuthPage extends StatelessWidget {
                               HiveDataSource().box.values.toList().first;
 
                           debugPrint(user.type);
-                          Navigator.of(context).pushReplacementNamed(AppRoutes.main);
+                          Navigator.of(context)
+                              .pushReplacementNamed(AppRoutes.main);
 
                           setState(() {
                             isLoading = false;

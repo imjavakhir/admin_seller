@@ -1,7 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class MyOrdersCardShimmer extends StatelessWidget {
   const MyOrdersCardShimmer({

@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AuthLocalDataSource {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -24,7 +23,8 @@ class AuthLocalDataSource {
   Future<String?> getFcmToken() async {
     final SharedPreferences prefs = await _prefs;
     final tokenFcm = prefs.getString('fcmToken');
-    debugPrint('fcmtoken-----------------------------$tokenFcm------ fromlocal');
+    debugPrint(
+        'fcmtoken-----------------------------$tokenFcm------ fromlocal');
     return tokenFcm;
   }
 
@@ -49,7 +49,7 @@ class AuthLocalDataSource {
     final SharedPreferences prefs = await _prefs;
 
     final removedLog = prefs.remove('logToken');
-    
+
     final tokenStatus = await removedLog;
     debugPrint('-----------------------removeLog----$tokenStatus');
     return removedLog;
@@ -70,7 +70,8 @@ class AuthLocalDataSource {
   Future<bool?> getUserStatus() async {
     final SharedPreferences prefs = await _prefs;
     final isverified = prefs.getBool('isverified');
-    debugPrint('isverified-----------------------------$isverified ---- fromlocal');
+    debugPrint(
+        'isverified-----------------------------$isverified ---- fromlocal');
     return isverified;
   }
 
@@ -90,14 +91,16 @@ class AuthLocalDataSource {
       'switchValue',
       switchValue,
     );
-    debugPrint('switchvalue-----------------------------$switchValue ---- saved');
+    debugPrint(
+        'switchvalue-----------------------------$switchValue ---- saved');
   }
 
   //get statusswitch
   Future<bool?> getUserStatusSwitch() async {
     final SharedPreferences prefs = await _prefs;
     final tokenLog = prefs.getBool('switchValue');
-    debugPrint('switchvalue-----------------------------$tokenLog ---- fromlocal');
+    debugPrint(
+        'switchvalue-----------------------------$tokenLog ---- fromlocal');
     return tokenLog;
   }
 
@@ -123,7 +126,8 @@ class AuthLocalDataSource {
   Future<bool?> getUserPause() async {
     final SharedPreferences prefs = await _prefs;
     final pauseValue = prefs.getBool('pauseValue');
-    debugPrint('pausevalue-----------------------------$pauseValue ---- fromlocal');
+    debugPrint(
+        'pausevalue-----------------------------$pauseValue ---- fromlocal');
     return pauseValue;
   }
 

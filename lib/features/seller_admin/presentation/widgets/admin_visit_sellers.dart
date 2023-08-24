@@ -1,16 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
-import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
-import 'package:admin_seller/services/socket_io_client_service.dart';
-import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AdminSellerVisitSellersWidget extends StatefulWidget {
   final String id;

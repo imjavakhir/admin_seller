@@ -1,11 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/seller/presentation/pages/selling_warehouse.dart';
-import 'package:admin_seller/features/seller/presentation/widgets/order_tile_widget.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WarehouseCardWidget extends StatefulWidget {
   final VoidCallback? onTapFirst;

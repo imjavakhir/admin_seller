@@ -2,7 +2,8 @@
 //
 //     final ackDataModel = ackDataModelFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 AckDataModel ackDataModelFromJson(String str) => AckDataModel.fromJson(json.decode(str));
 

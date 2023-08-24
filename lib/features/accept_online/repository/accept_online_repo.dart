@@ -1,10 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/accept_online/data/models/user_unverified_model.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AcceptOnlineRepository {
   Dio? _dio;
@@ -39,7 +33,7 @@ class AcceptOnlineRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print(
+        debugPrint(
             'verified-----------------success-----${userUnverified.isVerified}---${userUnverified.user}');
         return userUnverified;
       }
@@ -52,7 +46,7 @@ class AcceptOnlineRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userUnverified;
   }
@@ -70,7 +64,7 @@ class AcceptOnlineRepository {
           }));
       if (response.statusCode == 200) {
         userUnverified = userUnverifiedFromJson(response.data);
-        print(
+        debugPrint(
             'unverified-----------------success-----${userUnverified.length} }');
         return userUnverified;
       }
@@ -83,7 +77,7 @@ class AcceptOnlineRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userUnverified;
   }
