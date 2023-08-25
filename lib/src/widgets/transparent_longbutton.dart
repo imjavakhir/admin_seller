@@ -7,9 +7,11 @@ class TransparentLongButton extends StatelessWidget {
   final double height;
   final double fontsize;
   final double paddingW;
+  final bool isDisabled;
   const TransparentLongButton({
     Key? key,
     required this.buttonName,
+    this.isDisabled = false,
     this.fontsize = 20,
     required this.onTap,
     this.width = double.maxFinite,
@@ -25,7 +27,10 @@ class TransparentLongButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(width: 1, color: AppColors.red)),
+          border: Border.all(
+              width: 1,
+              color:
+                  isDisabled ? AppColors.red.withOpacity(0.2) : AppColors.red)),
       width: width,
       height: height.h,
       child: MaterialButton(
@@ -33,11 +38,13 @@ class TransparentLongButton extends StatelessWidget {
         highlightColor: AppColors.red.withOpacity(0.1),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-        onPressed: onTap,
+        onPressed: isDisabled ? null : onTap,
         child: Text(
           buttonName,
-          style: Styles.headline3
-              .copyWith(color: AppColors.red, fontSize: fontsize.sp),
+          style: Styles.headline3.copyWith(
+              color:
+                  isDisabled ? AppColors.red.withOpacity(0.2) : AppColors.red,
+              fontSize: fontsize.sp),
         ),
       ),
     );

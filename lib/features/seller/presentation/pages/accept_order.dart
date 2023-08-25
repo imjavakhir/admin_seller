@@ -35,7 +35,7 @@ class _AcceptOrderPageState extends State<AcceptOrderPage> {
               itemBuilder: (BuildContext context, int index) {
                 final item = orderList[index];
                 return AcceptOrderCard(
-                    onChangeTap: () {
+                    onEditTap: () {
                       Navigator.of(context).push(
                         PageRouteBuilder(
                           transitionsBuilder:

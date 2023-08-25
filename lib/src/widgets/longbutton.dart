@@ -9,10 +9,12 @@ class LongButton extends StatelessWidget {
   final double fontsize;
   final double paddingW;
   final bool isloading;
+  final bool isBooking;
   const LongButton({
     Key? key,
     required this.buttonName,
     this.isDisabled = false,
+    this.isBooking = false,
     required this.onTap,
     this.width = double.maxFinite,
     this.height = 56,
@@ -51,13 +53,27 @@ class LongButton extends StatelessWidget {
                   color: AppColors.white,
                 ),
               )
-            : Text(
-                buttonName,
-                style: Styles.headline3.copyWith(
-                    fontSize: fontsize.sp,
-                    color: isDisabled
-                        ? AppColors.black.withOpacity(0.2)
-                        : AppColors.black),
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isBooking)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      child: Icon(
+                        Icons.bookmark_added,
+                        size: 20.h,
+                      ),
+                    ),
+                  Text(
+                    buttonName,
+                    style: Styles.headline3.copyWith(
+                        fontSize: fontsize.sp,
+                        color: isDisabled
+                            ? AppColors.black.withOpacity(0.2)
+                            : AppColors.black),
+                  ),
+                ],
               ),
       ),
     );

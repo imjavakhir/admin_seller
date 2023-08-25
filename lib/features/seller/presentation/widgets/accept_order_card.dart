@@ -2,7 +2,6 @@ import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-
 class AcceptOrderCard extends StatelessWidget {
   final String id;
   final String category;
@@ -18,11 +17,13 @@ class AcceptOrderCard extends StatelessWidget {
   final double total;
   final OrderListModel orderListModelItem;
   final VoidCallback onDeleteTap;
-  final VoidCallback onChangeTap;
+ 
+  final VoidCallback onEditTap;
 
   const AcceptOrderCard(
       {super.key,
       required this.id,
+      required this.onEditTap,
       required this.category,
       required this.idModel,
       required this.furnitureType,
@@ -36,12 +37,42 @@ class AcceptOrderCard extends StatelessWidget {
       required this.total,
       required this.orderListModelItem,
       required this.onDeleteTap,
-      required this.onChangeTap});
+});
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
       key: Key(id),
+      startActionPane: ActionPane(
+          extentRatio: 1 / 2,
+          motion: const ScrollMotion(),
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 24.w, top: 5.h, bottom: 5.h),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r)),
+                        foregroundColor: Colors.grey),
+                    onPressed: onEditTap,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          CupertinoIcons.pencil_ellipsis_rectangle,
+                          color: AppColors.grey,
+                        ),
+                        Text(
+                          'Изменить',
+                          style:
+                              Styles.headline4.copyWith(color: AppColors.grey),
+                        )
+                      ],
+                    )),
+              ),
+            )
+          ]),
       endActionPane: ActionPane(
           extentRatio: 1 / 2,
           motion: const ScrollMotion(),
@@ -83,7 +114,7 @@ class AcceptOrderCard extends StatelessWidget {
                   color: AppColors.cardShadow,
                   offset: const Offset(0, 0))
             ]),
-        height: 300.h,
+        height: 270.h,
         width: double.maxFinite,
         margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
         child: Column(
@@ -133,13 +164,6 @@ class AcceptOrderCard extends StatelessWidget {
               leading: 'Сумма',
               trailing: '$total сум',
             ),
-            const Spacer(),
-            LongButton(
-              buttonName: 'Изменить',
-              onTap: onChangeTap,
-              height: 36,
-              fontsize: 14,
-            )
           ],
         ),
       ),

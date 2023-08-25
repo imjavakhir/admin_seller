@@ -1,7 +1,7 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 
-class WarehouseCardWidget extends StatefulWidget {
+class WarehouseCardWidget extends StatelessWidget {
   final VoidCallback? onTapFirst;
   final VoidCallback? onTapSecond;
   final VoidCallback onTapThird;
@@ -30,12 +30,6 @@ class WarehouseCardWidget extends StatefulWidget {
   });
 
   @override
-  State<WarehouseCardWidget> createState() => _WarehouseCardWidgetState();
-}
-
-class _WarehouseCardWidgetState extends State<WarehouseCardWidget> {
-  bool isAdded = false;
-  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
@@ -54,147 +48,189 @@ class _WarehouseCardWidgetState extends State<WarehouseCardWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.productStatus == ProductStatus.booked)
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                  color: AppColors.orange.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(100.r)),
-              height: 30.h,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    CupertinoIcons.exclamationmark_circle_fill,
-                    size: 20.h,
-                    color: AppColors.orange,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (productStatus == ProductStatus.booked)
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                  decoration: BoxDecoration(
+                      color: AppColors.orange.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(100.r)),
+                  height: 30.h,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        CupertinoIcons.exclamationmark_circle_fill,
+                        size: 20.h,
+                        color: AppColors.orange,
+                      ),
+                      ScreenUtil().setHorizontalSpacing(4),
+                      Text(
+                        'Забронирована',
+                        style:
+                            Styles.headline5M.copyWith(color: AppColors.orange),
+                      ),
+                    ],
                   ),
-                  ScreenUtil().setHorizontalSpacing(4),
-                  Text(
-                    'Забронирована',
-                    style: Styles.headline5M.copyWith(color: AppColors.orange),
+                ),
+              if (productStatus == ProductStatus.active)
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                  decoration: BoxDecoration(
+                      color: AppColors.green.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(100.r)),
+                  height: 30.h,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        CupertinoIcons.check_mark_circled_solid,
+                        size: 20.h,
+                        color: AppColors.green,
+                      ),
+                      ScreenUtil().setHorizontalSpacing(4),
+                      Text(
+                        'Готова',
+                        style:
+                            Styles.headline5M.copyWith(color: AppColors.green),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          if (widget.productStatus == ProductStatus.active)
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              decoration: BoxDecoration(
-                  color: AppColors.green.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(100.r)),
-              height: 30.h,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    CupertinoIcons.check_mark_circled_solid,
-                    size: 20.h,
-                    color: AppColors.green,
-                  ),
-                  ScreenUtil().setHorizontalSpacing(4),
-                  Text(
-                    'Готова',
-                    style: Styles.headline5M.copyWith(color: AppColors.green),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              const Spacer(),
+              AnimatedFollowIcon(
+                isAdded: orderList.map((e) => e.id).contains(id) ||
+                    orderModelListWare.map((e) => e.id).contains(id),
+                onAddTap: onTapThird,
+                isDisabled: !canChange || productStatus != ProductStatus.booked,
+              )
+            ],
+          ),
           ScreenUtil().setVerticalSpacing(6),
           OrderCardTile(
             leading: 'ID',
-            trailing: widget.id,
+            trailing: id,
           ),
           OrderCardTile(
             leading: 'Склад',
-            trailing: widget.warehouse,
+            trailing: warehouse,
           ),
           OrderCardTile(
             leading: 'Вид мебели',
-            trailing: widget.furnitureType,
+            trailing: furnitureType,
           ),
           OrderCardTile(
             leading: 'Модель',
-            trailing: widget.furnitureModel,
+            trailing: furnitureModel,
           ),
           OrderCardTile(
             leading: 'Ткань',
-            trailing: widget.tissue,
+            trailing: tissue,
           ),
           OrderCardTile(
             leading: 'Примичение',
-            trailing: widget.details,
+            trailing: details,
           ),
           const Spacer(),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                  child: LongButton(
-                isDisabled: !widget.canChange &&
-                    widget.productStatus == ProductStatus.booked,
-                paddingW: 8,
-                buttonName: widget.productStatus == ProductStatus.active
-                    ? 'Бронь'
-                    : 'Отменить',
-                onTap: widget.productStatus == ProductStatus.active
-                    ? widget.onTapFirst
-                    : widget.onTapSecond,
-                height: 36,
-                fontsize: 14,
-              )),
-              const Spacer(),
-              AddProductWarehouseButton(
-                isAdded: isAdded,
-                onTap: isAdded
-                    ? null
-                    : () {
-                        widget.onTapThird();
-                        isAdded = true;
-                        setState(() {});
-                      },
-                isDisabled: !widget.canChange ||
-                    widget.productStatus != ProductStatus.booked,
-              )
-            ],
-          )
+          productStatus == ProductStatus.active
+              ? LongButton(
+                  isBooking: true,
+                  isDisabled:
+                      !canChange && productStatus == ProductStatus.booked,
+                  paddingW: 8,
+                  buttonName: 'Бронь',
+                  onTap: onTapFirst,
+                  height: 36,
+                  fontsize: 14,
+                )
+              : TransparentLongButton(
+                  isDisabled:
+                      !canChange && productStatus == ProductStatus.booked,
+                  paddingW: 8,
+                  height: 36,
+                  fontsize: 14,
+                  buttonName: 'Отменить',
+                  onTap: onTapSecond)
         ],
       ),
     );
   }
 }
 
-class AddProductWarehouseButton extends StatelessWidget {
+class AnimatedFollowIcon extends StatefulWidget {
   final bool isDisabled;
-  final VoidCallback? onTap;
+  final VoidCallback onAddTap;
   final bool isAdded;
-  const AddProductWarehouseButton(
+  const AnimatedFollowIcon(
       {super.key,
+      required this.onAddTap,
       this.isDisabled = false,
-      this.isAdded = false,
-      required this.onTap});
+      required this.isAdded});
+
+  @override
+  State<AnimatedFollowIcon> createState() => _AnimatedFollowIconState();
+}
+
+class _AnimatedFollowIconState extends State<AnimatedFollowIcon>
+    with TickerProviderStateMixin {
+  bool? onTapped = false;
+
+  late final AnimationController _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+      value: 1.0,
+      upperBound: 1.25,
+      lowerBound: 1.0);
+
+  @override
+  void initState() {
+    onTapped = widget.isAdded;
+    setState(() {});
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 36.h,
-      width: 36.h,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          color: isDisabled
-              ? AppColors.primaryColor.withOpacity(0.2)
-              : AppColors.primaryColor),
-      child: MaterialButton(
-        padding: EdgeInsets.zero,
-        onPressed: onTap,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-        child: Icon(
-          isAdded ? CupertinoIcons.check_mark : CupertinoIcons.add,
-          size: 24.h,
-          color:
-              isDisabled ? AppColors.black.withOpacity(0.2) : AppColors.black,
-        ),
+    return MaterialButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.r)),
+      padding: EdgeInsets.zero,
+      minWidth: 48.w,
+      visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      onPressed: !widget.isDisabled
+          ? !onTapped!
+              ? () {
+                  setState(() {
+                    if (onTapped == false) {
+                      _animationController
+                          .forward()
+                          .then((value) => _animationController.reverse());
+                    }
+                    onTapped = !onTapped!;
+                    widget.onAddTap();
+                  });
+                }
+              : null
+          : null,
+      child: ScaleTransition(
+        scale: _animationController,
+        child: !onTapped!
+            ? Icon(
+                CupertinoIcons.add,
+                size: 24.h,
+              )
+            : Icon(
+                CupertinoIcons.check_mark,
+                size: 24.r,
+              ),
       ),
     );
   }
