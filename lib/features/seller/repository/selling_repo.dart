@@ -75,6 +75,38 @@ class SellingRepository {
     return sellingMyOrders;
   }
 
+  Future<BookedSeller?> getBookedSeller(String sellerId) async {
+    BookedSeller? bookedSeller;
+
+    try {
+      debugPrint(sellerId);
+      Response response =
+          await _dio!.get('${ApiSelling.bookedSeller}/$sellerId',
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        bookedSeller = BookedSeller.fromJson(response.data);
+        debugPrint(bookedSeller.name!);
+        // debugPrint("${clientInfoList.first!.sentAt!}-------------");
+        return bookedSeller;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+    return bookedSeller;
+  }
+
   Future<void> bookWareHouseProduct(DateTime dateTime, String id) async {
     final data = {'end_date': dateTime.toIso8601String()};
     try {
@@ -199,4 +231,30 @@ class ApiSelling {
   static const unbookOrder = '$baseUrl/unbooked-order';
   static const sellingMyOrders = '$baseUrl/seller-orders';
   static const sellingGetId = "$baseUrl/getId";
+  static const bookedSeller = '$baseUrl/get-seller';
+}
+
+BookedSeller bookedSellerFromJson(String str) =>
+    BookedSeller.fromJson(json.decode(str));
+
+String bookedSellerToJson(BookedSeller data) => json.encode(data.toJson());
+
+class BookedSeller {
+  final String? name;
+  final String? phone;
+
+  BookedSeller({
+    this.name,
+    this.phone,
+  });
+
+  factory BookedSeller.fromJson(Map<String, dynamic> json) => BookedSeller(
+        name: json["name"],
+        phone: json["phone"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "phone": phone,
+      };
 }

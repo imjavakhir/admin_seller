@@ -13,8 +13,10 @@ class WarehouseCardWidget extends StatelessWidget {
   final String furnitureModel;
   final String productStatus;
   final bool canChange;
+  final String sellerId;
 
   const WarehouseCardWidget({
+    required this.sellerId,
     this.productStatus = ProductStatus.active,
     super.key,
     required this.id,
@@ -31,130 +33,183 @@ class WarehouseCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 20.r,
-                color: AppColors.cardShadow,
-                offset: const Offset(0, 0))
-          ]),
-      height: 250.h,
-      width: double.maxFinite,
-      margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (productStatus == ProductStatus.booked)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.orange.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(100.r)),
-                  height: 30.h,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        CupertinoIcons.exclamationmark_circle_fill,
-                        size: 20.h,
-                        color: AppColors.orange,
-                      ),
-                      ScreenUtil().setHorizontalSpacing(4),
-                      Text(
-                        'Забронирована',
-                        style:
-                            Styles.headline5M.copyWith(color: AppColors.orange),
-                      ),
-                    ],
+    return GestureDetector(
+      onTap: sellerId.isNotEmpty
+          ? () async {
+              final bookedSeller =
+                  await SellingRepository().getBookedSeller(sellerId);
+              showDialog(
+                  context: context,
+                  builder: (context) => BookedSellerInfo(
+                        bookedSeller: bookedSeller!,
+                      ));
+            }
+          : null,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+        decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(10.r),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 20.r,
+                  color: AppColors.cardShadow,
+                  offset: const Offset(0, 0))
+            ]),
+        height: 250.h,
+        width: double.maxFinite,
+        margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 5.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (productStatus == ProductStatus.booked)
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                    decoration: BoxDecoration(
+                        color: AppColors.orange.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(100.r)),
+                    height: 30.h,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          CupertinoIcons.exclamationmark_circle_fill,
+                          size: 20.h,
+                          color: AppColors.orange,
+                        ),
+                        ScreenUtil().setHorizontalSpacing(4),
+                        Text(
+                          'Забронирована',
+                          style: Styles.headline5M
+                              .copyWith(color: AppColors.orange),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              if (productStatus == ProductStatus.active)
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(100.r)),
-                  height: 30.h,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        CupertinoIcons.check_mark_circled_solid,
-                        size: 20.h,
-                        color: AppColors.green,
-                      ),
-                      ScreenUtil().setHorizontalSpacing(4),
-                      Text(
-                        'Готова',
-                        style:
-                            Styles.headline5M.copyWith(color: AppColors.green),
-                      ),
-                    ],
+                if (productStatus == ProductStatus.active)
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
+                    decoration: BoxDecoration(
+                        color: AppColors.green.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(100.r)),
+                    height: 30.h,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          CupertinoIcons.check_mark_circled_solid,
+                          size: 20.h,
+                          color: AppColors.green,
+                        ),
+                        ScreenUtil().setHorizontalSpacing(4),
+                        Text(
+                          'Готова',
+                          style: Styles.headline5M
+                              .copyWith(color: AppColors.green),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              const Spacer(),
-              AnimatedFollowIcon(
-                isAdded: orderList.map((e) => e.id).contains(id) ||
-                    orderModelListWare.map((e) => e.id).contains(id),
-                onAddTap: onTapThird,
-                isDisabled: !canChange || productStatus != ProductStatus.booked,
-              )
-            ],
-          ),
-          ScreenUtil().setVerticalSpacing(6),
-          OrderCardTile(
-            leading: 'ID',
-            trailing: id,
-          ),
-          OrderCardTile(
-            leading: 'Склад',
-            trailing: warehouse,
-          ),
-          OrderCardTile(
-            leading: 'Вид мебели',
-            trailing: furnitureType,
-          ),
-          OrderCardTile(
-            leading: 'Модель',
-            trailing: furnitureModel,
-          ),
-          OrderCardTile(
-            leading: 'Ткань',
-            trailing: tissue,
-          ),
-          OrderCardTile(
-            leading: 'Примичение',
-            trailing: details,
-          ),
-          const Spacer(),
-          productStatus == ProductStatus.active
-              ? LongButton(
-                  isBooking: true,
+                const Spacer(),
+                AnimatedFollowIcon(
+                  isAdded: orderList.map((e) => e.id).contains(id) ||
+                      orderModelListWare.map((e) => e.id).contains(id),
+                  onAddTap: onTapThird,
                   isDisabled:
-                      !canChange && productStatus == ProductStatus.booked,
-                  paddingW: 8,
-                  buttonName: 'Бронь',
-                  onTap: onTapFirst,
-                  height: 36,
-                  fontsize: 14,
+                      !canChange || productStatus != ProductStatus.booked,
                 )
-              : TransparentLongButton(
-                  isDisabled:
-                      !canChange && productStatus == ProductStatus.booked,
-                  paddingW: 8,
-                  height: 36,
-                  fontsize: 14,
-                  buttonName: 'Отменить',
-                  onTap: onTapSecond)
-        ],
+              ],
+            ),
+            ScreenUtil().setVerticalSpacing(6),
+            OrderCardTile(
+              leading: 'ID',
+              trailing: id,
+            ),
+            OrderCardTile(
+              leading: 'Склад',
+              trailing: warehouse,
+            ),
+            OrderCardTile(
+              leading: 'Вид мебели',
+              trailing: furnitureType,
+            ),
+            OrderCardTile(
+              leading: 'Модель',
+              trailing: furnitureModel,
+            ),
+            OrderCardTile(
+              leading: 'Ткань',
+              trailing: tissue,
+            ),
+            OrderCardTile(
+              leading: 'Примичение',
+              trailing: details,
+            ),
+            const Spacer(),
+            productStatus == ProductStatus.active
+                ? LongButton(
+                    isBooking: true,
+                    isDisabled:
+                        !canChange && productStatus == ProductStatus.booked,
+                    paddingW: 8,
+                    buttonName: 'Бронировать',
+                    onTap: onTapFirst,
+                    height: 36,
+                    fontsize: 14,
+                  )
+                : TransparentLongButton(
+                    isDisabled:
+                        !canChange && productStatus == ProductStatus.booked,
+                    paddingW: 8,
+                    height: 36,
+                    fontsize: 14,
+                    buttonName: 'Разбронировать',
+                    onTap: onTapSecond)
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class BookedSellerInfo extends StatelessWidget {
+  final BookedSeller bookedSeller;
+  const BookedSellerInfo({
+    super.key,
+    required this.bookedSeller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        ScreenUtil().setVerticalSpacing(20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              CupertinoIcons.info_circle_fill,
+              color: AppColors.grey,
+              size: 32.h,
+            ),
+            ScreenUtil().setHorizontalSpacing(8.w),
+            Text(
+              'Кто забронировал',
+              style: Styles.headline2,
+            )
+          ],
+        ),
+        ScreenUtil().setVerticalSpacing(20),
+        ProfileTile(title: bookedSeller.name!, subtitle: bookedSeller.phone!),
+        ScreenUtil().setVerticalSpacing(20),
+      ]),
     );
   }
 }
