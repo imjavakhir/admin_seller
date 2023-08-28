@@ -121,6 +121,10 @@ class SellingRepository {
         debugPrint(response.data);
       }
     } on DioError catch (error) {
+      debugPrint(error.type.name);
+      debugPrint(error.toString());
+      debugPrint(error.message.toString());
+      debugPrint(error.response!.data());
       final errorMessage = DioExceptions.fromDioError(error);
       Fluttertoast.showToast(
           timeInSecForIosWeb: 2,

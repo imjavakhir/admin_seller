@@ -2,9 +2,9 @@ import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 
 class AddOrderButtonWidget extends StatelessWidget {
-  final VoidCallback onPress;
+  final VoidCallback? onPress;
   final String hint;
-  final isSelected;
+  final bool isSelected;
   const AddOrderButtonWidget({
     super.key,
     this.isSelected = false,

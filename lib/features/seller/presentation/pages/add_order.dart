@@ -1,13 +1,13 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
 import 'package:flutter/cupertino.dart';
 
 List<OrderListModel> orderList = [];
 
 class AddOrderPage extends StatefulWidget {
-  final bool isNew;
-  final OrderListModel? order;
-
-  const AddOrderPage({super.key, this.isNew = true, this.order});
+  const AddOrderPage({
+    super.key,
+  });
 
   @override
   State<AddOrderPage> createState() => _AddOrderPageState();
@@ -29,23 +29,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
   double total = 0;
   @override
   void initState() {
-    if (widget.isNew) {
-      BlocProvider.of<SellingBloc>(context).add(GetIdSelling());
-    }
-    // if (!widget.isNew) {
-    //   _tissueTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.tissue));
-    //   _countTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.count.toString()));
-    //   _priceTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.price.toString()));
-    //   _priceWithSaleTextEditingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.priceSale.toString()));
-    //   _reportDetailTextEdtingController = TextEditingController.fromValue(
-    //       TextEditingValue(text: widget.order!.details));
-    //   total = widget.order!.total;
-    //   setState(() {});
-    // }
+    BlocProvider.of<SellingBloc>(context).add(GetIdSelling());
+
     super.initState();
   }
 
@@ -85,7 +70,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                         ),
                         const Spacer(),
                         Text(
-                          !widget.isNew ? widget.order!.id : state.idSelling,
+                          state.idSelling,
                           style: Styles.headline4Reg,
                         )
                       ],
@@ -146,12 +131,56 @@ class _AddOrderPageState extends State<AddOrderPage> {
                     textEditingController: _tissueTextEditingController,
                   ),
                   AddOrderFields(
+                    valueChanged: (value) {
+                      if (_countTextEditingController.text.isNotEmpty &&
+                          _priceTextEditingController.text.isNotEmpty &&
+                          _priceWithSaleTextEditingController.text.isNotEmpty) {
+                        salePercent = 100 -
+                            ((double.parse(_priceWithSaleTextEditingController
+                                        .text
+                                        .replaceAll('.', '')) /
+                                    double.parse(_priceTextEditingController
+                                        .text
+                                        .replaceAll('.', ''))) *
+                                100);
+                        total = double.parse(_priceWithSaleTextEditingController
+                                .text
+                                .replaceAll('.', '')) *
+                            double.parse(_countTextEditingController.text
+                                .replaceAll('.', ''));
+                        setState(() {});
+                      }
+                    },
+                    isSoldField: true,
+                    listformatters: [ThousandsSeparatorInputFormatter()],
                     textInputType: TextInputType.number,
                     title: 'Цена',
                     hint: 'Цена',
                     textEditingController: _priceTextEditingController,
                   ),
                   AddOrderFields(
+                    valueChanged: (value) {
+                      if (_countTextEditingController.text.isNotEmpty &&
+                          _priceTextEditingController.text.isNotEmpty &&
+                          _priceWithSaleTextEditingController.text.isNotEmpty) {
+                        salePercent = 100 -
+                            ((double.parse(_priceWithSaleTextEditingController
+                                        .text
+                                        .replaceAll('.', '')) /
+                                    double.parse(_priceTextEditingController
+                                        .text
+                                        .replaceAll('.', ''))) *
+                                100);
+                        total = double.parse(_priceWithSaleTextEditingController
+                                .text
+                                .replaceAll('.', '')) *
+                            double.parse(_countTextEditingController.text
+                                .replaceAll('.', ''));
+                        setState(() {});
+                      }
+                    },
+                    isSoldField: true,
+                    listformatters: [ThousandsSeparatorInputFormatter()],
                     textInputType: TextInputType.number,
                     title: 'Цена со скидкой',
                     hint: 'Цена со скидкой',
@@ -167,13 +196,17 @@ class _AddOrderPageState extends State<AddOrderPage> {
                           _priceWithSaleTextEditingController.text.isNotEmpty) {
                         salePercent = 100 -
                             ((double.parse(_priceWithSaleTextEditingController
-                                        .text) /
-                                    double.parse(
-                                        _priceTextEditingController.text)) *
+                                        .text
+                                        .replaceAll('.', '')) /
+                                    double.parse(_priceTextEditingController
+                                        .text
+                                        .replaceAll('.', ''))) *
                                 100);
-                        total = double.parse(
-                                _priceWithSaleTextEditingController.text) *
-                            double.parse(_countTextEditingController.text);
+                        total = double.parse(_priceWithSaleTextEditingController
+                                .text
+                                .replaceAll('.', '')) *
+                            double.parse(_countTextEditingController.text
+                                .replaceAll('.', ''));
                         setState(() {});
                       }
                     },
@@ -211,7 +244,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                         ),
                         const Spacer(),
                         Text(
-                          '$total сум',
+                          '${MaskFormat.formatter.format(total)} сум',
                           style: Styles.headline4,
                         ),
                       ],
@@ -234,8 +267,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
                 onTap: () {
                   final order = OrderListModel(
                       id: state.idSelling,
-                      salePercent: salePercent,
-                      total: total,
+                      salePercent: salePercent.toString(),
+                      total: total.toString(),
                       category: state.category!,
                       idModel: state.idModel!,
                       furnitureType:
@@ -243,9 +276,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
                       furnitureModel:
                           state.furnitureTypeAndModel.split('--').last,
                       tissue: _tissueTextEditingController.text,
-                      price: double.parse(_priceTextEditingController.text),
-                      priceSale: double.parse(
-                          _priceWithSaleTextEditingController.text),
+                      price: _priceTextEditingController.text,
+                      priceSale: _priceWithSaleTextEditingController.text,
                       count: int.parse(_countTextEditingController.text),
                       details: _reportDetailTextEdtingController.text);
 
@@ -274,72 +306,4 @@ class _AddOrderPageState extends State<AddOrderPage> {
       ),
     );
   }
-}
-
-class AddOrderFields extends StatelessWidget {
-  final String title;
-  final String hint;
-  final TextEditingController textEditingController;
-  final ValueChanged? valueChanged;
-  final TextInputType textInputType;
-  const AddOrderFields(
-      {super.key,
-      required this.title,
-      required this.hint,
-      required this.textEditingController,
-      this.valueChanged,
-      this.textInputType = TextInputType.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Text(
-            title,
-            style: Styles.headline4,
-          ),
-        ),
-        ScreenUtil().setVerticalSpacing(10),
-        TextfieldWidget(
-            textInputType: textInputType,
-            valueChanged: valueChanged,
-            hintext: hint,
-            textEditingController: textEditingController),
-        ScreenUtil().setVerticalSpacing(10),
-      ],
-    );
-  }
-}
-
-class OrderListModel {
-  final String id;
-  final String category;
-  final String idModel;
-  final String furnitureType;
-  final String furnitureModel;
-  final String tissue;
-  final double price;
-  final double priceSale;
-  final int count;
-  final String details;
-  final double salePercent;
-  final double total;
-
-  OrderListModel(
-      {required this.id,
-      required this.salePercent,
-      required this.total,
-      required this.category,
-      required this.idModel,
-      required this.furnitureType,
-      required this.furnitureModel,
-      required this.tissue,
-      required this.price,
-      required this.priceSale,
-      required this.count,
-      required this.details});
 }

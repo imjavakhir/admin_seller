@@ -47,10 +47,10 @@ class TextfieldWidget extends StatelessWidget {
         child: TextFormField(
           maxLength: isSoldField ? 11 : null,
           validator: validator,
-          key: textFieldKey,
-          onTap: () {
-            Scrollable.ensureVisible(textFieldKey!.currentContext!);
-          },
+          // key: textFieldKey,
+          // onTap: () {
+          //   Scrollable.ensureVisible(textFieldKey!.currentContext!);
+          // },
           initialValue: initialValue,
           onChanged: valueChanged,
           enableSuggestions: false,

@@ -1,6 +1,8 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/unbook_dialog.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/warehouse_date_time.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 List<OrderListModel> orderModelListWare = [];
 
@@ -149,18 +151,16 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                               onTapThird: () {
                                 final newItem = OrderListModel(
                                     id: item.order!.orderId!,
-                                    salePercent:
-                                        double.tryParse(item.order!.sale!)!,
-                                    total: double.parse(item.order!.sum!),
-                                    category: 'Продажа со склада',
+                                    salePercent: item.order!.sale!,
+                                    total: item.order!.sum!,
+                                    category: item.order!.cathegory!,
                                     idModel: item.order!.id!,
                                     furnitureType:
                                         item.order!.model!.furnitureType!.name!,
                                     furnitureModel: item.order!.model!.name!,
                                     tissue: item.order!.tissue!,
-                                    price: double.parse(item.order!.cost!),
-                                    priceSale:
-                                        double.tryParse(item.order!.sum!)!,
+                                    price: item.order!.cost!,
+                                    priceSale: item.order!.sum!,
                                     count: item.order!.qty!,
                                     details: item.order!.title!);
                                 debugPrint(newItem.id);
@@ -279,193 +279,6 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
           ),
         );
       },
-    );
-  }
-}
-
-class UnbookDialog extends StatelessWidget {
-  final VoidCallback onTap;
-  final String id;
-  final String warehouse;
-  final String furnitureType;
-  final String tissue;
-  final String details;
-  final String furnitureModel;
-  const UnbookDialog({
-    super.key,
-    required this.onTap,
-    required this.id,
-    required this.warehouse,
-    required this.furnitureType,
-    required this.tissue,
-    required this.details,
-    required this.furnitureModel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 24.w,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ScreenUtil().setVerticalSpacing(20.h),
-            Center(
-              child: Text(
-                'Вы хотите разбронировать этот товар?',
-                textAlign: TextAlign.center,
-                style: Styles.headline2,
-              ),
-            ),
-            ScreenUtil().setVerticalSpacing(20),
-            OrderCardTile(
-              leading: 'ID',
-              trailing: id,
-            ),
-            OrderCardTile(
-              leading: 'Склад',
-              trailing: warehouse,
-            ),
-            OrderCardTile(
-              leading: 'Вид мебели',
-              trailing: furnitureType,
-            ),
-            OrderCardTile(
-              leading: 'Модель',
-              trailing: furnitureModel,
-            ),
-            OrderCardTile(
-              leading: 'Ткань',
-              trailing: tissue,
-            ),
-            OrderCardTile(
-              leading: 'Примичение',
-              trailing: details,
-            ),
-            ScreenUtil().setVerticalSpacing(20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                LongButton(
-                  paddingW: 0,
-                  buttonName: 'Да',
-                  fontsize: 12,
-                  onTap: onTap,
-                  height: 40,
-                  width: 80,
-                ),
-                ScreenUtil().setHorizontalSpacing(20.w),
-                TransparentLongButton(
-                  paddingW: 0,
-                  width: 80,
-                  height: 40,
-                  fontsize: 12,
-                  buttonName: 'Нет',
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ),
-            ScreenUtil().setVerticalSpacing(20)
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DateAndTimeWarehouse extends StatefulWidget {
-  const DateAndTimeWarehouse({
-    super.key,
-    required this.item,
-  });
-
-  final Product? item;
-
-  @override
-  State<DateAndTimeWarehouse> createState() => _DateAndTimeWarehouseState();
-}
-
-class _DateAndTimeWarehouseState extends State<DateAndTimeWarehouse> {
-  DateTime _currentDate =
-      DateTime.now().add(Duration(minutes: 15 - DateTime.now().minute % 15));
-  @override
-  Widget build(BuildContext context) {
-    debugPrint(DateTime.now()
-        .add(Duration(minutes: 10 - DateTime.now().minute % 15))
-        .toString());
-
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ScreenUtil().setVerticalSpacing(24),
-          Text(
-            'Виберите дату и время',
-            style: Styles.headline2,
-          ),
-          SizedBox(
-            height: 250.h,
-            width: double.maxFinite,
-            child: CupertinoDatePicker(
-                minuteInterval: 15,
-                minimumDate: DateTime.now(),
-                initialDateTime: DateTime.now()
-                    .add(Duration(minutes: 15 - DateTime.now().minute % 15)),
-                mode: CupertinoDatePickerMode.dateAndTime,
-                use24hFormat: true,
-                backgroundColor: AppColors.white,
-                onDateTimeChanged: (value) {
-                  setState(() {
-                    debugPrint(value.toString());
-                    _currentDate = value;
-                  });
-                }),
-          ),
-          Text(
-            "Дата и время: ${DateFormat('HH:mm  dd/MM').format(_currentDate.toLocal())}",
-            style: Styles.headline4,
-          ),
-          ScreenUtil().setVerticalSpacing(20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LongButton(
-                paddingW: 0,
-                buttonName: 'Подвердить',
-                fontsize: 12,
-                onTap: () async {
-                  BlocProvider.of<SellingBloc>(context).add(
-                      BookWarehouseProduct(
-                          widget.item!.order!.id!, _currentDate));
-                  Navigator.of(context).pop();
-                },
-                height: 40,
-                width: 120,
-              ),
-              ScreenUtil().setHorizontalSpacing(20),
-              TransparentLongButton(
-                paddingW: 0,
-                width: 120,
-                height: 40,
-                fontsize: 12,
-                buttonName: 'Отменить',
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ),
-          ScreenUtil().setVerticalSpacing(24),
-        ],
-      ),
     );
   }
 }

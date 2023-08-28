@@ -13,9 +13,11 @@ class SellingState {
   final bool showSearchLoading;
   final List<FurnitureModelTypeModel?>? furnitureModelTypeModelList;
   final bool isHasSearch;
+  final List<OrderListModel?> orderList;
 
   SellingState(
       {required this.sellingWarehouseModel,
+      required this.orderList,
       this.idModel,
       this.searchText = '',
       this.category,
@@ -31,6 +33,7 @@ class SellingState {
   SellingState copyWith(
       {final List<Product?>? sellingWarehouseModel,
       final String? searchText,
+      final List<OrderListModel?>? orderList,
       final List<FurnitureModelTypeModel?>? furnitureModelTypeModelList,
       final bool? showLoadingSellingMyOrders,
       final String? idSelling,
@@ -42,6 +45,7 @@ class SellingState {
       final bool? showSearchLoading,
       final bool? showLoadingWarehouseProducts}) {
     return SellingState(
+        orderList: orderList ?? this.orderList,
         searchText: searchText ?? this.searchText,
         isHasSearch: isHasSearch ?? this.isHasSearch,
         idModel: idModel ?? this.idModel,

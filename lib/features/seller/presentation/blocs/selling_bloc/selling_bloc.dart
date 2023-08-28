@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
 
 part 'selling_event.dart';
 part 'selling_state.dart';
@@ -6,7 +7,9 @@ part 'selling_state.dart';
 class SellingBloc extends Bloc<SellingEvent, SellingState> {
   SellingBloc()
       : super(SellingState(
-            furnitureModelTypeModelList: [], sellingWarehouseModel: [])) {
+            orderList: [],
+            furnitureModelTypeModelList: [],
+            sellingWarehouseModel: [])) {
     on<GetWarehouseProducts>(_getWarehouseProducts);
     on<BookWarehouseProduct>(_bookWarehouseProduct);
     on<UnbookWarehouseProduct>(_unbookWarehouseProduct);

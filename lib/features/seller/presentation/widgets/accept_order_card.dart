@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -9,35 +10,35 @@ class AcceptOrderCard extends StatelessWidget {
   final String furnitureType;
   final String furnitureModel;
   final String tissue;
-  final double price;
-  final double priceSale;
+  final String price;
+  final String priceSale;
   final int count;
   final String details;
-  final double salePercent;
-  final double total;
+  final String salePercent;
+  final String total;
   final OrderListModel orderListModelItem;
   final VoidCallback onDeleteTap;
- 
+
   final VoidCallback onEditTap;
 
-  const AcceptOrderCard(
-      {super.key,
-      required this.id,
-      required this.onEditTap,
-      required this.category,
-      required this.idModel,
-      required this.furnitureType,
-      required this.furnitureModel,
-      required this.tissue,
-      required this.price,
-      required this.priceSale,
-      required this.count,
-      required this.details,
-      required this.salePercent,
-      required this.total,
-      required this.orderListModelItem,
-      required this.onDeleteTap,
-});
+  const AcceptOrderCard({
+    super.key,
+    required this.id,
+    required this.onEditTap,
+    required this.category,
+    required this.idModel,
+    required this.furnitureType,
+    required this.furnitureModel,
+    required this.tissue,
+    required this.price,
+    required this.priceSale,
+    required this.count,
+    required this.details,
+    required this.salePercent,
+    required this.total,
+    required this.orderListModelItem,
+    required this.onDeleteTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +155,7 @@ class AcceptOrderCard extends StatelessWidget {
             ),
             OrderCardTile(
               leading: 'Скидка',
-              trailing: '${((salePercent) * 100).ceil() / 100} %',
+              trailing: '${((double.parse(salePercent)) * 100).ceil() / 100} %',
             ),
             OrderCardTile(
               leading: 'Количество',
@@ -162,7 +163,8 @@ class AcceptOrderCard extends StatelessWidget {
             ),
             OrderCardTile(
               leading: 'Сумма',
-              trailing: '$total сум',
+              trailing:
+                  '${MaskFormat.formatter.format(double.parse(total))} сум',
             ),
           ],
         ),
