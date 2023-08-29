@@ -30,7 +30,7 @@ class _AcceptOrderPageState extends State<AcceptOrderPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
+              padding: EdgeInsets.only(top: 10.h, bottom: 90.h),
               itemCount: orderList.length,
               itemBuilder: (BuildContext context, int index) {
                 final item = orderList[index];

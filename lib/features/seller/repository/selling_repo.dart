@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/selling_data/wallet_model.dart';
 
 class SellingRepository {
   Dio? _dio;
@@ -73,6 +74,36 @@ class SellingRepository {
       debugPrint('---------------------------------------$error-------');
     }
     return sellingMyOrders;
+  }
+
+  Future<List<WalletModel?>> getWalletList() async {
+    List<WalletModel?> walletList = [];
+
+    try {
+      Response response = await _dio!.get(ApiSelling.walletList,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        walletList = walletModelFromJson(response.data);
+        debugPrint(walletList.first!.name!);
+        // debugPrint("${clientInfoList.first!.sentAt!}-------------");
+        return walletList;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+    return walletList;
   }
 
   Future<BookedSeller?> getBookedSeller(String sellerId) async {
@@ -236,6 +267,7 @@ class ApiSelling {
   static const sellingMyOrders = '$baseUrl/seller-orders';
   static const sellingGetId = "$baseUrl/getId";
   static const bookedSeller = '$baseUrl/get-seller';
+  static const walletList = '$baseUrl/wallet';
 }
 
 BookedSeller bookedSellerFromJson(String str) =>

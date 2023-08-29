@@ -293,8 +293,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   debugPrint(order.total.toString());
 
                   orderList.add(order);
-                  BlocProvider.of<SellingBloc>(context)
-                      .add(CategorySelling(null));
+                  // BlocProvider.of<SellingBloc>(context)
+                  //     .add(CategorySelling(null));
                   BlocProvider.of<SellingBloc>(context)
                       .add(SelectFurnitureTypeAndModel('', ''));
                   Navigator.of(context).pushNamed(AppRoutes.acceptOrder);

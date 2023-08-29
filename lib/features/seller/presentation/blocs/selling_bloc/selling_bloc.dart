@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/selling_data/wallet_model.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
 
 part 'selling_event.dart';
@@ -7,7 +8,7 @@ part 'selling_state.dart';
 class SellingBloc extends Bloc<SellingEvent, SellingState> {
   SellingBloc()
       : super(SellingState(
-            orderList: [],
+            walletList: [],
             furnitureModelTypeModelList: [],
             sellingWarehouseModel: [])) {
     on<GetWarehouseProducts>(_getWarehouseProducts);
@@ -20,12 +21,24 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
     on<SelectFurnitureTypeAndModel>(_selectFurnitureTypeAndModel);
     on<SearchWarehouseProduct>(_searchWarehouseProduct);
     on<SearchHasEvent>(_searchHasEvent);
+    on<GetWalletList>(_getWalletList);
+    on<SelectTypePayment>(_selectTypePayment);
   }
 
   final SellingRepository _sellingRepository = SellingRepository();
 
   void _searchHasEvent(SearchHasEvent event, Emitter<SellingState> emit) {
     emit(state.copyWith(isHasSearch: !state.isHasSearch, searchText: ''));
+  }
+
+  void _selectTypePayment(SelectTypePayment event, Emitter<SellingState> emit) {
+    emit(state.copyWith(paymentValue: event.value));
+  }
+
+  Future<void> _getWalletList(
+      GetWalletList event, Emitter<SellingState> emit) async {
+    final walletList = await _sellingRepository.getWalletList();
+    emit(state.copyWith(walletList: walletList));
   }
 
   void _selectFurnitureTypeAndModel(
