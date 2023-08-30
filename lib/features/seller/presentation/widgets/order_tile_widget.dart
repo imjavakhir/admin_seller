@@ -39,3 +39,48 @@ class OrderCardTile extends StatelessWidget {
     );
   }
 }
+
+class ReceiptCardTile extends StatelessWidget {
+  final String leading;
+  final String trailing;
+  final bool isLast;
+
+  const ReceiptCardTile({
+    super.key,
+    required this.leading,
+    this.isLast = false,
+    required this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: !isLast
+              ? const Border(
+                  bottom: BorderSide(
+                  width: 0,
+                  color: AppColors.grey,
+                ))
+              : null),
+      child: Row(
+        children: [
+          Text(
+            leading,
+            style: Styles.headline6.copyWith(color: AppColors.grey),
+          ),
+          const Spacer(),
+          SizedBox(
+            width: 180.w,
+            child: Text(
+              trailing,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: Styles.headline6.copyWith(color: AppColors.black),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

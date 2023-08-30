@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/presentation/pages/update_payment.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -42,6 +43,23 @@ class _PaymentOrderPageState extends State<PaymentOrderPage> {
             itemCount: paymentList.length,
             itemBuilder: (BuildContext context, int index) {
               return PaymentCard(
+                onEditTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      ),
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          UpdatePaymentPage(
+                        index: index,
+                        payment: paymentList[index],
+                      ),
+                    ),
+                  );
+                },
                 onDeleteTap: () {
                   paymentList.removeAt(index);
                   setState(() {});
@@ -61,7 +79,11 @@ class _PaymentOrderPageState extends State<PaymentOrderPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: LongButton(buttonName: 'Подвердить', onTap: () {}),
+                  child: LongButton(
+                      buttonName: 'Подвердить',
+                      onTap: () {
+                        Navigator.of(context).pushNamed(AppRoutes.receipt);
+                      }),
                 ),
                 Container(
                   height: 56.h,
@@ -94,12 +116,13 @@ class _PaymentOrderPageState extends State<PaymentOrderPage> {
 class PaymentCard extends StatelessWidget {
   final VoidCallback onDeleteTap;
   final PaymentListModel paymentListItem;
+  final VoidCallback onEditTap;
 
-  const PaymentCard({
-    super.key,
-    required this.paymentListItem,
-    required this.onDeleteTap,
-  });
+  const PaymentCard(
+      {super.key,
+      required this.paymentListItem,
+      required this.onDeleteTap,
+      required this.onEditTap});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +140,7 @@ class PaymentCard extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.r)),
                           foregroundColor: Colors.grey),
-                      onPressed: () {},
+                      onPressed: onEditTap,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -200,7 +223,8 @@ class PaymentCard extends StatelessWidget {
               ),
               OrderCardTile(
                 leading: 'Сумма по курсу',
-                trailing: "${paymentListItem.paymentDollarOnSum} сум",
+                trailing:
+                    "${MaskFormat.formatter.format(double.parse(paymentListItem.paymentDollarOnSum))} сум",
               ),
               OrderCardTile(
                 leading: 'Здачи',
@@ -208,7 +232,8 @@ class PaymentCard extends StatelessWidget {
               ),
               OrderCardTile(
                 leading: 'Итого(Сум)',
-                trailing: "${paymentListItem.totalSum} сум",
+                trailing:
+                    "${MaskFormat.formatter.format(double.parse(paymentListItem.totalSum))} сум",
               ),
             ],
           ),

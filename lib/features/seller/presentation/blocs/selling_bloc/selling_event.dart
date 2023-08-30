@@ -55,3 +55,15 @@ class SelectTypePayment extends SellingEvent {
 
   SelectTypePayment({required this.value});
 }
+
+class ClientStatusChange extends SellingEvent {
+  final String? clientStatus;
+
+  ClientStatusChange({required this.clientStatus});
+}
+
+class CheckOrderDatePick extends SellingEvent {
+  final DateTime? dateTimeDeliver;
+
+  CheckOrderDatePick({required this.dateTimeDeliver});
+}

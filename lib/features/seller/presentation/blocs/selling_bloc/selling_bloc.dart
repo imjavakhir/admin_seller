@@ -23,12 +23,24 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
     on<SearchHasEvent>(_searchHasEvent);
     on<GetWalletList>(_getWalletList);
     on<SelectTypePayment>(_selectTypePayment);
+    on<ClientStatusChange>(_clientStatusChange);
+    on<CheckOrderDatePick>(_checkOrderDatePick);
   }
 
   final SellingRepository _sellingRepository = SellingRepository();
 
   void _searchHasEvent(SearchHasEvent event, Emitter<SellingState> emit) {
     emit(state.copyWith(isHasSearch: !state.isHasSearch, searchText: ''));
+  }
+
+  void _checkOrderDatePick(
+      CheckOrderDatePick event, Emitter<SellingState> emit) {
+    emit(state.copyWith(dateTimeDeliver: event.dateTimeDeliver));
+  }
+
+  void _clientStatusChange(
+      ClientStatusChange event, Emitter<SellingState> emit) {
+    emit(state.copyWith(clientStatus: event.clientStatus));
   }
 
   void _selectTypePayment(SelectTypePayment event, Emitter<SellingState> emit) {

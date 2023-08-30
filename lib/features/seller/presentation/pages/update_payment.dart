@@ -1,25 +1,39 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
 
-class AddPaymentPage extends StatefulWidget {
-  const AddPaymentPage({
+class UpdatePaymentPage extends StatefulWidget {
+  final int? index;
+  final PaymentListModel? payment;
+  const UpdatePaymentPage({
     super.key,
+    this.index,
+    this.payment,
   });
 
   @override
-  State<AddPaymentPage> createState() => _AddPaymentPageState();
+  State<UpdatePaymentPage> createState() => _UpdatePaymentPageState();
 }
 
-class _AddPaymentPageState extends State<AddPaymentPage> {
+class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
+  late TextEditingController _prepaymentSumContoller;
+  late TextEditingController _prepaymentDollarController;
+  late TextEditingController _refundController;
+  late TextEditingController _dollarExchangeContoller;
   @override
   void initState() {
+    _prepaymentDollarController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.payment!.prepaymentDollar));
+    _prepaymentSumContoller = TextEditingController.fromValue(
+        TextEditingValue(text: widget.payment!.prepaymentSum));
+    _refundController = TextEditingController.fromValue(
+        TextEditingValue(text: widget.payment!.refund));
+    _dollarExchangeContoller = TextEditingController.fromValue(
+        TextEditingValue(text: widget.payment!.dollarExchange));
+    totalSum = double.parse(widget.payment!.totalSum);
+    dollarExchangeSum = double.parse(widget.payment!.paymentDollarOnSum);
+    setState(() {});
     super.initState();
   }
-
-  final _prepaymentSumContoller = TextEditingController();
-  final _prepaymentDollarController = TextEditingController();
-  final _refundController = TextEditingController();
-  final _dollarExchangeContoller = TextEditingController();
 
   double totalSum = 0;
   double dollarExchangeSum = 0;
@@ -239,7 +253,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                         ],
                       ),
                     ),
-                    ScreenUtil().setVerticalSpacing(150.h),
+                    ScreenUtil().setVerticalSpacing(96.h),
                   ],
                 ),
               ),
@@ -264,9 +278,10 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           prepaymentDollar: _prepaymentDollarController.text,
                           prepaymentSum: _prepaymentSumContoller.text,
                           dollarExchange: _dollarExchangeContoller.text,
-                          paymentDollarOnSum: dollarExchangeSum.toString(),
+                          paymentDollarOnSum:
+                              MaskFormat.formatter.format(dollarExchangeSum),
                           refund: _refundController.text,
-                          totalSum: totalSum.toString());
+                          totalSum: MaskFormat.formatter.format(totalSum));
                       BlocProvider.of<SellingBloc>(context)
                           .add(SelectTypePayment(value: null));
                       paymentList.add(payment);

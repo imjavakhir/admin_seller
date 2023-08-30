@@ -13,4 +13,6 @@ abstract class AppRoutes {
   static const String checkOrder = '/checkOrder';
   static const String addPayment = '/addPayment';
   static const String updateOrder = '/updateOrder';
+  static const String updatePayment = '/updatePayment';
+  static const String receipt = '/receipt';
 }

@@ -1,3 +1,6 @@
+import 'package:admin_seller/features/seller/presentation/pages/receipt_page.dart';
+import 'package:admin_seller/features/seller/presentation/pages/update_payment.dart';
+
 import 'app_exports.dart';
 
 abstract class AppPages {
@@ -40,7 +43,11 @@ abstract class AppPages {
       case AppRoutes.addPayment:
         return PageAnimation.animatedPageRoute(
             settings, const AddPaymentPage());
-
+      case AppRoutes.updatePayment:
+        return PageAnimation.animatedPageRoute(
+            settings, const UpdatePaymentPage());
+      case AppRoutes.receipt:
+        return PageAnimation.animatedPageRoute(settings, const ReceiptPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
