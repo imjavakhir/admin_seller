@@ -18,6 +18,7 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   @override
   void initState() {
+    BlocProvider.of<SellingBloc>(context).add(GetIdSelling());
     for (var element in orderList) {
       totalofOrdersSum = totalofOrdersSum + double.parse(element.total);
     }
@@ -180,7 +181,17 @@ class _ReceiptPageState extends State<ReceiptPage> {
                     child: LongButton(
                       paddingW: 0,
                       buttonName: 'Правильно',
-                      onTap: () {},
+                      onTap: () {
+                        debugPrint(state.dateTimeDeliver.toString());
+                        for (var element in orderList) {
+                          debugPrint("${element.idModel}   model");
+                          debugPrint("${element.id}   id");
+                          debugPrint("${element.idOrder}   orderid");
+                        }
+                        for (var element in paymentList) {
+                          debugPrint("${element.paymentId} payment id");
+                        }
+                      },
                     ),
                   ),
                   ScreenUtil().setHorizontalSpacing(20.w),
@@ -188,7 +199,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
                     child: TransparentLongButton(
                       paddingW: 0,
                       buttonName: 'Неправильно',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
                   ),
                 ],

@@ -126,6 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context, AppRoutes.auth, (route) => false);
                             await HiveDataSource().clearUserDetails();
                             await AuthLocalDataSource().removeLogToken();
+                            await AuthLocalDataSource().removeSellingToken();
                             final token =
                                 await AuthLocalDataSource().getLogToken();
                             debugPrint(token);

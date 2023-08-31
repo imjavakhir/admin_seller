@@ -14,10 +14,8 @@ class SellerState {
   List<HelpClientInfo?> helpClients;
   final bool loadingdata;
 
-
-  SellerState( 
+  SellerState(
       {required this.clientInfoList,
-
       this.isReported = false,
       required this.helpClients,
       required this.sellerList,
@@ -33,7 +31,6 @@ class SellerState {
   SellerState copyWith(
       {final List<ClientInfo?>? clientInfoList,
       final bool? isPaused,
-   
       final bool? isReported,
       final String? whereFrom,
       final bool? showLoading,
@@ -46,7 +43,6 @@ class SellerState {
       final bool? loadingdata}) {
     // debugPrint('Error ------------- $error');
     return SellerState(
-  
         loadingdata: loadingdata ?? this.loadingdata,
         helpClients: helpClients ?? this.helpClients,
         isReported: isReported ?? this.isReported,

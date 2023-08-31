@@ -28,7 +28,7 @@ class SellingState {
       this.searchText = '',
       this.category,
       this.isHasSearch = false,
-      this.idSelling = '',
+      this.idSelling = 'Авто',
       this.furnitureTypeAndModel = '',
       this.showSearchLoading = false,
       required this.furnitureModelTypeModelList,
@@ -39,7 +39,7 @@ class SellingState {
   SellingState copyWith(
       {final List<Product?>? sellingWarehouseModel,
       final String? searchText,
-        final DateTime? dateTimeDeliver,
+      final DateTime? dateTimeDeliver,
       final List<PaymentListModel?>? paymentList,
       final String? paymentValue,
       final String? clientStatus,
@@ -56,7 +56,7 @@ class SellingState {
       final bool? showSearchLoading,
       final bool? showLoadingWarehouseProducts}) {
     return SellingState(
-      dateTimeDeliver: dateTimeDeliver??this.dateTimeDeliver,
+        dateTimeDeliver: dateTimeDeliver ?? this.dateTimeDeliver,
         clientStatus: clientStatus ?? this.clientStatus,
         paymentValue: paymentValue ?? this.paymentValue,
         walletList: walletList ?? this.walletList,

@@ -28,12 +28,6 @@ class _AddOrderPageState extends State<AddOrderPage> {
   double salePercent = 0;
   double total = 0;
   @override
-  void initState() {
-    BlocProvider.of<SellingBloc>(context).add(GetIdSelling());
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -266,6 +260,7 @@ class _AddOrderPageState extends State<AddOrderPage> {
                 buttonName: 'Добавить',
                 onTap: () {
                   final order = OrderListModel(
+                      idOrder: '',
                       id: state.idSelling,
                       salePercent: salePercent.toString(),
                       total: total.toString(),

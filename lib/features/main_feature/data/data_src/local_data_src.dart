@@ -3,6 +3,34 @@ import 'package:admin_seller/app_const/app_exports.dart';
 class AuthLocalDataSource {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+//sellingToken save
+
+  Future<void> saveSellingToken(String sellingToken) async {
+    final SharedPreferences prefs = await _prefs;
+
+    await prefs.setString('sellingToken', sellingToken);
+    debugPrint(
+        'sellingToken-----------------------------$sellingToken ---- saved');
+  }
+
+//sellingToken get
+  Future<String?> getSellingToken() async {
+    final SharedPreferences prefs = await _prefs;
+    final sellingToken = prefs.getString('sellingToken');
+    debugPrint(
+        'sellingToken-----------------------------$sellingToken ---- fromlocal');
+    return sellingToken;
+  }
+
+  //sellingToken remove
+  Future<bool> removeSellingToken() async {
+    final SharedPreferences prefs = await _prefs;
+    final sellingToken = prefs.remove('sellingToken');
+    final tokenStatus = await sellingToken;
+    debugPrint('-----------------------sellingToken----$tokenStatus');
+    return sellingToken;
+  }
+
 //logtoken save
 
   Future<void> saveLogToken(String logToken) async {

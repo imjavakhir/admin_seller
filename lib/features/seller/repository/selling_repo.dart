@@ -12,11 +12,10 @@ class SellingRepository {
         sendTimeout: const Duration(milliseconds: 10000));
     _dio = Dio(options);
   }
-  final token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiZGEyYzMzLWVkZGUtNDkxMy1hYzVlLWRlYTcwMjVhNGViZSIsImlhdCI6MTY5MjEwMjMwOX0.HG9UShebI69tCZ4wGAsx7lc7XMHtRi5hxwRfu8Q8zy8';
   Future<SellingWarehouseModel?> getWarehouseProducts(
       String size, String page, String searchItem) async {
     SellingWarehouseModel? sellingWarehouseModel;
+    final token = await AuthLocalDataSource().getSellingToken();
 
     try {
       Response response = await _dio!.get(
@@ -48,6 +47,7 @@ class SellingRepository {
 
   Future<List<SellingMyOrders?>> getSellingMyOrders() async {
     List<SellingMyOrders?> sellingMyOrders = [];
+    final token = await AuthLocalDataSource().getSellingToken();
 
     try {
       Response response = await _dio!.get(ApiSelling.sellingMyOrders,
@@ -77,6 +77,7 @@ class SellingRepository {
   }
 
   Future<List<WalletModel?>> getWalletList() async {
+    final token = await AuthLocalDataSource().getSellingToken();
     List<WalletModel?> walletList = [];
 
     try {
@@ -107,6 +108,7 @@ class SellingRepository {
   }
 
   Future<BookedSeller?> getBookedSeller(String sellerId) async {
+    final token = await AuthLocalDataSource().getSellingToken();
     BookedSeller? bookedSeller;
 
     try {
@@ -139,6 +141,7 @@ class SellingRepository {
   }
 
   Future<void> bookWareHouseProduct(DateTime dateTime, String id) async {
+    final token = await AuthLocalDataSource().getSellingToken();
     final data = {'end_date': dateTime.toIso8601String()};
     try {
       Response response = await _dio!.put("${ApiSelling.bookOrder}/$id",
@@ -169,6 +172,7 @@ class SellingRepository {
   }
 
   Future<void> unbookWareHouseProduct(String id) async {
+    final token = await AuthLocalDataSource().getSellingToken();
     try {
       Response response = await _dio!.put("${ApiSelling.unbookOrder}/$id",
           options: Options(headers: {
@@ -194,6 +198,7 @@ class SellingRepository {
 
   Future<List<FurnitureModelTypeModel?>> searchFurnitureModel(
       String searchText) async {
+    final token = await AuthLocalDataSource().getSellingToken();
     List<FurnitureModelTypeModel?> furnitureModelList = [];
 
     try {
@@ -227,6 +232,7 @@ class SellingRepository {
   }
 
   Future<String> sellingGetId() async {
+    final token = await AuthLocalDataSource().getSellingToken();
     String id = '';
 
     try {

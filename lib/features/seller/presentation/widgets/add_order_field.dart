@@ -11,7 +11,7 @@ class AddOrderFields extends StatelessWidget {
   final TextInputType textInputType;
   const AddOrderFields(
       {super.key,
-      this.isDisabled=false,
+      this.isDisabled = false,
       required this.title,
       this.isSoldField = false,
       required this.hint,
@@ -50,6 +50,7 @@ class AddOrderFields extends StatelessWidget {
 
 class OrderListModel {
   final String id;
+  final String idOrder;
   final String category;
   final String idModel;
   final String furnitureType;
@@ -64,6 +65,7 @@ class OrderListModel {
 
   OrderListModel(
       {required this.id,
+     required this.idOrder, 
       required this.salePercent,
       required this.total,
       required this.category,

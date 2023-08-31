@@ -18,6 +18,7 @@ class SocketServiceImpl implements SocketService {
   final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
+final sellingLocal = 'http://192.168.1.140:9999';
 
   @override
   void connect(String logToken) async {
@@ -28,7 +29,7 @@ class SocketServiceImpl implements SocketService {
         .setQuery({'token': logToken})
         .disableAutoConnect()
         .build();
-    _socket = IO.io(localTestUrl, options);
+    _socket = IO.io(sellingLocal, options);
 
     _socket.connect();
 
@@ -93,13 +94,14 @@ class SocketIOService {
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
   final local = 'http://192.168.100.214:3000/';
+  final sellingLocal = 'http://192.168.1.140:9999';
   final List<ClientInfo?> clientInfos = [];
   void connectSocket() async {
     final logToken = await AuthLocalDataSource().getLogToken();
     debugPrint("${logToken}_____________socket");
 
     socket = IO.io(
-        localTestUrl,
+        sellingLocal,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .enableForceNewConnection()

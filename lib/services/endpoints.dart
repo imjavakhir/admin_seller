@@ -1,7 +1,8 @@
 abstract class AppEndPoints {
   static const String testBaseUrl = 'http://64.226.90.160:9999';
-   static const String baseUrl = testBaseUrl;
-  
+  static const String baseUrl = sellingLocal;
+  static const String sellingLocal = 'http://192.168.1.140:9999';
+
   // static const String localTestUrl = 'http://192.168.1.140:9999';
   // static const String mongoUrl = 'http://64.226.90.160:5555';
   // static const String baseUrl = mongoUrl;

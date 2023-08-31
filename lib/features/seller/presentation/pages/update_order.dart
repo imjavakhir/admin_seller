@@ -299,6 +299,7 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                 buttonName: 'Сохранить',
                 onTap: () {
                   final order = OrderListModel(
+                      idOrder: widget.order!.id,
                       id: widget.order!.id,
                       salePercent: salePercent.toString(),
                       total: total.toString(),

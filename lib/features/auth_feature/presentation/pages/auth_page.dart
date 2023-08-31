@@ -140,11 +140,15 @@ class AuthPage extends StatelessWidget {
                         if (userModel != null) {
                           debugPrint('TOKEN--------${userModel.token}');
                           await AuthLocalDataSource()
-                              .saveLogToken(userModel.token);
+                              .saveLogToken(userModel.token!);
+                          if (userModel.selling!.token != null) {
+                            await AuthLocalDataSource().saveSellingToken(
+                                userModel.selling!.token!.token!);
+                          }
                           await HiveDataSource().saveUserDetails(
-                              branch: userModel.branch,
-                              fullName: userModel.fullname,
-                              type: userModel.type);
+                              branch: userModel.branch!,
+                              fullName: userModel.fullname!,
+                              type: userModel.type!);
 
                           final user =
                               HiveDataSource().box.values.toList().first;

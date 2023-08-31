@@ -29,6 +29,7 @@ class AuthRepository {
       if (response.statusCode == 200) {
         userModel = UserModel.fromJson(response.data);
         debugPrint('-----------------success');
+        debugPrint(response.data.toString());
         return userModel;
       }
     } on DioError catch (error) {

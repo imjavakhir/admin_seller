@@ -45,11 +45,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     if (userModel != null) {
       debugPrint('TOKEN--------${userModel.token}');
-      await AuthLocalDataSource().saveLogToken(userModel.token);
+      await AuthLocalDataSource().saveLogToken(userModel.token!);
       await HiveDataSource().saveUserDetails(
-          branch: userModel.branch,
-          fullName: userModel.fullname,
-          type: userModel.type);
+          branch: userModel.branch!,
+          fullName: userModel.fullname!,
+          type: userModel.type!);
 
       final user = HiveDataSource().box.values.toList().first;
 

@@ -150,11 +150,12 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                                   : '',
                               onTapThird: () {
                                 final newItem = OrderListModel(
+                                  idOrder: item.order!.id!,
                                     id: item.order!.orderId!,
                                     salePercent: item.order!.sale!,
                                     total: item.order!.sum!,
                                     category: item.order!.cathegory!,
-                                    idModel: item.order!.id!,
+                                    idModel: item.order!.modelId!,
                                     furnitureType:
                                         item.order!.model!.furnitureType!.name!,
                                     furnitureModel: item.order!.model!.name!,
