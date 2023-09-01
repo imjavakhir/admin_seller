@@ -25,9 +25,13 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
     on<SelectTypePayment>(_selectTypePayment);
     on<ClientStatusChange>(_clientStatusChange);
     on<CheckOrderDatePick>(_checkOrderDatePick);
+    on<LoadMoreWarehouseProducts>(_loadMoreWarehouseProducts);
   }
 
   final SellingRepository _sellingRepository = SellingRepository();
+  final scrollController = ScrollController();
+  int page = 1;
+  List<Product?> warehouseProducts = [];
 
   void _searchHasEvent(SearchHasEvent event, Emitter<SellingState> emit) {
     emit(state.copyWith(isHasSearch: !state.isHasSearch, searchText: ''));
@@ -93,23 +97,43 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
         sellingMyOrders: sellingMyOrders, showLoadingSellingMyOrders: false));
   }
 
+  void _loadMoreWarehouseProducts(
+      LoadMoreWarehouseProducts event, Emitter<SellingState> emit) async {
+    if (state.loadMoreLoading) return;
+    emit(state.copyWith(loadMoreLoading: true));
+    if (!state.hasReached) {
+      page++;
+      debugPrint(page.toString());
+    }
+    final loadMoreWarehouseProducts =
+        await _sellingRepository.getWarehouseProducts(page, 10, '');
+    if (loadMoreWarehouseProducts!.products!.isEmpty) {
+      emit(state.copyWith(hasReached: true));
+    }
+    warehouseProducts.addAll(loadMoreWarehouseProducts.products!);
+    emit(state.copyWith(
+        sellingWarehouseModel: warehouseProducts, loadMoreLoading: false));
+  }
+
   Future<void> _getWarehouseProducts(
       GetWarehouseProducts event, Emitter<SellingState> emit) async {
     emit(state.copyWith(showLoadingWarehouseProducts: true));
 
     final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts('', '', '');
-
+        await _sellingRepository.getWarehouseProducts(1, 10, '');
+    warehouseProducts = sellingWarehouseModel!.products!;
+    page = 1;
     emit(state.copyWith(
-        sellingWarehouseModel: sellingWarehouseModel!.products!,
-        showLoadingWarehouseProducts: false));
+        sellingWarehouseModel: warehouseProducts,
+        showLoadingWarehouseProducts: false,
+        hasReached: false));
   }
 
   Future<void> _searchWarehouseProduct(
       SearchWarehouseProduct event, Emitter<SellingState> emit) async {
     emit(state.copyWith(showLoadingWarehouseProducts: true));
     final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts('', '', event.searchText);
+        await _sellingRepository.getWarehouseProducts(1, 10, event.searchText);
 
     emit(state.copyWith(
         searchText: event.searchText,
@@ -122,7 +146,7 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
       BookWarehouseProduct event, Emitter<SellingState> emit) async {
     await _sellingRepository.bookWareHouseProduct(event.dateTime, event.id);
     final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts('', '', state.searchText);
+        await _sellingRepository.getWarehouseProducts(1, 10, state.searchText);
     emit(state.copyWith(
         sellingWarehouseModel: sellingWarehouseModel!.products!));
   }
@@ -131,7 +155,7 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
       UnbookWarehouseProduct event, Emitter<SellingState> emit) async {
     await _sellingRepository.unbookWareHouseProduct(event.id);
     final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts('', '', state.searchText);
+        await _sellingRepository.getWarehouseProducts(1, 10, state.searchText);
     emit(state.copyWith(
         sellingWarehouseModel: sellingWarehouseModel!.products!));
   }

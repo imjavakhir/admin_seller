@@ -28,6 +28,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   final GlobalKey<AnimatedListState> key = GlobalKey();
 
   final SellerRepository _sellerRepository = SellerRepository();
+  
 
   final SocketService _socketService;
   final ScrollController scrollController = ScrollController();

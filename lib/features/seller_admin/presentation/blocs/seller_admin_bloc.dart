@@ -1,6 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 
-
 part 'seller_admin_event.dart';
 part 'seller_admin_state.dart';
 
@@ -78,13 +77,7 @@ class SellerAdminBloc extends Bloc<SellerAdminEvent, SellerAdminState> {
         await _sellerAdminRepository.getAdminSellerVisits(page: 1, size: 10);
     adminVisitList = adminSellerVisit!.data!;
     page = 1;
-    // if (!state.hasReached) {
-    //   page++;
-    // }
-    // debugPrint(page.toString());
 
-    // adminVisitList.addAll(adminSellerVisit.data!);
-    // debugPrint(adminVisitList.length.toString());
     emit(state.copyWith(
         adminVisist: adminVisitList,
         showLoadingVisits: false,

@@ -15,35 +15,48 @@ class DropDownOrderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: DropdownButton2(
-        menuItemStyleData: MenuItemStyleData(height: 56.h),
+      child: DropdownButtonFormField2(
+        menuItemStyleData: MenuItemStyleData(
+            height: 56.h, padding: EdgeInsets.symmetric(horizontal: 16.w)),
         hint: Text(
           'Выберите категорию',
           style: Styles.headline4.copyWith(color: AppColors.textfieldText),
         ),
         enableFeedback: false,
-        underline: const SizedBox(),
+        validator: (value) {
+          return Validators.empty(value);
+        },
+        decoration: InputDecoration(
+          isCollapsed: true,
+          filled: true,
+          fillColor: AppColors.textfieldBackground,
+          errorBorder: Decorations.errorBorder,
+          focusedBorder: Decorations.focusedBorder,
+          enabledBorder: Decorations.enabledBorder,
+          focusedErrorBorder: Decorations.errorBorder,
+        ),
         iconStyleData: IconStyleData(
             iconEnabledColor: AppColors.borderColor,
             iconSize: 24.h,
-            icon: const Icon(
-              CupertinoIcons.chevron_down,
+            icon: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: const Icon(
+                CupertinoIcons.chevron_down,
+              ),
             )),
         buttonStyleData: ButtonStyleData(
-            width: double.maxFinite,
-            height: 56.h,
-            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-            decoration: BoxDecoration(
-                color: AppColors.textfieldBackground,
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(width: 1, color: AppColors.borderColor))),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+          height: 56.h,
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+        ),
         dropdownStyleData: DropdownStyleData(
-            offset: const Offset(0, -4),
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                color: AppColors.white,
-                border: Border.all(width: 1, color: AppColors.borderColor))),
+          padding: EdgeInsets.zero,
+          offset: const Offset(0, -4),
+          decoration: BoxDecoration(
+              border: Border.all(width: 1, color: AppColors.borderColor),
+              borderRadius: BorderRadius.circular(10.r),
+              color: AppColors.white),
+        ),
         isExpanded: true,
         onChanged: valueChanged,
         value: value,

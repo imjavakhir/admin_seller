@@ -1,12 +1,14 @@
 part of 'selling_bloc.dart';
 
 class SellingState {
+  final bool hasReached;
+  final bool loadMoreLoading;
   final String furnitureTypeAndModel;
   final String searchText;
   final String? category;
   final String? idModel;
   final String idSelling;
-  final List<Product?> sellingWarehouseModel;
+  final List<Product?>? sellingWarehouseModel;
   final bool showLoadingWarehouseProducts;
   final List<SellingMyOrders?>? sellingMyOrders;
   final bool showLoadingSellingMyOrders;
@@ -22,6 +24,8 @@ class SellingState {
       {required this.sellingWarehouseModel,
       required this.walletList,
       this.dateTimeDeliver,
+      this.hasReached=false,
+      this.loadMoreLoading =false,
       this.paymentValue,
       this.idModel,
       this.clientStatus,
@@ -39,6 +43,8 @@ class SellingState {
   SellingState copyWith(
       {final List<Product?>? sellingWarehouseModel,
       final String? searchText,
+       final bool? hasReached,
+  final bool? loadMoreLoading,
       final DateTime? dateTimeDeliver,
       final List<PaymentListModel?>? paymentList,
       final String? paymentValue,
@@ -56,6 +62,8 @@ class SellingState {
       final bool? showSearchLoading,
       final bool? showLoadingWarehouseProducts}) {
     return SellingState(
+      loadMoreLoading: loadMoreLoading??this.loadMoreLoading,
+      hasReached: hasReached??this.hasReached,
         dateTimeDeliver: dateTimeDeliver ?? this.dateTimeDeliver,
         clientStatus: clientStatus ?? this.clientStatus,
         paymentValue: paymentValue ?? this.paymentValue,

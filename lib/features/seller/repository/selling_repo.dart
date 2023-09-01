@@ -13,7 +13,7 @@ class SellingRepository {
     _dio = Dio(options);
   }
   Future<SellingWarehouseModel?> getWarehouseProducts(
-      String size, String page, String searchItem) async {
+      int page, int size, String searchItem) async {
     SellingWarehouseModel? sellingWarehouseModel;
     final token = await AuthLocalDataSource().getSellingToken();
 
@@ -152,7 +152,7 @@ class SellingRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint(response.data);
+        debugPrint(response.data.toString());
       }
     } on DioError catch (error) {
       debugPrint(error.type.name);
@@ -181,7 +181,7 @@ class SellingRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint(response.data);
+        debugPrint(response.data.toString());
       }
     } on DioError catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);

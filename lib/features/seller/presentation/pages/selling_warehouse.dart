@@ -23,7 +23,14 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
 
   @override
   void initState() {
-    BlocProvider.of<SellingBloc>(context).add(GetWarehouseProducts());
+    final bloc = BlocProvider.of<SellingBloc>(context);
+    bloc.add(GetWarehouseProducts());
+    bloc.scrollController.addListener(() {
+      if (bloc.scrollController.position.maxScrollExtent ==
+          bloc.scrollController.offset) {
+        bloc.add(LoadMoreWarehouseProducts());
+      }
+    });
     super.initState();
   }
 
@@ -133,128 +140,216 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                     ),
                   ),
                 Expanded(
-                  child: state.sellingWarehouseModel.isNotEmpty
-                      ? ListView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          padding: EdgeInsets.only(top: 10.h, bottom: 96.h),
-                          itemCount: state.sellingWarehouseModel.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (state.showLoadingWarehouseProducts) {
-                              return const SellingWarehouseCardShimmer();
-                            }
-                            final item = state.sellingWarehouseModel[index];
+                    child: state.sellingWarehouseModel != null
+                        ? state.sellingWarehouseModel!.isNotEmpty
+                            ? Scrollbar(
+                                radius: Radius.circular(100.r),
+                                thickness: 4,
+                                child: ListView.builder(
+                                  controller:
+                                      BlocProvider.of<SellingBloc>(context)
+                                          .scrollController,
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  padding:
+                                      EdgeInsets.only(top: 10.h, bottom: 96.h),
+                                  itemCount:
+                                      state.sellingWarehouseModel!.length + 1,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    if (state.showLoadingWarehouseProducts) {
+                                      return const SellingWarehouseCardShimmer();
+                                    } else if (index <
+                                        state.sellingWarehouseModel!.length) {
+                                      final item =
+                                          state.sellingWarehouseModel![index];
+                                      return WarehouseCardWidget(
+                                        sellerId: item!.order!.sellerId != null
+                                            ? item.order!.sellerId!
+                                            : '',
+                                        onTapThird: () {
+                                          final newItem = OrderListModel(
+                                              idOrder: item.order!.id!,
+                                              id: item.order!.orderId!,
+                                              salePercent: item.order!.sale!,
+                                              total: item.order!.sum!,
+                                              category: item.order!.cathegory!,
+                                              idModel: item.order!.modelId!,
+                                              furnitureType: item.order!.model!
+                                                  .furnitureType!.name!,
+                                              furnitureModel:
+                                                  item.order!.model!.name!,
+                                              tissue: item.order!.tissue!,
+                                              price: item.order!.cost!,
+                                              priceSale: item.order!.sum!,
+                                              count: item.order!.qty!,
+                                              details: item.order!.title!);
+                                          debugPrint(newItem.id);
+                                          debugPrint(newItem.count.toString());
+                                          debugPrint(newItem.category);
+                                          debugPrint(newItem.furnitureType);
+                                          debugPrint(newItem.furnitureModel);
+                                          debugPrint(newItem.tissue);
+                                          debugPrint(newItem.price.toString());
+                                          debugPrint(
+                                              newItem.priceSale.toString());
+                                          debugPrint(newItem.details);
+                                          debugPrint(
+                                              newItem.salePercent.toString());
+                                          debugPrint(newItem.total.toString());
+                                          orderModelListWare.add(newItem);
+                                          setState(() {});
+                                        },
+                                        onTapFirst: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  DateAndTimeWarehouse(
+                                                      item: item));
+                                        },
+                                        onTapSecond: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) => UnbookDialog(
+                                                    tissue: item.order!.tissue!,
+                                                    details: item.order!.title!,
+                                                    furnitureType:
+                                                        item.order!.model !=
+                                                                null
+                                                            ? item
+                                                                .order!
+                                                                .model!
+                                                                .furnitureType!
+                                                                .name!
+                                                            : "- - -",
+                                                    furnitureModel:
+                                                        item.order!.model !=
+                                                                null
+                                                            ? item.order!.model!
+                                                                .name!
+                                                            : "- - -",
+                                                    id: item.order!.orderId!,
+                                                    warehouse: item.warehouse!
+                                                                .name !=
+                                                            null
+                                                        ? item.warehouse!.name!
+                                                        : '- - -',
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      BlocProvider.of<
+                                                                  SellingBloc>(
+                                                              context)
+                                                          .add(
+                                                              UnbookWarehouseProduct(
+                                                                  item.order!
+                                                                      .id!));
+                                                    },
+                                                  ));
 
-                            return WarehouseCardWidget(
-                              sellerId: item!.order!.sellerId != null
-                                  ? item.order!.sellerId!
-                                  : '',
-                              onTapThird: () {
-                                final newItem = OrderListModel(
-                                  idOrder: item.order!.id!,
-                                    id: item.order!.orderId!,
-                                    salePercent: item.order!.sale!,
-                                    total: item.order!.sum!,
-                                    category: item.order!.cathegory!,
-                                    idModel: item.order!.modelId!,
-                                    furnitureType:
-                                        item.order!.model!.furnitureType!.name!,
-                                    furnitureModel: item.order!.model!.name!,
-                                    tissue: item.order!.tissue!,
-                                    price: item.order!.cost!,
-                                    priceSale: item.order!.sum!,
-                                    count: item.order!.qty!,
-                                    details: item.order!.title!);
-                                debugPrint(newItem.id);
-                                debugPrint(newItem.count.toString());
-                                debugPrint(newItem.category);
-                                debugPrint(newItem.furnitureType);
-                                debugPrint(newItem.furnitureModel);
-                                debugPrint(newItem.tissue);
-                                debugPrint(newItem.price.toString());
-                                debugPrint(newItem.priceSale.toString());
-                                debugPrint(newItem.details);
-                                debugPrint(newItem.salePercent.toString());
-                                debugPrint(newItem.total.toString());
-                                orderModelListWare.add(newItem);
-                                setState(() {});
-                              },
-                              onTapFirst: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) =>
-                                        DateAndTimeWarehouse(item: item));
-                              },
-                              onTapSecond: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) => UnbookDialog(
-                                          tissue: item.order!.tissue!,
-                                          details: item.order!.title!,
-                                          furnitureType:
-                                              item.order!.model != null
-                                                  ? item.order!.model!
-                                                      .furnitureType!.name!
-                                                  : "- - -",
-                                          furnitureModel:
-                                              item.order!.model != null
-                                                  ? item.order!.model!.name!
-                                                  : "- - -",
-                                          id: item.order!.orderId!,
-                                          warehouse:
-                                              item.warehouse!.name != null
-                                                  ? item.warehouse!.name!
-                                                  : '- - -',
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                            BlocProvider.of<SellingBloc>(
-                                                    context)
-                                                .add(UnbookWarehouseProduct(
-                                                    item.order!.id!));
-                                          },
-                                        ));
+                                          orderModelListWare.removeWhere(
+                                              (element) =>
+                                                  element.id ==
+                                                  item.order!.orderId);
 
-                                orderModelListWare.removeWhere((element) =>
-                                    element.id == item.order!.orderId);
+                                          orderList.removeWhere((element) =>
+                                              element.id ==
+                                              item.order!.orderId);
 
-                                orderList.removeWhere((element) =>
-                                    element.id == item.order!.orderId);
-
-                                debugPrint(item.order!.orderId!);
-                                setState(() {});
-                              },
-                              canChange: item.order!.canChange!,
-                              tissue: item.order!.tissue!,
-                              details: item.order!.title!,
-                              furnitureType: item.order!.model != null
-                                  ? item.order!.model!.furnitureType!.name!
-                                  : "- - -",
-                              furnitureModel: item.order!.model != null
-                                  ? item.order!.model!.name!
-                                  : "- - -",
-                              id: item.order!.orderId!,
-                              warehouse: item.warehouse!.name != null
-                                  ? item.warehouse!.name!
-                                  : '- - -',
-                              productStatus: item.order!.status!,
-                            );
-                          },
-                        )
-                      : Center(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 6.h, horizontal: 12.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  100.r,
+                                          debugPrint(item.order!.orderId!);
+                                          setState(() {});
+                                        },
+                                        canChange: item.order!.canChange!,
+                                        tissue: item.order!.tissue!,
+                                        details: item.order!.title!,
+                                        furnitureType: item.order!.model != null
+                                            ? item.order!.model!.furnitureType!
+                                                .name!
+                                            : "- - -",
+                                        furnitureModel:
+                                            item.order!.model != null
+                                                ? item.order!.model!.name!
+                                                : "- - -",
+                                        id: item.order!.orderId!,
+                                        warehouse: item.warehouse!.name != null
+                                            ? item.warehouse!.name!
+                                            : '- - -',
+                                        productStatus: item.order!.status!,
+                                      );
+                                    } else {
+                                      return state.sellingWarehouseModel!
+                                                  .length >
+                                              9
+                                          ? Center(
+                                              child: state.hasReached
+                                                  ? Text(
+                                                      'Больше нет товаров',
+                                                      style:
+                                                          Styles.headline4Reg,
+                                                    )
+                                                  : Transform.scale(
+                                                      scale: 0.8,
+                                                      child:
+                                                          const CircularProgressIndicator(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    ))
+                                          : const SizedBox();
+                                    }
+                                  },
                                 ),
-                                color: AppColors.primaryColor.withOpacity(0.5)),
-                            child: Text(
-                              'Ничего не найдено',
-                              style: Styles.headline4,
-                            ),
-                          ),
-                        ),
-                ),
+                              )
+                            : ListView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                children: [
+                                  ScreenUtil().setVerticalSpacing(
+                                      (MediaQuery.of(context).size.height -
+                                              56) /
+                                          2),
+                                  Center(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 6.h, horizontal: 12.w),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            100.r,
+                                          ),
+                                          color: AppColors.primaryColor
+                                              .withOpacity(0.5)),
+                                      child: Text(
+                                        'Ничего не найдено',
+                                        style: Styles.headline4,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                        : ListView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            children: [
+                              ScreenUtil().setVerticalSpacing(
+                                  (MediaQuery.of(context).size.height - 56) /
+                                      2),
+                              Center(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 6.h, horizontal: 12.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        100.r,
+                                      ),
+                                      color: AppColors.primaryColor
+                                          .withOpacity(0.5)),
+                                  child: Text(
+                                    'Ничего не найдено',
+                                    style: Styles.headline4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ))
               ],
             ),
           ),

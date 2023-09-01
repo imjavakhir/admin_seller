@@ -17,10 +17,18 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   }
 
   final _prepaymentSumContoller = TextEditingController();
-  final _prepaymentDollarController = TextEditingController();
-  final _refundController = TextEditingController();
-  final _dollarExchangeContoller = TextEditingController();
+  final _prepaymentDollarController =
+      TextEditingController.fromValue(const TextEditingValue(text: '0'));
+  final _refundController =
+      TextEditingController.fromValue(const TextEditingValue(text: '0'));
+  final _dollarExchangeContoller =
+      TextEditingController.fromValue(const TextEditingValue(text: '0'));
 
+  final GlobalKey<FormState> presumFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> preDollarFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> refundFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> dollarexchangeFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> typePayment = GlobalKey<FormState>();
   double totalSum = 0;
   double dollarExchangeSum = 0;
 
@@ -59,7 +67,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       ),
                     ),
                     ScreenUtil().setVerticalSpacing(10),
-                    const AddPaymentDropDownWidget(),
+                    Form(
+                        key: typePayment,
+                        child: const AddPaymentDropDownWidget()),
                     ScreenUtil().setVerticalSpacing(10),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -69,33 +79,37 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       ),
                     ),
                     ScreenUtil().setVerticalSpacing(10),
-                    TextfieldWidget(
-                        textInputType: TextInputType.number,
-                        valueChanged: (value) {
-                          if (_prepaymentSumContoller.text.isNotEmpty &&
-                              _prepaymentDollarController.text.isNotEmpty &&
-                              _dollarExchangeContoller.text.isNotEmpty &&
-                              _refundController.text.isNotEmpty) {
-                            dollarExchangeSum = double.parse(
-                                    _prepaymentDollarController.text
-                                        .replaceAll('.', '')) *
-                                (double.parse(_dollarExchangeContoller.text
-                                        .replaceAll('.', '')) /
-                                    100);
+                    Form(
+                      key: presumFormKey,
+                      child: TextfieldWidget(
+                          validator: Validators.empty,
+                          textInputType: TextInputType.number,
+                          valueChanged: (value) {
+                            if (_prepaymentSumContoller.text.isNotEmpty &&
+                                _prepaymentDollarController.text.isNotEmpty &&
+                                _dollarExchangeContoller.text.isNotEmpty &&
+                                _refundController.text.isNotEmpty) {
+                              dollarExchangeSum = double.parse(
+                                      _prepaymentDollarController.text
+                                          .replaceAll('.', '')) *
+                                  (double.parse(_dollarExchangeContoller.text
+                                          .replaceAll('.', '')) /
+                                      100);
 
-                            totalSum = (dollarExchangeSum +
-                                    double.parse(_prepaymentSumContoller.text
-                                        .replaceAll('.', ''))) -
-                                double.parse(
-                                    _refundController.text.replaceAll('.', ''));
+                              totalSum = (dollarExchangeSum +
+                                      double.parse(_prepaymentSumContoller.text
+                                          .replaceAll('.', ''))) -
+                                  double.parse(_refundController.text
+                                      .replaceAll('.', ''));
 
-                            setState(() {});
-                          }
-                        },
-                        listFormater: [ThousandsSeparatorInputFormatter()],
-                        isSoldField: true,
-                        hintext: 'Предоплата(Сум)',
-                        textEditingController: _prepaymentSumContoller),
+                              setState(() {});
+                            }
+                          },
+                          listFormater: [ThousandsSeparatorInputFormatter()],
+                          isSoldField: true,
+                          hintext: 'Предоплата(Сум)',
+                          textEditingController: _prepaymentSumContoller),
+                    ),
                     ScreenUtil().setVerticalSpacing(10),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -105,70 +119,38 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       ),
                     ),
                     ScreenUtil().setVerticalSpacing(10),
-                    TextfieldWidget(
-                        textInputType: TextInputType.number,
-                        valueChanged: (value) {
-                          if (_prepaymentSumContoller.text.isNotEmpty &&
-                              _prepaymentDollarController.text.isNotEmpty &&
-                              _dollarExchangeContoller.text.isNotEmpty &&
-                              _refundController.text.isNotEmpty) {
-                            dollarExchangeSum = double.parse(
-                                    _prepaymentDollarController.text
-                                        .replaceAll('.', '')) *
-                                (double.parse(_dollarExchangeContoller.text
-                                        .replaceAll('.', '')) /
-                                    100);
+                    Form(
+                      key: preDollarFormKey,
+                      child: TextfieldWidget(
+                          validator: Validators.empty,
+                          textInputType: TextInputType.number,
+                          valueChanged: (value) {
+                            if (_prepaymentSumContoller.text.isNotEmpty &&
+                                _prepaymentDollarController.text.isNotEmpty &&
+                                _dollarExchangeContoller.text.isNotEmpty &&
+                                _refundController.text.isNotEmpty) {
+                              dollarExchangeSum = double.parse(
+                                      _prepaymentDollarController.text
+                                          .replaceAll('.', '')) *
+                                  (double.parse(_dollarExchangeContoller.text
+                                          .replaceAll('.', '')) /
+                                      100);
 
-                            totalSum = (dollarExchangeSum +
-                                    double.parse(_prepaymentSumContoller.text
-                                        .replaceAll('.', ''))) -
-                                double.parse(
-                                    _refundController.text.replaceAll('.', ''));
+                              totalSum = (dollarExchangeSum +
+                                      double.parse(_prepaymentSumContoller.text
+                                          .replaceAll('.', ''))) -
+                                  double.parse(_refundController.text
+                                      .replaceAll('.', ''));
 
-                            setState(() {});
-                          }
-                        },
-                        listFormater: [ThousandsSeparatorInputFormatter()],
-                        isSum: false,
-                        isSoldField: true,
-                        hintext: 'Предоплата(\$)',
-                        textEditingController: _prepaymentDollarController),
-                    ScreenUtil().setVerticalSpacing(10),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: Text(
-                        'Здачи',
-                        style: Styles.headline4,
-                      ),
+                              setState(() {});
+                            }
+                          },
+                          listFormater: [ThousandsSeparatorInputFormatter()],
+                          isSum: false,
+                          isSoldField: true,
+                          hintext: 'Предоплата(\$)',
+                          textEditingController: _prepaymentDollarController),
                     ),
-                    ScreenUtil().setVerticalSpacing(10),
-                    TextfieldWidget(
-                        textInputType: TextInputType.number,
-                        valueChanged: (value) {
-                          if (_prepaymentSumContoller.text.isNotEmpty &&
-                              _prepaymentDollarController.text.isNotEmpty &&
-                              _dollarExchangeContoller.text.isNotEmpty &&
-                              _refundController.text.isNotEmpty) {
-                            dollarExchangeSum = double.parse(
-                                    _prepaymentDollarController.text
-                                        .replaceAll('.', '')) *
-                                (double.parse(_dollarExchangeContoller.text
-                                        .replaceAll('.', '')) /
-                                    100);
-
-                            totalSum = (dollarExchangeSum +
-                                    double.parse(_prepaymentSumContoller.text
-                                        .replaceAll('.', ''))) -
-                                double.parse(
-                                    _refundController.text.replaceAll('.', ''));
-
-                            setState(() {});
-                          }
-                        },
-                        listFormater: [ThousandsSeparatorInputFormatter()],
-                        isSoldField: true,
-                        hintext: 'Здачи',
-                        textEditingController: _refundController),
                     ScreenUtil().setVerticalSpacing(10),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -178,33 +160,77 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       ),
                     ),
                     ScreenUtil().setVerticalSpacing(10),
-                    TextfieldWidget(
-                        textInputType: TextInputType.number,
-                        valueChanged: (value) {
-                          if (_prepaymentSumContoller.text.isNotEmpty &&
-                              _prepaymentDollarController.text.isNotEmpty &&
-                              _dollarExchangeContoller.text.isNotEmpty &&
-                              _refundController.text.isNotEmpty) {
-                            dollarExchangeSum = double.parse(
-                                    _prepaymentDollarController.text
-                                        .replaceAll('.', '')) *
-                                (double.parse(_dollarExchangeContoller.text
-                                        .replaceAll('.', '')) /
-                                    100);
+                    Form(
+                      key: dollarexchangeFormKey,
+                      child: TextfieldWidget(
+                          validator: Validators.empty,
+                          textInputType: TextInputType.number,
+                          valueChanged: (value) {
+                            if (_prepaymentSumContoller.text.isNotEmpty &&
+                                _prepaymentDollarController.text.isNotEmpty &&
+                                _dollarExchangeContoller.text.isNotEmpty &&
+                                _refundController.text.isNotEmpty) {
+                              dollarExchangeSum = double.parse(
+                                      _prepaymentDollarController.text
+                                          .replaceAll('.', '')) *
+                                  (double.parse(_dollarExchangeContoller.text
+                                          .replaceAll('.', '')) /
+                                      100);
 
-                            totalSum = (dollarExchangeSum +
-                                    double.parse(_prepaymentSumContoller.text
-                                        .replaceAll('.', ''))) -
-                                double.parse(
-                                    _refundController.text.replaceAll('.', ''));
+                              totalSum = (dollarExchangeSum +
+                                      double.parse(_prepaymentSumContoller.text
+                                          .replaceAll('.', ''))) -
+                                  double.parse(_refundController.text
+                                      .replaceAll('.', ''));
 
-                            setState(() {});
-                          }
-                        },
-                        listFormater: [ThousandsSeparatorInputFormatter()],
-                        isSoldField: true,
-                        hintext: 'Курс \$100',
-                        textEditingController: _dollarExchangeContoller),
+                              setState(() {});
+                            }
+                          },
+                          listFormater: [ThousandsSeparatorInputFormatter()],
+                          isSoldField: true,
+                          hintext: 'Курс \$100',
+                          textEditingController: _dollarExchangeContoller),
+                    ),
+                    ScreenUtil().setVerticalSpacing(10),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      child: Text(
+                        'Здачи',
+                        style: Styles.headline4,
+                      ),
+                    ),
+                    ScreenUtil().setVerticalSpacing(10),
+                    Form(
+                      key: refundFormKey,
+                      child: TextfieldWidget(
+                          validator: Validators.empty,
+                          textInputType: TextInputType.number,
+                          valueChanged: (value) {
+                            if (_prepaymentSumContoller.text.isNotEmpty &&
+                                _prepaymentDollarController.text.isNotEmpty &&
+                                _dollarExchangeContoller.text.isNotEmpty &&
+                                _refundController.text.isNotEmpty) {
+                              dollarExchangeSum = double.parse(
+                                      _prepaymentDollarController.text
+                                          .replaceAll('.', '')) *
+                                  (double.parse(_dollarExchangeContoller.text
+                                          .replaceAll('.', '')) /
+                                      100);
+
+                              totalSum = (dollarExchangeSum +
+                                      double.parse(_prepaymentSumContoller.text
+                                          .replaceAll('.', ''))) -
+                                  double.parse(_refundController.text
+                                      .replaceAll('.', ''));
+
+                              setState(() {});
+                            }
+                          },
+                          listFormater: [ThousandsSeparatorInputFormatter()],
+                          isSoldField: true,
+                          hintext: 'Здачи',
+                          textEditingController: _refundController),
+                    ),
                     ScreenUtil().setVerticalSpacing(10),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -254,23 +280,34 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 child: LongButton(
                     buttonName: 'Сохранить',
                     onTap: () {
-                      final payment = PaymentListModel(
-                          paymentType: state.walletList
-                              .where((element) =>
-                                  element!.id == state.paymentValue)
-                              .first!
-                              .name!,
-                          paymentId: state.paymentValue!,
-                          prepaymentDollar: _prepaymentDollarController.text,
-                          prepaymentSum: _prepaymentSumContoller.text,
-                          dollarExchange: _dollarExchangeContoller.text,
-                          paymentDollarOnSum: dollarExchangeSum.toString(),
-                          refund: _refundController.text,
-                          totalSum: totalSum.toString());
-                      BlocProvider.of<SellingBloc>(context)
-                          .add(SelectTypePayment(value: null));
-                      paymentList.add(payment);
-                      Navigator.of(context).pushNamed(AppRoutes.paymentOrder);
+                      final typePaymentValidate =
+                          typePayment.currentState!.validate();
+                      final presumValidate =
+                          presumFormKey.currentState!.validate();
+
+                      final predollarValidate =
+                          preDollarFormKey.currentState!.validate();
+                      final dollarExchangeValidate =
+                          dollarexchangeFormKey.currentState!.validate();
+                      final refundValidate =
+                          refundFormKey.currentState!.validate();
+                      // final payment = PaymentListModel(
+                      //     paymentType: state.walletList
+                      //         .where((element) =>
+                      //             element!.id == state.paymentValue)
+                      //         .first!
+                      //         .name!,
+                      //     paymentId: state.paymentValue!,
+                      //     prepaymentDollar: _prepaymentDollarController.text,
+                      //     prepaymentSum: _prepaymentSumContoller.text,
+                      //     dollarExchange: _dollarExchangeContoller.text,
+                      //     paymentDollarOnSum: dollarExchangeSum.toString(),
+                      //     refund: _refundController.text,
+                      //     totalSum: totalSum.toString());
+                      // BlocProvider.of<SellingBloc>(context)
+                      //     .add(SelectTypePayment(value: null));
+                      // paymentList.add(payment);
+                      // Navigator.of(context).pushNamed(AppRoutes.paymentOrder);
                     }),
               ),
             );
@@ -290,40 +327,52 @@ class AddPaymentDropDownWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: BlocBuilder<SellingBloc, SellingState>(
         builder: (context, state) {
-          return DropdownButton2(
-              menuItemStyleData: MenuItemStyleData(height: 56.h),
+          return DropdownButtonFormField2(
+              menuItemStyleData: MenuItemStyleData(
+                  height: 56.h,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w)),
               hint: Text(
                 'Выберите категорию',
                 style:
                     Styles.headline4.copyWith(color: AppColors.textfieldText),
               ),
               enableFeedback: false,
-              underline: const SizedBox(),
+              decoration: InputDecoration(
+                isCollapsed: true,
+                filled: true,
+                fillColor: AppColors.textfieldBackground,
+                errorBorder: Decorations.errorBorder,
+                focusedBorder: Decorations.focusedBorder,
+                enabledBorder: Decorations.enabledBorder,
+                focusedErrorBorder: Decorations.errorBorder,
+              ),
+              validator: (value) {
+                return Validators.empty(value);
+              },
               iconStyleData: IconStyleData(
                   iconEnabledColor: AppColors.borderColor,
                   iconSize: 24.h,
-                  icon: const Icon(
-                    CupertinoIcons.chevron_down,
+                  icon: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: const Icon(
+                      CupertinoIcons.chevron_down,
+                    ),
                   )),
               buttonStyleData: ButtonStyleData(
-                  width: double.maxFinite,
-                  height: 56.h,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-                  decoration: BoxDecoration(
-                      color: AppColors.textfieldBackground,
-                      borderRadius: BorderRadius.circular(10.r),
-                      border:
-                          Border.all(width: 1, color: AppColors.borderColor))),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+                height: 56.h,
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+              ),
               dropdownStyleData: DropdownStyleData(
-                  maxHeight: 280.h,
-                  offset: const Offset(0, -4),
-                  padding: EdgeInsets.zero,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: AppColors.white,
-                      border:
-                          Border.all(width: 1, color: AppColors.borderColor))),
+                padding: EdgeInsets.zero,
+                maxHeight: 280.h,
+                offset: const Offset(0, -4),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: AppColors.borderColor),
+                    borderRadius: BorderRadius.circular(10.r),
+                    color: AppColors.white),
+              ),
               isExpanded: true,
               value: state.paymentValue,
               onChanged: (value) {

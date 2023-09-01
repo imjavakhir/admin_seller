@@ -25,6 +25,11 @@ class _AddOrderPageState extends State<AddOrderPage> {
   final TextEditingController _reportDetailTextEdtingController =
       TextEditingController();
 
+  final GlobalKey<FormState> tissueFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> priceFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> pricesaleFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> countFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> orderTypeFormKey = GlobalKey<FormState>();
   double salePercent = 0;
   double total = 0;
   @override
@@ -79,16 +84,19 @@ class _AddOrderPageState extends State<AddOrderPage> {
                     ),
                   ),
                   ScreenUtil().setVerticalSpacing(10),
-                  DropDownOrderWidget(
-                    value: state.category,
-                    valueChanged: (value) {
-                      BlocProvider.of<SellingBloc>(context)
-                          .add(CategorySelling(value));
-                      if (value == 'Продажа со склада') {
-                        Navigator.of(context)
-                            .pushNamed(AppRoutes.sellingWarehouse);
-                      }
-                    },
+                  Form(
+                    key: orderTypeFormKey,
+                    child: DropDownOrderWidget(
+                      value: state.category,
+                      valueChanged: (value) {
+                        BlocProvider.of<SellingBloc>(context)
+                            .add(CategorySelling(value));
+                        if (value == 'Продажа со склада') {
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.sellingWarehouse);
+                        }
+                      },
+                    ),
                   ),
                   ScreenUtil().setVerticalSpacing(10),
                   Padding(
@@ -119,92 +127,108 @@ class _AddOrderPageState extends State<AddOrderPage> {
                         : 'Виберите вид мебеля и модель',
                   ),
                   ScreenUtil().setVerticalSpacing(10),
-                  AddOrderFields(
-                    title: 'Ткань',
-                    hint: 'Ткань',
-                    textEditingController: _tissueTextEditingController,
+                  Form(
+                    key: tissueFormKey,
+                    child: AddOrderFields(
+                      title: 'Ткань',
+                      hint: 'Ткань',
+                      textEditingController: _tissueTextEditingController,
+                    ),
                   ),
-                  AddOrderFields(
-                    valueChanged: (value) {
-                      if (_countTextEditingController.text.isNotEmpty &&
-                          _priceTextEditingController.text.isNotEmpty &&
-                          _priceWithSaleTextEditingController.text.isNotEmpty) {
-                        salePercent = 100 -
-                            ((double.parse(_priceWithSaleTextEditingController
-                                        .text
-                                        .replaceAll('.', '')) /
-                                    double.parse(_priceTextEditingController
-                                        .text
-                                        .replaceAll('.', ''))) *
-                                100);
-                        total = double.parse(_priceWithSaleTextEditingController
-                                .text
-                                .replaceAll('.', '')) *
-                            double.parse(_countTextEditingController.text
-                                .replaceAll('.', ''));
-                        setState(() {});
-                      }
-                    },
-                    isSoldField: true,
-                    listformatters: [ThousandsSeparatorInputFormatter()],
-                    textInputType: TextInputType.number,
-                    title: 'Цена',
-                    hint: 'Цена',
-                    textEditingController: _priceTextEditingController,
+                  Form(
+                    key: priceFormKey,
+                    child: AddOrderFields(
+                      valueChanged: (value) {
+                        if (_countTextEditingController.text.isNotEmpty &&
+                            _priceTextEditingController.text.isNotEmpty &&
+                            _priceWithSaleTextEditingController
+                                .text.isNotEmpty) {
+                          salePercent = 100 -
+                              ((double.parse(_priceWithSaleTextEditingController
+                                          .text
+                                          .replaceAll('.', '')) /
+                                      double.parse(_priceTextEditingController
+                                          .text
+                                          .replaceAll('.', ''))) *
+                                  100);
+                          total = double.parse(
+                                  _priceWithSaleTextEditingController.text
+                                      .replaceAll('.', '')) *
+                              double.parse(_countTextEditingController.text
+                                  .replaceAll('.', ''));
+                          setState(() {});
+                        }
+                      },
+                      isSoldField: true,
+                      listformatters: [ThousandsSeparatorInputFormatter()],
+                      textInputType: TextInputType.number,
+                      title: 'Цена',
+                      hint: 'Цена',
+                      textEditingController: _priceTextEditingController,
+                    ),
                   ),
-                  AddOrderFields(
-                    valueChanged: (value) {
-                      if (_countTextEditingController.text.isNotEmpty &&
-                          _priceTextEditingController.text.isNotEmpty &&
-                          _priceWithSaleTextEditingController.text.isNotEmpty) {
-                        salePercent = 100 -
-                            ((double.parse(_priceWithSaleTextEditingController
-                                        .text
-                                        .replaceAll('.', '')) /
-                                    double.parse(_priceTextEditingController
-                                        .text
-                                        .replaceAll('.', ''))) *
-                                100);
-                        total = double.parse(_priceWithSaleTextEditingController
-                                .text
-                                .replaceAll('.', '')) *
-                            double.parse(_countTextEditingController.text
-                                .replaceAll('.', ''));
-                        setState(() {});
-                      }
-                    },
-                    isSoldField: true,
-                    listformatters: [ThousandsSeparatorInputFormatter()],
-                    textInputType: TextInputType.number,
-                    title: 'Цена со скидкой',
-                    hint: 'Цена со скидкой',
-                    textEditingController: _priceWithSaleTextEditingController,
+                  Form(
+                    key: pricesaleFormKey,
+                    child: AddOrderFields(
+                      valueChanged: (value) {
+                        if (_countTextEditingController.text.isNotEmpty &&
+                            _priceTextEditingController.text.isNotEmpty &&
+                            _priceWithSaleTextEditingController
+                                .text.isNotEmpty) {
+                          salePercent = 100 -
+                              ((double.parse(_priceWithSaleTextEditingController
+                                          .text
+                                          .replaceAll('.', '')) /
+                                      double.parse(_priceTextEditingController
+                                          .text
+                                          .replaceAll('.', ''))) *
+                                  100);
+                          total = double.parse(
+                                  _priceWithSaleTextEditingController.text
+                                      .replaceAll('.', '')) *
+                              double.parse(_countTextEditingController.text
+                                  .replaceAll('.', ''));
+                          setState(() {});
+                        }
+                      },
+                      isSoldField: true,
+                      listformatters: [ThousandsSeparatorInputFormatter()],
+                      textInputType: TextInputType.number,
+                      title: 'Цена со скидкой',
+                      hint: 'Цена со скидкой',
+                      textEditingController:
+                          _priceWithSaleTextEditingController,
+                    ),
                   ),
-                  AddOrderFields(
-                    textInputType: TextInputType.number,
-                    title: 'Количество',
-                    hint: 'Количество',
-                    valueChanged: (value) {
-                      if (_countTextEditingController.text.isNotEmpty &&
-                          _priceTextEditingController.text.isNotEmpty &&
-                          _priceWithSaleTextEditingController.text.isNotEmpty) {
-                        salePercent = 100 -
-                            ((double.parse(_priceWithSaleTextEditingController
-                                        .text
-                                        .replaceAll('.', '')) /
-                                    double.parse(_priceTextEditingController
-                                        .text
-                                        .replaceAll('.', ''))) *
-                                100);
-                        total = double.parse(_priceWithSaleTextEditingController
-                                .text
-                                .replaceAll('.', '')) *
-                            double.parse(_countTextEditingController.text
-                                .replaceAll('.', ''));
-                        setState(() {});
-                      }
-                    },
-                    textEditingController: _countTextEditingController,
+                  Form(
+                    key: countFormKey,
+                    child: AddOrderFields(
+                      textInputType: TextInputType.number,
+                      title: 'Количество',
+                      hint: 'Количество',
+                      valueChanged: (value) {
+                        if (_countTextEditingController.text.isNotEmpty &&
+                            _priceTextEditingController.text.isNotEmpty &&
+                            _priceWithSaleTextEditingController
+                                .text.isNotEmpty) {
+                          salePercent = 100 -
+                              ((double.parse(_priceWithSaleTextEditingController
+                                          .text
+                                          .replaceAll('.', '')) /
+                                      double.parse(_priceTextEditingController
+                                          .text
+                                          .replaceAll('.', ''))) *
+                                  100);
+                          total = double.parse(
+                                  _priceWithSaleTextEditingController.text
+                                      .replaceAll('.', '')) *
+                              double.parse(_countTextEditingController.text
+                                  .replaceAll('.', ''));
+                          setState(() {});
+                        }
+                      },
+                      textEditingController: _countTextEditingController,
+                    ),
                   ),
                   AddOrderFields(
                     title: 'Примичение',
@@ -259,40 +283,48 @@ class _AddOrderPageState extends State<AddOrderPage> {
               child: LongButton(
                 buttonName: 'Добавить',
                 onTap: () {
-                  final order = OrderListModel(
-                      idOrder: '',
-                      id: state.idSelling,
-                      salePercent: salePercent.toString(),
-                      total: total.toString(),
-                      category: state.category!,
-                      idModel: state.idModel!,
-                      furnitureType:
-                          state.furnitureTypeAndModel.split('--').first,
-                      furnitureModel:
-                          state.furnitureTypeAndModel.split('--').last,
-                      tissue: _tissueTextEditingController.text,
-                      price: _priceTextEditingController.text,
-                      priceSale: _priceWithSaleTextEditingController.text,
-                      count: int.parse(_countTextEditingController.text),
-                      details: _reportDetailTextEdtingController.text);
+                  final tissueValidate = tissueFormKey.currentState!.validate();
+                  final orderTypeValidate =
+                      orderTypeFormKey.currentState!.validate();
 
-                  debugPrint(order.id);
-                  debugPrint(order.category);
-                  debugPrint(order.furnitureType);
-                  debugPrint(order.furnitureModel);
-                  debugPrint(order.tissue);
-                  debugPrint(order.price.toString());
-                  debugPrint(order.priceSale.toString());
-                  debugPrint(order.details);
-                  debugPrint(order.salePercent.toString());
-                  debugPrint(order.total.toString());
+                  final priceValidate = priceFormKey.currentState!.validate();
+                  final priceSaleValidate =
+                      pricesaleFormKey.currentState!.validate();
+                  final countValidate = countFormKey.currentState!.validate();
+                  // final order = OrderListModel(
+                  //     idOrder: '',
+                  //     id: state.idSelling,
+                  //     salePercent: salePercent.toString(),
+                  //     total: total.toString(),
+                  //     category: state.category!,
+                  //     idModel: state.idModel!,
+                  //     furnitureType:
+                  //         state.furnitureTypeAndModel.split('--').first,
+                  //     furnitureModel:
+                  //         state.furnitureTypeAndModel.split('--').last,
+                  //     tissue: _tissueTextEditingController.text,
+                  //     price: _priceTextEditingController.text,
+                  //     priceSale: _priceWithSaleTextEditingController.text,
+                  //     count: int.parse(_countTextEditingController.text),
+                  //     details: _reportDetailTextEdtingController.text);
 
-                  orderList.add(order);
+                  // debugPrint(order.id);
+                  // debugPrint(order.category);
+                  // debugPrint(order.furnitureType);
+                  // debugPrint(order.furnitureModel);
+                  // debugPrint(order.tissue);
+                  // debugPrint(order.price.toString());
+                  // debugPrint(order.priceSale.toString());
+                  // debugPrint(order.details);
+                  // debugPrint(order.salePercent.toString());
+                  // debugPrint(order.total.toString());
+
+                  // orderList.add(order);
+                  // // BlocProvider.of<SellingBloc>(context)
+                  // //     .add(CategorySelling(null));
                   // BlocProvider.of<SellingBloc>(context)
-                  //     .add(CategorySelling(null));
-                  BlocProvider.of<SellingBloc>(context)
-                      .add(SelectFurnitureTypeAndModel('', ''));
-                  Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                  //     .add(SelectFurnitureTypeAndModel('', ''));
+                  // Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
                 },
               ),
             ),

@@ -35,6 +35,7 @@ class AddOrderFields extends StatelessWidget {
         ),
         ScreenUtil().setVerticalSpacing(10),
         TextfieldWidget(
+            validator: Validators.empty,
             isDisabled: isDisabled,
             isSoldField: isSoldField,
             listFormater: listformatters,
@@ -65,7 +66,7 @@ class OrderListModel {
 
   OrderListModel(
       {required this.id,
-     required this.idOrder, 
+      required this.idOrder,
       required this.salePercent,
       required this.total,
       required this.category,

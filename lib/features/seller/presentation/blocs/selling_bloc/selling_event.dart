@@ -67,3 +67,5 @@ class CheckOrderDatePick extends SellingEvent {
 
   CheckOrderDatePick({required this.dateTimeDeliver});
 }
+
+class LoadMoreWarehouseProducts extends SellingEvent{}
