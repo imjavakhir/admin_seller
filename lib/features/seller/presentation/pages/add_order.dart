@@ -291,40 +291,47 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   final priceSaleValidate =
                       pricesaleFormKey.currentState!.validate();
                   final countValidate = countFormKey.currentState!.validate();
-                  // final order = OrderListModel(
-                  //     idOrder: '',
-                  //     id: state.idSelling,
-                  //     salePercent: salePercent.toString(),
-                  //     total: total.toString(),
-                  //     category: state.category!,
-                  //     idModel: state.idModel!,
-                  //     furnitureType:
-                  //         state.furnitureTypeAndModel.split('--').first,
-                  //     furnitureModel:
-                  //         state.furnitureTypeAndModel.split('--').last,
-                  //     tissue: _tissueTextEditingController.text,
-                  //     price: _priceTextEditingController.text,
-                  //     priceSale: _priceWithSaleTextEditingController.text,
-                  //     count: int.parse(_countTextEditingController.text),
-                  //     details: _reportDetailTextEdtingController.text);
 
-                  // debugPrint(order.id);
-                  // debugPrint(order.category);
-                  // debugPrint(order.furnitureType);
-                  // debugPrint(order.furnitureModel);
-                  // debugPrint(order.tissue);
-                  // debugPrint(order.price.toString());
-                  // debugPrint(order.priceSale.toString());
-                  // debugPrint(order.details);
-                  // debugPrint(order.salePercent.toString());
-                  // debugPrint(order.total.toString());
+                  if (tissueValidate &&
+                      orderTypeValidate &&
+                      priceSaleValidate &&
+                      priceValidate &&
+                      countValidate) {
+                    final order = OrderListModel(
+                        idOrder: '',
+                        id: state.idSelling,
+                        salePercent: salePercent.toString(),
+                        total: total.toString(),
+                        category: state.category!,
+                        idModel: state.idModel!,
+                        furnitureType:
+                            state.furnitureTypeAndModel.split('--').first,
+                        furnitureModel:
+                            state.furnitureTypeAndModel.split('--').last,
+                        tissue: _tissueTextEditingController.text,
+                        price: _priceTextEditingController.text,
+                        priceSale: _priceWithSaleTextEditingController.text,
+                        count: int.parse(_countTextEditingController.text),
+                        details: _reportDetailTextEdtingController.text);
+                    debugPrint(order.id);
+                    debugPrint(order.category);
+                    debugPrint(order.furnitureType);
+                    debugPrint(order.furnitureModel);
+                    debugPrint(order.tissue);
+                    debugPrint(order.price.toString());
+                    debugPrint(order.priceSale.toString());
+                    debugPrint(order.details);
+                    debugPrint(order.salePercent.toString());
+                    debugPrint(order.total.toString());
 
-                  // orderList.add(order);
-                  // // BlocProvider.of<SellingBloc>(context)
-                  // //     .add(CategorySelling(null));
+                    orderList.add(order);
+                    BlocProvider.of<SellingBloc>(context)
+                        .add(SelectFurnitureTypeAndModel('', ''));
+                    Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                  }
+
                   // BlocProvider.of<SellingBloc>(context)
-                  //     .add(SelectFurnitureTypeAndModel('', ''));
-                  // Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                  //     .add(CategorySelling(null));
                 },
               ),
             ),

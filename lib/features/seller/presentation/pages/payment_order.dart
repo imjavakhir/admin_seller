@@ -5,108 +5,47 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 List<PaymentListModel> paymentList = [];
 
-class PaymentOrderPage extends StatefulWidget {
-  const PaymentOrderPage({super.key});
+class PaymentsTabView extends StatefulWidget {
+  const PaymentsTabView({super.key});
 
   @override
-  State<PaymentOrderPage> createState() => _PaymentOrderPageState();
+  State<PaymentsTabView> createState() => _PaymentsTabViewState();
 }
 
-class _PaymentOrderPageState extends State<PaymentOrderPage> {
-  @override
-  void initState() {
-    BlocProvider.of<SellingBloc>(context).add(GetWalletList());
-    super.initState();
-  }
-
+class _PaymentsTabViewState extends State<PaymentsTabView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SellingBloc, SellingState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBarWidget(
-            title: 'Предоплаты',
-            leading: IconButton(
-                enableFeedback: false,
-                splashRadius: 24.r,
-                iconSize: 24.h,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  CupertinoIcons.chevron_left,
-                  color: AppColors.black,
-                )),
-          ),
-          body: ListView.builder(
-            padding: EdgeInsets.only(top: 10.h, bottom: 90.h),
-            itemCount: paymentList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return PaymentCard(
-                onEditTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          UpdatePaymentPage(
-                        index: index,
-                        payment: paymentList[index],
-                      ),
+        return ListView.builder(
+          padding: EdgeInsets.only(top: 10.h, bottom: 90.h),
+          itemCount: paymentList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return PaymentCard(
+              onEditTap: () {
+                Navigator.of(context).push(
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) =>
+                            FadeTransition(
+                      opacity: animation,
+                      child: child,
                     ),
-                  );
-                },
-                onDeleteTap: () {
-                  paymentList.removeAt(index);
-                  setState(() {});
-                },
-                paymentListItem: paymentList[index],
-              );
-            },
-          ),
-          bottomSheet: Container(
-            height: 96.h,
-            width: double.maxFinite,
-            decoration: const BoxDecoration(
-                color: AppColors.white,
-                border:
-                    Border(top: BorderSide(width: 0, color: AppColors.grey))),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: LongButton(
-                      buttonName: 'Подвердить',
-                      onTap: () {
-                        Navigator.of(context).pushNamed(AppRoutes.receipt);
-                      }),
-                ),
-                Container(
-                  height: 56.h,
-                  width: 56.h,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: AppColors.primaryColor),
-                  child: MaterialButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(AppRoutes.addPayment);
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r)),
-                    child: const Icon(
-                      Icons.payments,
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        UpdatePaymentPage(
+                      index: index,
+                      payment: paymentList[index],
                     ),
                   ),
-                ),
-                ScreenUtil().setHorizontalSpacing(24),
-              ],
-            ),
-          ),
+                );
+              },
+              onDeleteTap: () {
+                paymentList.removeAt(index);
+                setState(() {});
+              },
+              paymentListItem: paymentList[index],
+            );
+          },
         );
       },
     );

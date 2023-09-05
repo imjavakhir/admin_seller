@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class CheckOrderPage extends StatelessWidget {
-  const CheckOrderPage({super.key});
+  final GlobalKey<FormState> statusClientFormKey = GlobalKey<FormState>();
+  CheckOrderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,9 @@ class CheckOrderPage extends StatelessWidget {
               ),
             ),
             ScreenUtil().setVerticalSpacing(10),
-            const ClientStatusDropDownWidget(),
+            Form(
+                key: statusClientFormKey,
+                child: const ClientStatusDropDownWidget()),
             ScreenUtil().setVerticalSpacing(10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -75,7 +78,11 @@ class CheckOrderPage extends StatelessWidget {
         child: LongButton(
           buttonName: 'Подвердить',
           onTap: () {
-            Navigator.of(context).pushNamed(AppRoutes.paymentOrder);
+            final statusClientFormKeyValidate =
+                statusClientFormKey.currentState!.validate();
+            if (statusClientFormKeyValidate) {
+              Navigator.of(context).pushNamed(AppRoutes.receipt);
+            }
           },
         ),
       ),
@@ -173,37 +180,52 @@ class ClientStatusDropDownWidget extends StatelessWidget {
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: DropdownButton2(
-            menuItemStyleData: MenuItemStyleData(height: 56.h),
+          child: DropdownButtonFormField2(
+            menuItemStyleData: MenuItemStyleData(
+                height: 56.h, padding: EdgeInsets.symmetric(horizontal: 16.w)),
             hint: Text(
               'Выберите статус клиента',
               style: Styles.headline4.copyWith(color: AppColors.borderColor),
             ),
             enableFeedback: false,
-            underline: const SizedBox(),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+              errorStyle: Styles.headline6.copyWith(color: AppColors.red),
+              isCollapsed: true,
+              filled: true,
+              fillColor: AppColors.textfieldBackground,
+              errorBorder: Decorations.errorBorder,
+              focusedBorder: Decorations.focusedBorder,
+              enabledBorder: Decorations.enabledBorder,
+              focusedErrorBorder: Decorations.errorBorder,
+            ),
+            validator: (value) {
+              return Validators.empty(value);
+            },
             iconStyleData: IconStyleData(
                 iconEnabledColor: AppColors.borderColor,
                 iconSize: 24.h,
-                icon: const Icon(
-                  CupertinoIcons.chevron_down,
+                icon: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: const Icon(
+                    CupertinoIcons.chevron_down,
+                  ),
                 )),
             buttonStyleData: ButtonStyleData(
-                width: double.maxFinite,
-                height: 56.h,
-                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-                decoration: BoxDecoration(
-                    color: AppColors.textfieldBackground,
-                    borderRadius: BorderRadius.circular(10.r),
-                    border:
-                        Border.all(width: 1, color: AppColors.borderColor))),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
+              height: 56.h,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+            ),
             dropdownStyleData: DropdownStyleData(
-                offset: const Offset(0, -4),
-                padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: AppColors.white,
-                    border:
-                        Border.all(width: 1, color: AppColors.borderColor))),
+              padding: EdgeInsets.zero,
+              maxHeight: 280.h,
+              offset: const Offset(0, -4),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: AppColors.borderColor),
+                  borderRadius: BorderRadius.circular(10.r),
+                  color: AppColors.white),
+            ),
             isExpanded: true,
             value: state.clientStatus,
             onChanged: (value) {
@@ -212,14 +234,14 @@ class ClientStatusDropDownWidget extends StatelessWidget {
             },
             items: [
               DropdownMenuItem(
-                value: 'first',
+                value: 'Первая покупка',
                 child: Text(
                   'Первая покупка',
                   style: Styles.headline4,
                 ),
               ),
               DropdownMenuItem(
-                value: 'always',
+                value: 'Постоянный',
                 child: Text(
                   'Постоянный',
                   style: Styles.headline4,

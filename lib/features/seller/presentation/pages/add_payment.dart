@@ -13,6 +13,7 @@ class AddPaymentPage extends StatefulWidget {
 class _AddPaymentPageState extends State<AddPaymentPage> {
   @override
   void initState() {
+    BlocProvider.of<SellingBloc>(context).add(GetWalletList());
     super.initState();
   }
 
@@ -284,30 +285,37 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           typePayment.currentState!.validate();
                       final presumValidate =
                           presumFormKey.currentState!.validate();
-
                       final predollarValidate =
                           preDollarFormKey.currentState!.validate();
                       final dollarExchangeValidate =
                           dollarexchangeFormKey.currentState!.validate();
                       final refundValidate =
                           refundFormKey.currentState!.validate();
-                      // final payment = PaymentListModel(
-                      //     paymentType: state.walletList
-                      //         .where((element) =>
-                      //             element!.id == state.paymentValue)
-                      //         .first!
-                      //         .name!,
-                      //     paymentId: state.paymentValue!,
-                      //     prepaymentDollar: _prepaymentDollarController.text,
-                      //     prepaymentSum: _prepaymentSumContoller.text,
-                      //     dollarExchange: _dollarExchangeContoller.text,
-                      //     paymentDollarOnSum: dollarExchangeSum.toString(),
-                      //     refund: _refundController.text,
-                      //     totalSum: totalSum.toString());
-                      // BlocProvider.of<SellingBloc>(context)
-                      //     .add(SelectTypePayment(value: null));
-                      // paymentList.add(payment);
-                      // Navigator.of(context).pushNamed(AppRoutes.paymentOrder);
+
+                      if (typePaymentValidate &&
+                          predollarValidate &&
+                          dollarExchangeValidate &&
+                          predollarValidate &&
+                          presumValidate &&
+                          refundValidate) {
+                        final payment = PaymentListModel(
+                            paymentType: state.walletList
+                                .where((element) =>
+                                    element!.id == state.paymentValue)
+                                .first!
+                                .name!,
+                            paymentId: state.paymentValue!,
+                            prepaymentDollar: _prepaymentDollarController.text,
+                            prepaymentSum: _prepaymentSumContoller.text,
+                            dollarExchange: _dollarExchangeContoller.text,
+                            paymentDollarOnSum: dollarExchangeSum.toString(),
+                            refund: _refundController.text,
+                            totalSum: totalSum.toString());
+                        BlocProvider.of<SellingBloc>(context)
+                            .add(SelectTypePayment(value: null));
+                        paymentList.add(payment);
+                        Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                      }
                     }),
               ),
             );
@@ -328,6 +336,7 @@ class AddPaymentDropDownWidget extends StatelessWidget {
       child: BlocBuilder<SellingBloc, SellingState>(
         builder: (context, state) {
           return DropdownButtonFormField2(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               menuItemStyleData: MenuItemStyleData(
                   height: 56.h,
                   padding: EdgeInsets.symmetric(horizontal: 16.w)),
@@ -338,6 +347,7 @@ class AddPaymentDropDownWidget extends StatelessWidget {
               ),
               enableFeedback: false,
               decoration: InputDecoration(
+                errorStyle: Styles.headline6.copyWith(color: AppColors.red),
                 isCollapsed: true,
                 filled: true,
                 fillColor: AppColors.textfieldBackground,
@@ -362,7 +372,9 @@ class AddPaymentDropDownWidget extends StatelessWidget {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10.r)),
                 height: 56.h,
-                padding: EdgeInsets.symmetric(vertical: 16.h),
+                padding: EdgeInsets.symmetric(
+                  vertical: 16.h,
+                ),
               ),
               dropdownStyleData: DropdownStyleData(
                 padding: EdgeInsets.zero,

@@ -205,6 +205,7 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                                               context: context,
                                               builder: (context) =>
                                                   DateAndTimeWarehouse(
+                                                      index: index,
                                                       item: item));
                                         },
                                         onTapSecond: () {
@@ -243,7 +244,8 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                                                           .add(
                                                               UnbookWarehouseProduct(
                                                                   item.order!
-                                                                      .id!));
+                                                                      .id!,
+                                                                  index));
                                                     },
                                                   ));
 

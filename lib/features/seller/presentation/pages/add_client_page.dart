@@ -46,7 +46,6 @@ class AddClientpage extends StatelessWidget {
                         style: Styles.headline4,
                       ),
                     ),
-                    ScreenUtil().setVerticalSpacing(10.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
                       child: Text(
@@ -129,21 +128,6 @@ class AddClientpage extends StatelessWidget {
                                     groupValue: soldInfo)
                               ],
                             ),
-                            ScreenUtil().setVerticalSpacing(10.h),
-                            Form(
-                              key: sellKey,
-                              child: TextfieldWidget(
-                                  listFormater: [
-                                    ThousandsSeparatorInputFormatter()
-                                  ],
-                                  validator: Validators.empty,
-                                  textInputType: TextInputType.number,
-                                  isDisabled: isSoldInfo,
-                                  isSoldField: true,
-                                  paddingW: 0,
-                                  hintext: '0',
-                                  textEditingController: _priceController),
-                            )
                           ],
                         ),
                       );

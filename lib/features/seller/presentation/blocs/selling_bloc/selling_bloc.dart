@@ -144,19 +144,20 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
 
   Future<void> _bookWarehouseProduct(
       BookWarehouseProduct event, Emitter<SellingState> emit) async {
-    await _sellingRepository.bookWareHouseProduct(event.dateTime, event.id);
-    final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts(1, 10, state.searchText);
-    emit(state.copyWith(
-        sellingWarehouseModel: sellingWarehouseModel!.products!));
+    final changedItem =
+        await _sellingRepository.bookWareHouseProduct(event.dateTime, event.id);
+
+    warehouseProducts[event.indexItem] = changedItem;
+    emit(state.copyWith(sellingWarehouseModel: warehouseProducts));
+    // final sellingWarehouseModel =
+    //     await _sellingRepository.getWarehouseProducts(1, 10, state.searchText);
   }
 
   Future<void> _unbookWarehouseProduct(
       UnbookWarehouseProduct event, Emitter<SellingState> emit) async {
-    await _sellingRepository.unbookWareHouseProduct(event.id);
-    final sellingWarehouseModel =
-        await _sellingRepository.getWarehouseProducts(1, 10, state.searchText);
-    emit(state.copyWith(
-        sellingWarehouseModel: sellingWarehouseModel!.products!));
+    final changedItem =
+        await _sellingRepository.unbookWareHouseProduct(event.id);
+    warehouseProducts[event.indexItem] = changedItem;
+    emit(state.copyWith(sellingWarehouseModel: warehouseProducts));
   }
 }

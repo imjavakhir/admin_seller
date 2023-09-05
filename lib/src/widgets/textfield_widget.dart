@@ -12,7 +12,7 @@ class TextfieldWidget extends StatelessWidget {
   final double paddingW;
   final bool isSoldField;
   final bool isDisabled;
-
+  final Widget? suffixWidget;
   final Function()? onEditingComplete;
   final ValueChanged? valueChanged;
   final bool isPhoneNumber;
@@ -23,6 +23,7 @@ class TextfieldWidget extends StatelessWidget {
   TextfieldWidget({
     Key? key,
     required this.hintext,
+    this.suffixWidget,
     this.isSum = true,
     this.textInputType = TextInputType.text,
     required this.textEditingController,
@@ -47,6 +48,7 @@ class TextfieldWidget extends StatelessWidget {
         child: TextFormField(
           maxLength: isSoldField ? 11 : null,
           validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           // key: textFieldKey,
           // onTap: () {
           //   Scrollable.ensureVisible(textFieldKey!.currentContext!);
@@ -63,6 +65,7 @@ class TextfieldWidget extends StatelessWidget {
           controller: textEditingController,
           keyboardType: textInputType,
           decoration: InputDecoration(
+              errorStyle: Styles.headline6.copyWith(color: AppColors.red),
               counterText: '',
               isCollapsed: true,
               prefixIcon: isPhoneNumber
@@ -97,7 +100,7 @@ class TextfieldWidget extends StatelessWidget {
                             : CupertinoIcons.eye_fill,
                         color: AppColors.greyIcon,
                       ))
-                  : null,
+                  : suffixWidget,
               hintText: hintext,
               hintStyle:
                   Styles.headline4.copyWith(color: AppColors.textfieldText),

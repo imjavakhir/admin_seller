@@ -21,6 +21,7 @@ class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
   late TextEditingController _dollarExchangeContoller;
   @override
   void initState() {
+      BlocProvider.of<SellingBloc>(context).add(GetWalletList());
     _prepaymentDollarController = TextEditingController.fromValue(
         TextEditingValue(text: widget.payment!.prepaymentDollar));
     _prepaymentSumContoller = TextEditingController.fromValue(

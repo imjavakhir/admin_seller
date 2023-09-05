@@ -7,14 +7,16 @@ class GetWarehouseProducts extends SellingEvent {}
 class BookWarehouseProduct extends SellingEvent {
   final String id;
   final DateTime dateTime;
+  final int indexItem;
 
-  BookWarehouseProduct(this.id, this.dateTime);
+  BookWarehouseProduct(this.id, this.dateTime, this.indexItem);
 }
 
 class UnbookWarehouseProduct extends SellingEvent {
   final String id;
+  final int indexItem;
 
-  UnbookWarehouseProduct(this.id);
+  UnbookWarehouseProduct(this.id,this.indexItem);
 }
 
 class GetSellingMyOrders extends SellingEvent {}
@@ -68,4 +70,4 @@ class CheckOrderDatePick extends SellingEvent {
   CheckOrderDatePick({required this.dateTimeDeliver});
 }
 
-class LoadMoreWarehouseProducts extends SellingEvent{}
+class LoadMoreWarehouseProducts extends SellingEvent {}

@@ -33,10 +33,10 @@ abstract class AppPages {
         return PageAnimation.animatedPageRoute(settings, const AddOrderPage());
       case AppRoutes.checkOrder:
         return PageAnimation.animatedPageRoute(
-            settings, const CheckOrderPage());
-      case AppRoutes.paymentOrder:
-        return PageAnimation.animatedPageRoute(
-            settings, const PaymentOrderPage());
+            settings,  CheckOrderPage());
+      // case AppRoutes.paymentOrder:
+      //   return PageAnimation.animatedPageRoute(
+      //       settings, const PaymentOrderPage());
       case AppRoutes.sellingWarehouse:
         return PageAnimation.animatedPageRoute(
             settings, const SellingWareHouse());

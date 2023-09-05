@@ -140,8 +140,9 @@ class SellingRepository {
     return bookedSeller;
   }
 
-  Future<void> bookWareHouseProduct(DateTime dateTime, String id) async {
+  Future<Product?> bookWareHouseProduct(DateTime dateTime, String id) async {
     final token = await AuthLocalDataSource().getSellingToken();
+    Product? product;
     final data = {'end_date': dateTime.toIso8601String()};
     try {
       Response response = await _dio!.put("${ApiSelling.bookOrder}/$id",
@@ -152,7 +153,9 @@ class SellingRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
+        product = Product.fromJson(response.data);
         debugPrint(response.data.toString());
+        return product;
       }
     } on DioError catch (error) {
       debugPrint(error.type.name);
@@ -168,11 +171,14 @@ class SellingRepository {
           fontSize: 16,
           backgroundColor: AppColors.grey);
       debugPrint('---------------------------------------$error-------');
+      return product;
     }
+    return product;
   }
 
-  Future<void> unbookWareHouseProduct(String id) async {
+  Future<Product?> unbookWareHouseProduct(String id) async {
     final token = await AuthLocalDataSource().getSellingToken();
+    Product? product;
     try {
       Response response = await _dio!.put("${ApiSelling.unbookOrder}/$id",
           options: Options(headers: {
@@ -181,7 +187,10 @@ class SellingRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
+        product = Product.fromJson(response.data);
+
         debugPrint(response.data.toString());
+        return product;
       }
     } on DioError catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);
@@ -193,7 +202,9 @@ class SellingRepository {
           fontSize: 16,
           backgroundColor: AppColors.grey);
       debugPrint('---------------------------------------$error-------');
+      return product;
     }
+    return product;
   }
 
   Future<List<FurnitureModelTypeModel?>> searchFurnitureModel(

@@ -5,10 +5,11 @@ import 'package:intl/intl.dart';
 class DateAndTimeWarehouse extends StatefulWidget {
   const DateAndTimeWarehouse({
     super.key,
-    required this.item,
+    required this.item, required this.index,
   });
 
   final Product? item;
+  final int index;
 
   @override
   State<DateAndTimeWarehouse> createState() => _DateAndTimeWarehouseState();
@@ -66,7 +67,7 @@ class _DateAndTimeWarehouseState extends State<DateAndTimeWarehouse> {
                 onTap: () async {
                   BlocProvider.of<SellingBloc>(context).add(
                       BookWarehouseProduct(
-                          widget.item!.order!.id!, _currentDate));
+                          widget.item!.order!.id!, _currentDate,widget.index));
                   Navigator.of(context).pop();
                 },
                 height: 40,
