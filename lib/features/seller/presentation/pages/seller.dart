@@ -107,9 +107,9 @@ class _SellerPageState extends State<SellerPage> {
                     if (state.loadingdata) {
                       return const SellerCardShimmer();
                     }
-                    debugPrint("${state.clientInfoList.length}___________");
-                    debugPrint(
-                        "${state.clientInfoList[index]!.isAccepted!}||||||||||||");
+                    // debugPrint("${state.clientInfoList.length}___________");
+                    // debugPrint(
+                    //     "${state.clientInfoList[index]!.isAccepted!}||||||||||||");
                     return SellerCard(
                       isAcceptedFromApi:
                           state.clientInfoList[index]!.isAccepted!,

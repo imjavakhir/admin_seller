@@ -331,7 +331,9 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                   //     .add(CategorySelling(null));
                   // BlocProvider.of<SellingBloc>(context)
                   //     .add(SelectFurnitureTypeAndModel('', ''));
-                  Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                          AppRoutes.acceptOrder,
+                          ModalRoute.withName(AppRoutes.addClient));
                 },
               ),
             ),

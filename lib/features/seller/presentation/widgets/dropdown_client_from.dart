@@ -36,10 +36,9 @@ class DropDownClientFrom extends StatelessWidget {
               validator: (value) {
                 return Validators.empty(value);
               },
-              
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
-                 errorStyle: Styles.headline6.copyWith(color: AppColors.red),
+                errorStyle: Styles.headline6.copyWith(color: AppColors.red),
                 isCollapsed: true,
                 filled: true,
                 fillColor: AppColors.textfieldBackground,

@@ -32,6 +32,7 @@ class SellingBloc extends Bloc<SellingEvent, SellingState> {
   final scrollController = ScrollController();
   int page = 1;
   List<Product?> warehouseProducts = [];
+  
 
   void _searchHasEvent(SearchHasEvent event, Emitter<SellingState> emit) {
     emit(state.copyWith(isHasSearch: !state.isHasSearch, searchText: ''));

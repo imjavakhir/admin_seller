@@ -20,9 +20,13 @@ class TextfieldWidget extends StatelessWidget {
   final GlobalKey? textFieldKey = GlobalKey(debugLabel: 'textFfieldKey');
   final String? Function(String?)? validator;
   final bool isSum;
+  final bool isReadOnly;
+  final VoidCallback? onTap;
   TextfieldWidget({
     Key? key,
     required this.hintext,
+    this.isReadOnly = false,
+    this.onTap,
     this.suffixWidget,
     this.isSum = true,
     this.textInputType = TextInputType.text,
@@ -53,6 +57,7 @@ class TextfieldWidget extends StatelessWidget {
           // onTap: () {
           //   Scrollable.ensureVisible(textFieldKey!.currentContext!);
           // },
+          onTap: onTap,
           initialValue: initialValue,
           onChanged: valueChanged,
           enableSuggestions: false,
@@ -60,6 +65,7 @@ class TextfieldWidget extends StatelessWidget {
           onEditingComplete: onEditingComplete,
           enabled: !isDisabled,
           inputFormatters: listFormater,
+          readOnly: isReadOnly,
           obscureText: obsecure,
           textInputAction: TextInputAction.next,
           controller: textEditingController,

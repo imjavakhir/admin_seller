@@ -21,7 +21,7 @@ class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
   late TextEditingController _dollarExchangeContoller;
   @override
   void initState() {
-      BlocProvider.of<SellingBloc>(context).add(GetWalletList());
+    BlocProvider.of<SellingBloc>(context).add(GetWalletList());
     _prepaymentDollarController = TextEditingController.fromValue(
         TextEditingValue(text: widget.payment!.prepaymentDollar));
     _prepaymentSumContoller = TextEditingController.fromValue(
@@ -279,14 +279,16 @@ class _UpdatePaymentPageState extends State<UpdatePaymentPage> {
                           prepaymentDollar: _prepaymentDollarController.text,
                           prepaymentSum: _prepaymentSumContoller.text,
                           dollarExchange: _dollarExchangeContoller.text,
-                          paymentDollarOnSum:
-                              MaskFormat.formatter.format(dollarExchangeSum),
+                          paymentDollarOnSum: dollarExchangeSum.toString(),
                           refund: _refundController.text,
-                          totalSum: MaskFormat.formatter.format(totalSum));
-                      BlocProvider.of<SellingBloc>(context)
-                          .add(SelectTypePayment(value: null));
-                      paymentList.add(payment);
-                      Navigator.of(context).pushNamed(AppRoutes.paymentOrder);
+                          totalSum: totalSum.toString());
+                      // BlocProvider.of<SellingBloc>(context)
+                      //     .add(SelectTypePayment(value: null));
+                      paymentList[widget.index!] = payment;
+                      setState(() {});
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          AppRoutes.acceptOrder,
+                          ModalRoute.withName(AppRoutes.addClient));
                     }),
               ),
             );

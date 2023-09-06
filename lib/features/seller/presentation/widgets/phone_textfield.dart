@@ -54,6 +54,7 @@ class _PhoneFieldState extends State<PhoneField> {
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: TypeAheadFormField<SearchedCustomers?>(
             validator: widget.validator,
+            autovalidate: true,
             loadingBuilder: (context) => const SizedBox(),
             textFieldConfiguration: TextFieldConfiguration(
                 onChanged: widget.valueChanged,
@@ -76,6 +77,7 @@ class _PhoneFieldState extends State<PhoneField> {
                       ),
                     ),
                     isCollapsed: true,
+                    errorStyle: Styles.headline6.copyWith(color: AppColors.red),
                     hintStyle: Styles.headline4
                         .copyWith(color: AppColors.textfieldText),
                     filled: true,

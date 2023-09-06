@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/local_datasrc/hive_local.dart';
 import 'package:flutter/cupertino.dart';
 
 enum Sold { sold, notSold }
@@ -18,7 +19,7 @@ class AddClientpage extends StatelessWidget {
   final GlobalKey<FormState> sellKey = GlobalKey<FormState>();
   final TextEditingController _textEditingControllerID =
       TextEditingController();
-
+  final SellerRepository _sellerRepository = SellerRepository();
   AddClientpage({
     super.key,
   });
@@ -148,123 +149,89 @@ class AddClientpage extends StatelessWidget {
                                   // // debugPrint(
                                   // //     '${state.isReported}++++++++$reporShareId');
 
-                                  // print(client.id);
-                                  // if (soldInfo == Sold.notSold) {
-                                  //   final isValidatedPhone =
-                                  //       phoneFormKey.currentState!.validate();
-                                  //   final isValidatedParams = paramClientFormKey
-                                  //       .currentState!
-                                  //       .validate();
-                                  //   final isValidatedName = fullnameFormKey
-                                  //       .currentState!
-                                  //       .validate();
-                                  //   if (isValidatedName &&
-                                  //       isValidatedParams &&
-                                  //       isValidatedPhone) {
-                                  //     set(() {
-                                  //       _isLoading = true;
-                                  //     });
-                                  //     if (_isLoading) {
-                                  //       await _sellerRepository
-                                  //           .sendNotSoldSelling(
-                                  //               sharedid: /* reporShareId */'',
-                                  //               report: state.isReported,
-                                  //               id: client.id!,
-                                  //               whereFrom:
-                                  //                   _textEditingControllerID
-                                  //                               .text !=
-                                  //                           ''
-                                  //                       ? _textEditingControllerID
-                                  //                           .text
-                                  //                       : state.whereFrom!,
-                                  //               details:
-                                  //                   _detailsController.text,
-                                  //               phoneNumber: _phoneController
-                                  //                   .text
-                                  //                   .replaceAll('-', '')
-                                  //                   .replaceAll('(', '')
-                                  //                   .replaceAll(')', '')
-                                  //                   .replaceAll(' ', ''),
-                                  //               fullName:
-                                  //                   _fullNameController.text);
-                                  //       Navigator.of(context)
-                                  //           .pushNamed(AppRoutes.main);
-                                  //       set(() {
-                                  //         _isLoading = false;
-                                  //       });
-                                  //     } else {
-                                  //       set(() {
-                                  //         _isLoading = false;
-                                  //       });
-                                  //     }
-                                  //   }
+                                  print(client.id);
+                                  if (soldInfo == Sold.notSold) {
+                                    final isValidatedPhone =
+                                        phoneFormKey.currentState!.validate();
+                                    final isValidatedParams = paramClientFormKey
+                                        .currentState!
+                                        .validate();
+                                    final isValidatedName = fullnameFormKey
+                                        .currentState!
+                                        .validate();
+                                    if (isValidatedName &&
+                                        isValidatedParams &&
+                                        isValidatedPhone) {
+                                      set(() {
+                                        _isLoading = true;
+                                      });
+                                      if (_isLoading) {
+                                        await _sellerRepository
+                                            .sendNotSoldSelling(
+                                                sharedid: /* reporShareId */ '',
+                                                report: state.isReported,
+                                                id: client.id!,
+                                                whereFrom:
+                                                    _textEditingControllerID
+                                                                .text !=
+                                                            ''
+                                                        ? _textEditingControllerID
+                                                            .text
+                                                        : state.whereFrom!,
+                                                details:
+                                                    _detailsController.text,
+                                                phoneNumber: _phoneController
+                                                    .text
+                                                    .replaceAll('-', '')
+                                                    .replaceAll('(', '')
+                                                    .replaceAll(')', '')
+                                                    .replaceAll(' ', ''),
+                                                fullName:
+                                                    _fullNameController.text);
+                                        Navigator.of(context)
+                                            .pushNamed(AppRoutes.main);
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      } else {
+                                        set(() {
+                                          _isLoading = false;
+                                        });
+                                      }
+                                    }
+                                  }
 
-                                  //   // Navigator.of(context)
-                                  //   //     .pushNamed(AppRoutes.addClient);
-                                  // }
-
-                                  // if (soldInfo == Sold.sold) {
-                                  //   final isValidatedSell =
-                                  //       sellKey.currentState!.validate();
-                                  //   final isValidatedPhone =
-                                  //       phoneFormKey.currentState!.validate();
-                                  //   final isValidatedParams = paramClientFormKey
-                                  //       .currentState!
-                                  //       .validate();
-                                  //   final isValidatedName = fullnameFormKey
-                                  //       .currentState!
-                                  //       .validate();
-                                  //   if (isValidatedName &&
-                                  //       isValidatedParams &&
-                                  //       isValidatedPhone &&
-                                  //       isValidatedSell) {
-                                  //     set(() {
-                                  //       _isLoading = true;
-                                  //     });
-
-                                  //     if (_isLoading) {
-                                  //       final soldSelling = await _sellerRepository
-                                  //           .sendSoldSelling(
-                                  //               sharedid: /* reporShareId */'',
-                                  //               report: state.isReported,
-                                  //               whereFrom:
-                                  //                   _textEditingControllerID
-                                  //                               .text !=
-                                  //                           ''
-                                  //                       ? _textEditingControllerID
-                                  //                           .text
-                                  //                       : state.whereFrom!,
-                                  //               id: client.id!,
-                                  //               details:
-                                  //                   _detailsController.text,
-                                  //               fullName:
-                                  //                   _fullNameController.text,
-                                  //               phoneNumber: _phoneController
-                                  //                   .text
-                                  //                   .replaceAll('-', '')
-                                  //                   .replaceAll('(', '')
-                                  //                   .replaceAll(')', '')
-                                  //                   .replaceAll(' ', ''),
-                                  //               price: double.parse(
-                                  //                   _priceController.text
-                                  //                       .replaceAll('.', '')));
-                                  //       debugPrint(soldSelling!.whereComeFrom!);
-                                  //       Navigator.of(context)
-                                  //           .pushNamed(AppRoutes.main);
-                                  //       set(() {
-                                  //         _isLoading = false;
-                                  //       });
-                                  //     } else {
-                                  //       set(() {
-                                  //         _isLoading = false;
-                                  //       });
-                                  //     }
-                                  //   }
-                                  // }
-
-                                  // // LoginService().sendSoldSelling();
-                                  Navigator.of(context)
-                                      .pushNamed('/acceptOrder');
+                                  if (soldInfo == Sold.sold) {
+                                    final isValidatedPhone =
+                                        phoneFormKey.currentState!.validate();
+                                    final isValidatedParams = paramClientFormKey
+                                        .currentState!
+                                        .validate();
+                                    final isValidatedName = fullnameFormKey
+                                        .currentState!
+                                        .validate();
+                                    if (isValidatedName &&
+                                        isValidatedParams &&
+                                        isValidatedPhone) {
+                                      await HiveDataSourceCLient()
+                                          .saveClientDetails(
+                                        id: client.id!,
+                                        phoneNumber: _phoneController.text
+                                            .replaceAll('-', '')
+                                            .replaceAll('(', '')
+                                            .replaceAll(')', '')
+                                            .replaceAll(' ', ''),
+                                        fullName: _fullNameController.text,
+                                        whereFrom:
+                                            _textEditingControllerID.text != ''
+                                                ? _textEditingControllerID.text
+                                                : state.whereFrom!,
+                                        details: _detailsController.text,
+                                      );
+                                      Navigator.of(context)
+                                          .pushNamed('/acceptOrder');
+                                    }
+                                  }
                                 }
                               : null);
                     }),
@@ -309,3 +276,38 @@ class AddClientpage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+      // final soldSelling = await _sellerRepository
+      //                                       .sendSoldSelling(
+      //                                           sharedid: /* reporShareId */ '',
+      //                                           report: state.isReported,
+      //                                           whereFrom:
+      //                                               _textEditingControllerID
+      //                                                           .text !=
+      //                                                       ''
+      //                                                   ? _textEditingControllerID
+      //                                                       .text
+      //                                                   : state.whereFrom!,
+      //                                           id: client.id!,
+      //                                           details:
+      //                                               _detailsController.text,
+      //                                           fullName:
+      //                                               _fullNameController.text,
+      //                                           phoneNumber: _phoneController
+      //                                               .text
+      //                                               .replaceAll('-', '')
+      //                                               .replaceAll('(', '')
+      //                                               .replaceAll(')', '')
+      //                                               .replaceAll(' ', ''),
+      //                                           price: double.parse(
+      //                                               _priceController.text
+      //                                                   .replaceAll('.', '')));
+      //                                   debugPrint(soldSelling!.whereComeFrom!);
+
+
+
+
+      

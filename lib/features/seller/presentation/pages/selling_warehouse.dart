@@ -370,7 +370,9 @@ class _SellingWareHouseState extends State<SellingWareHouse> {
                 if (orderModelListWare.isNotEmpty) {
                   orderList.addAll(orderModelListWare);
                 }
-                Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    AppRoutes.acceptOrder,
+                    ModalRoute.withName(AppRoutes.addClient));
                 orderModelListWare.clear();
               },
             ),

@@ -1,14 +1,18 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/hive_client_model.dart/hive_client_model.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class CheckOrderPage extends StatelessWidget {
   final GlobalKey<FormState> statusClientFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> dateFormKey = GlobalKey<FormState>();
   CheckOrderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final hiveUserBox = Hive.box<HiveClientModel>('Client');
+    final clientInfo = hiveUserBox.values.toList().cast<HiveClientModel>();
     return Scaffold(
       appBar: AppBarWidget(
         title: 'Подтверждение',
@@ -29,19 +33,19 @@ class CheckOrderPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ScreenUtil().setVerticalSpacing(10),
-            const CheckPageDetailTile(
+            CheckPageDetailTile(
               title: 'Имя клиента',
-              subtitle: 'Лили',
+              subtitle: clientInfo.first.fullName,
             ),
             ScreenUtil().setVerticalSpacing(10),
-            const CheckPageDetailTile(
+            CheckPageDetailTile(
               title: 'Номер телефона',
-              subtitle: '+998909336666',
+              subtitle: '+998${clientInfo.first.phoneNumber}',
             ),
             ScreenUtil().setVerticalSpacing(10),
-            const CheckPageDetailTile(
+            CheckPageDetailTile(
               title: 'Откуда узнал о нас',
-              subtitle: 'Telegram',
+              subtitle: clientInfo.first.whereFrom,
             ),
             ScreenUtil().setVerticalSpacing(10),
             Padding(
@@ -63,8 +67,10 @@ class CheckOrderPage extends StatelessWidget {
                 style: Styles.headline4,
               ),
             ),
+            // ScreenUtil().setVerticalSpacing(10),
+            // const CheckOrderDateWidget(),
             ScreenUtil().setVerticalSpacing(10),
-            const CheckOrderDateWidget()
+            Form(key: dateFormKey, child: const DateWidgetCheckOrders())
           ],
         ),
       ),
@@ -80,12 +86,103 @@ class CheckOrderPage extends StatelessWidget {
           onTap: () {
             final statusClientFormKeyValidate =
                 statusClientFormKey.currentState!.validate();
-            if (statusClientFormKeyValidate) {
+            final dateValidate = dateFormKey.currentState!.validate();
+            if (statusClientFormKeyValidate && dateValidate) {
               Navigator.of(context).pushNamed(AppRoutes.receipt);
             }
           },
         ),
       ),
+    );
+  }
+}
+
+class DateWidgetCheckOrders extends StatelessWidget {
+  const DateWidgetCheckOrders({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SellingBloc, SellingState>(
+      builder: (context, state) {
+        return TextfieldWidget(
+            validator: Validators.empty,
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    insetPadding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.r)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 16.h, horizontal: 16.w),
+                      child: CalendarDatePicker2(
+                        onValueChanged: (value) {
+                          BlocProvider.of<SellingBloc>(context).add(
+                              CheckOrderDatePick(dateTimeDeliver: value.first));
+                          Navigator.of(context).pop();
+                        },
+                        config: CalendarDatePicker2Config(
+                            disableModePicker: true,
+                            centerAlignModePicker: true,
+                            lastMonthIcon: Icon(
+                              CupertinoIcons.chevron_back,
+                              size: 20.h,
+                            ),
+                            nextMonthIcon: Icon(
+                              CupertinoIcons.chevron_forward,
+                              size: 20.h,
+                            ),
+                            selectedYearTextStyle: Styles.headline5M,
+                            controlsTextStyle: Styles.headline4,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2099),
+                            currentDate: DateTime.now(),
+                            firstDayOfWeek: 0,
+                            yearTextStyle: Styles.headline5M,
+                            yearBorderRadius: BorderRadius.circular(10.r),
+                            selectedDayHighlightColor: AppColors.primaryColor,
+                            selectedDayTextStyle: Styles.headline6,
+                            weekdayLabelTextStyle: Styles.headline6.copyWith(
+                                color: AppColors.grey, fontSize: 14.sp),
+                            weekdayLabels: [
+                              'Пон.',
+                              'Вт.',
+                              'Ср.',
+                              'Чет.',
+                              'Пят.',
+                              'Суб.',
+                              'Вос.'
+                            ],
+                            dayTextStyle: Styles.headline6),
+                        value: [DateTime.now()],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            isReadOnly: true,
+            hintext: '01.01.2023',
+            suffixWidget: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Icon(
+                CupertinoIcons.chevron_down,
+                size: 24.h,
+                color: AppColors.borderColor,
+              ),
+            ),
+            textEditingController: TextEditingController.fromValue(
+                TextEditingValue(
+                    text: state.dateTimeDeliver != null
+                        ? DateFormat('dd.MM.yyyy')
+                            .format(state.dateTimeDeliver!.toLocal())
+                        : '')));
+      },
     );
   }
 }

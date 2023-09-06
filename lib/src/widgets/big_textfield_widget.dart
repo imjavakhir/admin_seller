@@ -27,16 +27,18 @@ class BigTextFieldWidget extends StatelessWidget {
           ),
           ScreenUtil().setVerticalSpacing(10.h),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.text,
             onChanged: valueChanged,
             validator: validator,
-            key: textFieldKey,
-            onTap: () {
-              Scrollable.ensureVisible(textFieldKey!.currentContext!);
-            },
+            // key: textFieldKey,
+            // onTap: () {
+            //   Scrollable.ensureVisible(textFieldKey!.currentContext!);
+            // },
             controller: textEditingController,
             maxLines: 10,
             decoration: InputDecoration(
+                errorStyle: Styles.headline6.copyWith(color: AppColors.red),
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 filled: true,

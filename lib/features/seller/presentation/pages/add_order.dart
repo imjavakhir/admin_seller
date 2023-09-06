@@ -30,6 +30,8 @@ class _AddOrderPageState extends State<AddOrderPage> {
   final GlobalKey<FormState> pricesaleFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> countFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> orderTypeFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> furnitureTypeAndModelFormKey =
+      GlobalKey<FormState>();
   double salePercent = 0;
   double total = 0;
   @override
@@ -107,25 +109,59 @@ class _AddOrderPageState extends State<AddOrderPage> {
                     ),
                   ),
                   ScreenUtil().setVerticalSpacing(10),
-                  AddOrderButtonWidget(
-                    isSelected: state.furnitureTypeAndModel.isNotEmpty,
-                    onPress: () {
-                      showModalBottomSheet(
-                        backgroundColor: AppColors.white,
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.r)),
-                        context: context,
-                        builder: (context) {
-                          return const ModelBottomSheetWidget();
+                  Form(
+                    key: furnitureTypeAndModelFormKey,
+                    child: TextfieldWidget(
+                        validator: Validators.empty,
+                        onTap: () {
+                          showModalBottomSheet(
+                            backgroundColor: AppColors.white,
+                            useSafeArea: true,
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r)),
+                            context: context,
+                            builder: (context) {
+                              return const ModelBottomSheetWidget();
+                            },
+                          );
                         },
-                      );
-                    },
-                    hint: state.furnitureTypeAndModel.isNotEmpty
-                        ? state.furnitureTypeAndModel
-                        : 'Виберите вид мебеля и модель',
+                        isReadOnly: true,
+                        hintext: 'Виберите вид мебеля и модель',
+                        suffixWidget: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Icon(
+                            CupertinoIcons.chevron_down,
+                            size: 24.h,
+                            color: AppColors.borderColor,
+                          ),
+                        ),
+                        textEditingController:
+                            TextEditingController.fromValue(TextEditingValue(
+                          text: state.furnitureTypeAndModel.isNotEmpty
+                              ? state.furnitureTypeAndModel
+                              : '',
+                        ))),
                   ),
+                  // AddOrderButtonWidget(
+                  //   isSelected: state.furnitureTypeAndModel.isNotEmpty,
+                  //   onPress: () {
+                  //     showModalBottomSheet(
+                  //       backgroundColor: AppColors.white,
+                  //       useSafeArea: true,
+                  //       isScrollControlled: true,
+                  //       shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(20.r)),
+                  //       context: context,
+                  //       builder: (context) {
+                  //         return const ModelBottomSheetWidget();
+                  //       },
+                  //     );
+                  //   },
+                  //   hint: state.furnitureTypeAndModel.isNotEmpty
+                  //       ? state.furnitureTypeAndModel
+                  //       : 'Виберите вид мебеля и модель',
+                  // ),
                   ScreenUtil().setVerticalSpacing(10),
                   Form(
                     key: tissueFormKey,
@@ -291,12 +327,15 @@ class _AddOrderPageState extends State<AddOrderPage> {
                   final priceSaleValidate =
                       pricesaleFormKey.currentState!.validate();
                   final countValidate = countFormKey.currentState!.validate();
+                  final furnitureModelTypeModelValidate =
+                      furnitureTypeAndModelFormKey.currentState!.validate();
 
                   if (tissueValidate &&
                       orderTypeValidate &&
                       priceSaleValidate &&
                       priceValidate &&
-                      countValidate) {
+                      countValidate &&
+                      furnitureModelTypeModelValidate) {
                     final order = OrderListModel(
                         idOrder: '',
                         id: state.idSelling,
@@ -327,7 +366,9 @@ class _AddOrderPageState extends State<AddOrderPage> {
                     orderList.add(order);
                     BlocProvider.of<SellingBloc>(context)
                         .add(SelectFurnitureTypeAndModel('', ''));
-                    Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        AppRoutes.acceptOrder,
+                        ModalRoute.withName(AppRoutes.addClient));
                   }
 
                   // BlocProvider.of<SellingBloc>(context)

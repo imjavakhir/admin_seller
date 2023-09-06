@@ -311,10 +311,12 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                             paymentDollarOnSum: dollarExchangeSum.toString(),
                             refund: _refundController.text,
                             totalSum: totalSum.toString());
-                        BlocProvider.of<SellingBloc>(context)
-                            .add(SelectTypePayment(value: null));
+                        // BlocProvider.of<SellingBloc>(context)
+                        //     .add(SelectTypePayment(value: null));
                         paymentList.add(payment);
-                        Navigator.of(context).pushNamed(AppRoutes.acceptOrder);
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            AppRoutes.acceptOrder,
+                            ModalRoute.withName(AppRoutes.addClient));
                       }
                     }),
               ),

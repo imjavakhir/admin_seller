@@ -1,4 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/hive_client_model.dart/hive_client_model.dart';
 import 'package:admin_seller/features/seller/presentation/widgets/add_order_field.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,6 +36,8 @@ class _ReceiptPageState extends State<ReceiptPage> {
 
   @override
   Widget build(BuildContext context) {
+    final hiveUserBox = Hive.box<HiveClientModel>('Client');
+    final clientInfo = hiveUserBox.values.toList().cast<HiveClientModel>();
     return BlocBuilder<SellingBloc, SellingState>(
       builder: (context, state) {
         return Scaffold(
@@ -71,6 +74,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
                     ),
                   ),
                   ClientReceiptInfo(
+                    fullName: clientInfo.first.fullName,
+                    phoneNumber: clientInfo.first.phoneNumber,
+                    whereFrom: clientInfo.first.whereFrom,
                     dateTime: state.dateTimeDeliver!,
                   ),
                   ScreenUtil().setVerticalSpacing(10),
@@ -200,7 +206,9 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       paddingW: 0,
                       buttonName: 'Неправильно',
                       onTap: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            AppRoutes.acceptOrder,
+                            ModalRoute.withName(AppRoutes.addClient));
                       },
                     ),
                   ),
@@ -388,10 +396,16 @@ class OrderReceiptInfo extends StatelessWidget {
 
 class ClientReceiptInfo extends StatelessWidget {
   final DateTime dateTime;
+  final String fullName;
+  final String phoneNumber;
+  final String whereFrom;
 
   const ClientReceiptInfo({
     super.key,
     required this.dateTime,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.whereFrom,
   });
 
   @override
@@ -423,14 +437,14 @@ class ClientReceiptInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const ReceiptCardTile(leading: 'Имя клиента', trailing: ''),
-          const ReceiptCardTile(
+          ReceiptCardTile(leading: 'Имя клиента', trailing: fullName),
+          ReceiptCardTile(
             leading: 'Номер телефона',
-            trailing: "",
+            trailing: "+998$phoneNumber",
           ),
-          const ReceiptCardTile(
+          ReceiptCardTile(
             leading: 'Откуда пришёл',
-            trailing: "",
+            trailing: whereFrom,
           ),
           ReceiptCardTile(
             isLast: true,
