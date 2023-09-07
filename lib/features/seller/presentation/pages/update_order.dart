@@ -299,7 +299,7 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                 buttonName: 'Сохранить',
                 onTap: () {
                   final order = OrderListModel(
-                      idOrder: widget.order!.id,
+                      idOrder: widget.order!.idOrder,
                       id: widget.order!.id,
                       salePercent: salePercent.toString(),
                       total: total.toString(),
@@ -331,9 +331,9 @@ class _UpdateOrderPageState extends State<UpdateOrderPage> {
                   //     .add(CategorySelling(null));
                   // BlocProvider.of<SellingBloc>(context)
                   //     .add(SelectFurnitureTypeAndModel('', ''));
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                          AppRoutes.acceptOrder,
-                          ModalRoute.withName(AppRoutes.addClient));
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.acceptOrder,
+                      ModalRoute.withName(AppRoutes.addClient));
                 },
               ),
             ),

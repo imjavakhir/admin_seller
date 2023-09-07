@@ -272,6 +272,51 @@ class SellingRepository {
     }
     return id;
   }
+
+  Future<String> sendSellingOrder(
+      {required Map<String, dynamic> apiData}) async {
+    final token = await AuthLocalDataSource().getSellingToken();
+    String success = '';
+    try {
+      debugPrint("$apiData    from repo");
+      Response response = await _dio!.post(
+        ApiSelling.dealWithOrder,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        }),
+        data: apiData,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint(response.data.toString());
+        success = response.data.toString();
+        Fluttertoast.showToast(
+            timeInSecForIosWeb: 2,
+            gravity: ToastGravity.TOP,
+            msg: 'Успешно',
+            textColor: AppColors.white,
+            fontSize: 16,
+            backgroundColor: AppColors.grey);
+
+        return success;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      debugPrint(error.message);
+      debugPrint(error.response!.data);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+      return success;
+    }
+    return success;
+  }
 }
 
 class ApiSelling {
@@ -285,6 +330,7 @@ class ApiSelling {
   static const sellingGetId = "$baseUrl/getId";
   static const bookedSeller = '$baseUrl/get-seller';
   static const walletList = '$baseUrl/wallet';
+  static const dealWithOrder = '$baseUrl/deal-with-order';
 }
 
 BookedSeller bookedSellerFromJson(String str) =>

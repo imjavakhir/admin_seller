@@ -64,7 +64,7 @@ class DropDownOrderWidget extends StatelessWidget {
         value: value,
         items: [
           DropdownMenuItem(
-            value: 'Заказ',
+            value: 'заказ',
             child: Text(
               'Заказ',
               style: Styles.headline4,
@@ -73,7 +73,7 @@ class DropDownOrderWidget extends StatelessWidget {
           DropdownMenuItem(
             value: 'Продажа со склада',
             child: Text(
-              'Продажа со склада',
+              'продажа со склада',
               style: Styles.headline4,
             ),
           )
