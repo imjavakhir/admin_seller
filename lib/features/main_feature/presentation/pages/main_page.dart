@@ -64,7 +64,8 @@ class _MainPageState extends State<MainPage> {
                                     .elementAt(index)['inactive'],
                                 width: 28.h,
                                 height: 28.h,
-                                color: AppColors.primaryColor,
+                                colorFilter: const ColorFilter.mode(
+                                    AppColors.primaryColor, BlendMode.srcIn),
                               ),
                               label: AppIcons.bottomNavigationItemsAdmin.keys
                                   .elementAt(index),
@@ -73,7 +74,8 @@ class _MainPageState extends State<MainPage> {
                                     .elementAt(index)['inactive'],
                                 width: 28.h,
                                 height: 28.h,
-                                color: AppColors.greyIcon,
+                                colorFilter: const ColorFilter.mode(
+                                    AppColors.greyIcon, BlendMode.srcIn),
                               )))
                       : List.generate(
                           AppIcons.bottomNavigationItems.length,
@@ -83,7 +85,8 @@ class _MainPageState extends State<MainPage> {
                                     .elementAt(index)['inactive'],
                                 width: 28.h,
                                 height: 28.h,
-                                color: AppColors.primaryColor,
+                                colorFilter: const ColorFilter.mode(
+                                    AppColors.primaryColor, BlendMode.srcIn),
                               ),
                               label: AppIcons.bottomNavigationItems.keys
                                   .elementAt(index),
@@ -92,7 +95,8 @@ class _MainPageState extends State<MainPage> {
                                     .elementAt(index)['inactive'],
                                 width: 28.h,
                                 height: 28.h,
-                                color: AppColors.greyIcon,
+                                colorFilter: const ColorFilter.mode(
+                                    AppColors.greyIcon, BlendMode.srcIn),
                               )))),
             ),
           );
