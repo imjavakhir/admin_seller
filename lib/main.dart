@@ -24,7 +24,6 @@ void main() async {
   ]);
   Future.delayed(const Duration(seconds: 2))
       .then((value) => {FlutterNativeSplash.remove()});
-
   runApp(MyApp(
     savedToken: localToken,
   ));
