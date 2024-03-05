@@ -1,15 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
-import 'package:admin_seller/features/main_feature/presentation/blocs/main_feature_bloc.dart';
-import 'package:admin_seller/features/accept_online/presentation/pages/admin_accept_online.dart';
-import 'package:admin_seller/features/seller_admin/presentation/pages/admin_seller.dart';
-import 'package:admin_seller/features/seller/presentation/pages/seller.dart';
-import 'package:admin_seller/features/profile/presentation/pages/profile_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({
@@ -24,7 +13,7 @@ class _MainPageState extends State<MainPage> {
   bool? isAdmin;
   checkUser() {
     final user = HiveDataSource().box.values.toList().first;
-    print(user.type);
+    debugPrint(user.type);
 
     if (user.type == 'seller_admin') {
       setState(() {

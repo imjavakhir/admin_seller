@@ -1,7 +1,5 @@
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/profile/repository/profile_repo.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -11,7 +9,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<OnlineChangedEvent>(_onOnlineChangedEvent);
     on<GetUserOnlineModelEvent>(_getUserOnlineModelEvent);
     // on<CheckUserEvent>(_checkUserEvent);
-    on<GetUserRating>(_getRating);
   }
 
   final ProfileRepository _profileRepository = ProfileRepository();
@@ -42,7 +39,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     final value = await AuthLocalDataSource().getUserStatusSwitch();
 
-    emit(state.copyWith(isVerified: userStatusVerified, switchValue: value));
+    emit(state.copyWith(
+        phoneNumber: userOnlineModel!.user!.phoneNumber!,
+        isVerified: userStatusVerified,
+        switchValue: value,
+        balance: userOnlineModel.user!.balance!.toString(),
+        rating:
+            (((userOnlineModel.user!.point!) * 100).ceil() / 100).toString()));
   }
 
   // Future<void> _checkUserEvent(
@@ -56,12 +59,4 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   //     emit(const ProfileState(isAdmin: false));
   //   }
   // }
-
-  Future<void> _getRating(
-      GetUserRating event, Emitter<ProfileState> emit) async {
-    final ratingModel = await _profileRepository.getUserRating();
-
-    emit(state.copyWith(
-        rating: (((ratingModel!.rating)! * 100).ceil() / 100).toString()));
-  }
 }

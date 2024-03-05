@@ -1,12 +1,10 @@
-import 'package:admin_seller/features/accept_online/data/models/user_unverified_model.dart';
-import 'package:admin_seller/features/accept_online/repository/accept_online_repo.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 part 'accept_online_event.dart';
 part 'accept_online_state.dart';
 
 class AcceptOnlineBloc extends Bloc<AcceptOnlineEvent, AcceptOnlineState> {
-  AcceptOnlineBloc() : super( AcceptOnlineState()) {
+  AcceptOnlineBloc() : super(AcceptOnlineState()) {
     on<GetUsersUnverifiedEvent>(_getUsersUnverifiedEvent);
     on<AcceptUserEvent>(_acceptUserEvent);
   }
@@ -29,8 +27,7 @@ class AcceptOnlineBloc extends Bloc<AcceptOnlineEvent, AcceptOnlineState> {
     await _acceptOnlineRepository.verifyUser(seller: event.id);
     final userOnlineModelList =
         await _acceptOnlineRepository.getAllUnverified();
-  // emit(state.copyWith(loading: false));
+    // emit(state.copyWith(loading: false));
     emit(AcceptOnlineStateLoaded(userUnverifiedList: userOnlineModelList));
-  
   }
 }

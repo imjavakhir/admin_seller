@@ -1,9 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/auth_feature/data/models/user_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AuthRepository {
   Dio? _dio;
@@ -33,7 +28,8 @@ class AuthRepository {
       Response response = await _dio!.post(AppEndPoints.loginApi, data: data);
       if (response.statusCode == 200) {
         userModel = UserModel.fromJson(response.data);
-        print('-----------------success');
+        debugPrint('-----------------success');
+        debugPrint(response.data.toString());
         return userModel;
       }
     } on DioError catch (error) {
@@ -45,7 +41,7 @@ class AuthRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$errorMessage');
+      debugPrint('---------------------------------------$errorMessage');
     }
     return userModel;
   }

@@ -1,12 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/accept_online/presentation/blocs/blocs/accept_online_bloc.dart';
-import 'package:admin_seller/features/accept_online/presentation/widgets/accept_widget.dart';
-import 'package:admin_seller/src/shimmers/accept_widget_shimmer.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AcceptOnlineAccept extends StatefulWidget {
   const AcceptOnlineAccept({super.key});
@@ -50,16 +42,20 @@ class _AcceptOnlineAcceptState extends State<AcceptOnlineAccept> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     itemCount: state.userUnverifiedList.length,
                     itemBuilder: (context, index) => AcceptWidget(
+                      isOnline: state.userUnverifiedList[index]!.isOnline!,
+                      isVerfied: state.userUnverifiedList[index]!.isVerified!,
                       // selectedItem: state.selectedItem,
                       // index: index,
                       // isLoading: state.loading,
-                      fullname: state.userUnverifiedList[index]!.fullname!,
+                      fullname:
+                          state.userUnverifiedList[index]!.user!.fullname!,
                       phoneNumber:
-                          '+998${state.userUnverifiedList[index]!.phoneNumber!}',
+                          '+998${state.userUnverifiedList[index]!.user!.phoneNumber}',
                       onTapTick: () {
                         BlocProvider.of<AcceptOnlineBloc>(context).add(
                             AcceptUserEvent(
-                                state.userUnverifiedList[index]!.id!, index));
+                                state.userUnverifiedList[index]!.user!.id!,
+                                index));
                       },
                     ),
                   );

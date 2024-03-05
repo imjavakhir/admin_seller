@@ -1,11 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/profile/data/models/rating_model.dart';
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class ProfileRepository {
   Dio? _dio;
@@ -28,13 +21,14 @@ class ProfileRepository {
       "is_paused": false,
     };
     try {
-      Response response = await _dio!.put(AppEndPoints.userOnlineStatusApi,
-          data: data,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          }));
+      Response response =
+          await _dio!.put(AppEndPoints.userOnlineStatusUpdateApi,
+              data: data,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
         Fluttertoast.showToast(
@@ -44,8 +38,8 @@ class ProfileRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print(
-            'after put-----------------success-----${userOnlineModel.isOnline}');
+        debugPrint(
+            'after put-----------------success-----${userOnlineModel.isVerified}===========');
         return userOnlineModel;
       }
     } on DioError catch (error) {
@@ -57,14 +51,14 @@ class ProfileRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
 
-  Future<UserOnlineModel?> getUserOnlineInfo() async {
+  Future<UserProfileModel?> getUserOnlineInfo() async {
     final token = await AuthLocalDataSource().getLogToken();
-    UserOnlineModel? userOnlineModel;
+    UserProfileModel? userOnlineModel;
     try {
       Response response = await _dio!.get(AppEndPoints.userOnlineStatusApi,
           options: Options(headers: {
@@ -73,8 +67,9 @@ class ProfileRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200) {
-        userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print('-----------------success-----${userOnlineModel.isOnline}');
+        userOnlineModel = UserProfileModel.fromJson(response.data);
+        debugPrint(
+            '-----------------success-----${userOnlineModel.user!.phoneNumber!}=============');
         return userOnlineModel;
       }
     } on DioError catch (error) {
@@ -87,39 +82,8 @@ class ProfileRepository {
           fontSize: 16,
           backgroundColor: AppColors.grey);
 
-      print('hahah------------------------------------$error-------');
+      debugPrint('hahah------------------------------------$error-------');
     }
     return userOnlineModel;
-  }
-
-  Future<RatingModel?> getUserRating() async {
-    final token = await AuthLocalDataSource().getLogToken();
-    RatingModel? ratingModel;
-    try {
-      Response response = await _dio!.get(AppEndPoints.userRatingApi,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          }));
-      if (response.statusCode == 200) {
-        ratingModel = RatingModel.fromJson(response.data);
-        print(ratingModel.rating);
-        print('-----------------success-----${ratingModel.rating.toString()}');
-        return ratingModel;
-      }
-    } on DioError catch (error) {
-      final errorMessage = DioExceptions.fromDioError(error);
-      Fluttertoast.showToast(
-          timeInSecForIosWeb: 2,
-          gravity: ToastGravity.TOP,
-          msg: errorMessage.toString(),
-          textColor: AppColors.white,
-          fontSize: 16,
-          backgroundColor: AppColors.grey);
-
-      print('hahah------------------------------------$error-------');
-    }
-    return ratingModel;
   }
 }

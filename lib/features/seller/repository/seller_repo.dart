@@ -1,15 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/search_customer/search_customer.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/empty_selling.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/not_sold_selling.dart';
-import 'package:admin_seller/features/main_feature/data/models/selling/sold_selling.dart';
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
-import 'package:admin_seller/features/seller/data/client_info_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class SellerRepository {
   Dio? _dio;
@@ -36,7 +25,7 @@ class SellerRepository {
           }));
       if (response.statusCode == 200) {
         clientInfoList = clientsInfoFromJson(response.data);
-
+        // debugPrint("${clientInfoList.first!.sentAt!}-------------");
         return clientInfoList;
       }
     } on DioError catch (error) {
@@ -61,16 +50,17 @@ class SellerRepository {
       "is_paused": isPaused,
     };
     try {
-      Response response = await _dio!.put(AppEndPoints.userOnlineStatusApi,
-          data: data,
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          }));
+      Response response =
+          await _dio!.put(AppEndPoints.userOnlineStatusUpdateApi,
+              data: data,
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
       if (response.statusCode == 200) {
         userOnlineModel = UserOnlineModel.fromJson(response.data);
-        print(
+        debugPrint(
             'after put-----------------success-----${userOnlineModel.isPaused}');
         return userOnlineModel;
       }
@@ -83,7 +73,7 @@ class SellerRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userOnlineModel;
   }
@@ -117,7 +107,7 @@ class SellerRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print('-----------------success-----${emptySelling.branch}');
+        debugPrint('-----------------success-----${emptySelling.branch}');
         return emptySelling;
       }
     } on DioError catch (error) {
@@ -129,7 +119,7 @@ class SellerRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return emptySelling;
   }
@@ -173,7 +163,7 @@ class SellerRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print('-----------------success-----${notSoldSelling.isSold}');
+        debugPrint('-----------------success-----${notSoldSelling.isSold}');
         return notSoldSelling;
       }
     } on DioError catch (error) {
@@ -185,7 +175,7 @@ class SellerRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return notSoldSelling;
   }
@@ -210,7 +200,6 @@ class SellerRepository {
       "is_empty": false,
       "is_sold": true,
       "selling_price": price,
-      "report": report
     };
     final token = await AuthLocalDataSource().getLogToken();
     SoldSelling? soldSelling;
@@ -231,7 +220,7 @@ class SellerRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print('-----------------success-----${soldSelling.sellingPrice}');
+        debugPrint('-----------------success-----${soldSelling.sellingPrice}');
         return soldSelling;
       }
     } on DioError catch (error) {
@@ -243,7 +232,7 @@ class SellerRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return soldSelling;
   }
@@ -262,11 +251,11 @@ class SellerRepository {
               }));
       if (response.statusCode == 200) {
         searchedCustomers = searchedCustomersFromJson(response.data);
-        print('-----------------success $searchedCustomers');
+        debugPrint('-----------------success $searchedCustomers');
         return searchedCustomers;
       }
     } catch (error) {
-      print('searchedCustomer ---------------------------------------$error');
+      debugPrint('searchedCustomer ---------------------------------------$error');
     }
     return searchedCustomers;
   }

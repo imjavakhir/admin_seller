@@ -2,7 +2,7 @@
 //
 //     final soldSelling = soldSellingFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 SoldSelling soldSellingFromJson(String str) => SoldSelling.fromJson(json.decode(str));
 

@@ -1,11 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/seller_admin/presentation/blocs/seller_admin_bloc.dart';
-import 'package:admin_seller/features/seller_admin/presentation/widgets/seller_tile.dart';
-import 'package:admin_seller/src/shimmers/sellertile_shimmer.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 class SellerListWidget extends StatefulWidget {
   const SellerListWidget({
@@ -48,8 +42,49 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                 height: 0,
               ),
               Flexible(
-                child: state.sellerList!.isEmpty
-                    ? Center(
+                child: state.sellerList != null
+                    ? state.sellerList!.isEmpty
+                        ? Center(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 24.w, vertical: 16.h),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 6.h, horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    100.r,
+                                  ),
+                                  color:
+                                      AppColors.primaryColor.withOpacity(0.5)),
+                              child: Text(
+                                'Пока нет онлайн продавцов',
+                                style: Styles.headline4,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: scrollController,
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            shrinkWrap: true,
+                            itemCount: state.sellerList!.length,
+                            itemBuilder: (context, index) {
+                              if (state.showLoading) {
+                                return const SellersShimmer();
+                              }
+                              return SellerTile(
+                                onTap: () {
+                                  BlocProvider.of<SellerAdminBloc>(context).add(
+                                      SelectedSellerEvent(
+                                          selectedSeller:
+                                              state.sellerList![index]!));
+                                  Navigator.of(context).pop();
+                                },
+                                title: state.sellerList![index]!.fullname!,
+                                subtitle:
+                                    state.sellerList![index]!.phoneNumber!,
+                              );
+                            })
+                    : Center(
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               horizontal: 24.w, vertical: 16.h),
@@ -65,28 +100,7 @@ class _SellerListWidgetState extends State<SellerListWidget> {
                             style: Styles.headline4,
                           ),
                         ),
-                      )
-                    : ListView.builder(
-                        controller: scrollController,
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        shrinkWrap: true,
-                        itemCount: state.sellerList!.length,
-                        itemBuilder: (context, index) {
-                          if (state.showLoading) {
-                            return const SellersShimmer();
-                          }
-                          return SellerTile(
-                            onTap: () {
-                              BlocProvider.of<SellerAdminBloc>(context).add(
-                                  SelectedSellerEvent(
-                                      selectedSeller:
-                                          state.sellerList![index]!));
-                              Navigator.of(context).pop();
-                            },
-                            title: state.sellerList![index]!.fullname!,
-                            subtitle: state.sellerList![index]!.phoneNumber!,
-                          );
-                        }),
+                      ),
               )
             ],
           ),

@@ -1,7 +1,35 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AuthLocalDataSource {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+//sellingToken save
+
+  Future<void> saveSellingToken(String sellingToken) async {
+    final SharedPreferences prefs = await _prefs;
+
+    await prefs.setString('sellingToken', sellingToken);
+    debugPrint(
+        'sellingToken-----------------------------$sellingToken ---- saved');
+  }
+
+//sellingToken get
+  Future<String?> getSellingToken() async {
+    final SharedPreferences prefs = await _prefs;
+    final sellingToken = prefs.getString('sellingToken');
+    debugPrint(
+        'sellingToken-----------------------------$sellingToken ---- fromlocal');
+    return sellingToken;
+  }
+
+  //sellingToken remove
+  Future<bool> removeSellingToken() async {
+    final SharedPreferences prefs = await _prefs;
+    final sellingToken = prefs.remove('sellingToken');
+    final tokenStatus = await sellingToken;
+    debugPrint('-----------------------sellingToken----$tokenStatus');
+    return sellingToken;
+  }
 
 //logtoken save
 
@@ -9,21 +37,22 @@ class AuthLocalDataSource {
     final SharedPreferences prefs = await _prefs;
 
     await prefs.setString('logToken', logToken);
-    print('logtoken-----------------------------$logToken ---- saved');
+    debugPrint('logtoken-----------------------------$logToken ---- saved');
   }
 
 //fcmtoken save
   Future<void> saveFcmToken(String fcmToken) async {
     final SharedPreferences prefs = await _prefs;
     await prefs.setString('fcmToken', fcmToken);
-    print('fcmtoken-----------------------------$fcmToken------ saved');
+    debugPrint('fcmtoken-----------------------------$fcmToken------ saved');
   }
 
 //fcmtoken get
   Future<String?> getFcmToken() async {
     final SharedPreferences prefs = await _prefs;
     final tokenFcm = prefs.getString('fcmToken');
-    print('fcmtoken-----------------------------$tokenFcm------ fromlocal');
+    debugPrint(
+        'fcmtoken-----------------------------$tokenFcm------ fromlocal');
     return tokenFcm;
   }
 
@@ -31,7 +60,7 @@ class AuthLocalDataSource {
   Future<String?> getLogToken() async {
     final SharedPreferences prefs = await _prefs;
     final tokenLog = prefs.getString('logToken');
-    print('logtoken-----------------------------$tokenLog ---- fromlocal');
+    debugPrint('logtoken-----------------------------$tokenLog ---- fromlocal');
     return tokenLog;
   }
 
@@ -39,15 +68,18 @@ class AuthLocalDataSource {
   Future<bool> removeFcmToken() async {
     final SharedPreferences prefs = await _prefs;
     final removedFcm = prefs.remove('fcmToken');
-    print('-----------------------removeFcm----$removedFcm');
+    debugPrint('-----------------------removeFcm----$removedFcm');
     return removedFcm;
   }
 
 //logtoken remove
   Future<bool> removeLogToken() async {
     final SharedPreferences prefs = await _prefs;
+
     final removedLog = prefs.remove('logToken');
-    print('-----------------------removeLog----$removedLog');
+
+    final tokenStatus = await removedLog;
+    debugPrint('-----------------------removeLog----$tokenStatus');
     return removedLog;
   }
 
@@ -59,14 +91,15 @@ class AuthLocalDataSource {
       'isverified',
       isVerified,
     );
-    print('isverified-----------------------------$isVerified ---- saved');
+    debugPrint('isverified-----------------------------$isVerified ---- saved');
   }
 
   //get userstatus
   Future<bool?> getUserStatus() async {
     final SharedPreferences prefs = await _prefs;
     final isverified = prefs.getBool('isverified');
-    print('isverified-----------------------------$isverified ---- fromlocal');
+    debugPrint(
+        'isverified-----------------------------$isverified ---- fromlocal');
     return isverified;
   }
 
@@ -74,7 +107,7 @@ class AuthLocalDataSource {
   Future<bool> removeUserStatus() async {
     final SharedPreferences prefs = await _prefs;
     final removedveri = prefs.remove('isverified');
-    print('-----------------------removedveri----$removedveri');
+    debugPrint('-----------------------removedveri----$removedveri');
     return removedveri;
   }
 
@@ -86,14 +119,16 @@ class AuthLocalDataSource {
       'switchValue',
       switchValue,
     );
-    print('switchvalue-----------------------------$switchValue ---- saved');
+    debugPrint(
+        'switchvalue-----------------------------$switchValue ---- saved');
   }
 
   //get statusswitch
   Future<bool?> getUserStatusSwitch() async {
     final SharedPreferences prefs = await _prefs;
     final tokenLog = prefs.getBool('switchValue');
-    print('switchvalue-----------------------------$tokenLog ---- fromlocal');
+    debugPrint(
+        'switchvalue-----------------------------$tokenLog ---- fromlocal');
     return tokenLog;
   }
 
@@ -101,25 +136,26 @@ class AuthLocalDataSource {
   Future<bool> removeUserStatusSwitch() async {
     final SharedPreferences prefs = await _prefs;
     final removedswitch = prefs.remove('switchValue');
-    print('-----------------------removeLog----$removedswitch');
+    debugPrint('-----------------------removeLog----$removedswitch');
     return removedswitch;
   }
 
-    Future<void> saveUserPause(bool pauseValue) async {
+  Future<void> saveUserPause(bool pauseValue) async {
     final SharedPreferences prefs = await _prefs;
 
     await prefs.setBool(
       'pauseValue',
       pauseValue,
     );
-    print('pauseValue-----------------------------$pauseValue ---- saved');
+    debugPrint('pauseValue-----------------------------$pauseValue ---- saved');
   }
 
   //get statusswitch
   Future<bool?> getUserPause() async {
     final SharedPreferences prefs = await _prefs;
     final pauseValue = prefs.getBool('pauseValue');
-    print('pausevalue-----------------------------$pauseValue ---- fromlocal');
+    debugPrint(
+        'pausevalue-----------------------------$pauseValue ---- fromlocal');
     return pauseValue;
   }
 
@@ -127,7 +163,7 @@ class AuthLocalDataSource {
   Future<bool> removeUserPause() async {
     final SharedPreferences prefs = await _prefs;
     final removePause = prefs.remove('pauseValue');
-    print('-----------------------pauseremove----$removePause');
+    debugPrint('-----------------------pauseremove----$removePause');
     return removePause;
   }
 }

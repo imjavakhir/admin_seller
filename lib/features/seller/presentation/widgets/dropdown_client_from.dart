@@ -1,13 +1,5 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/src/decoration/input_decoration.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/validators/validators.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DropDownClientFrom extends StatelessWidget {
   final ValueChanged? valueChanged;
@@ -44,7 +36,9 @@ class DropDownClientFrom extends StatelessWidget {
               validator: (value) {
                 return Validators.empty(value);
               },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
+                errorStyle: Styles.headline6.copyWith(color: AppColors.red),
                 isCollapsed: true,
                 filled: true,
                 fillColor: AppColors.textfieldBackground,
@@ -54,7 +48,6 @@ class DropDownClientFrom extends StatelessWidget {
                 focusedErrorBorder: Decorations.errorBorder,
               ),
               enableFeedback: false,
-              autofocus: true,
               barrierColor: Colors.grey.withOpacity(0.8),
               iconStyleData: IconStyleData(
                   iconEnabledColor: AppColors.borderColor,
@@ -74,6 +67,7 @@ class DropDownClientFrom extends StatelessWidget {
                     color: AppColors.white),
               ),
               menuItemStyleData: MenuItemStyleData(
+                  height: 56.h,
                   padding: EdgeInsets.symmetric(horizontal: 16.w)),
               buttonStyleData: ButtonStyleData(
                 decoration:

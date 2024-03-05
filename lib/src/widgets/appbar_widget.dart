@@ -1,10 +1,6 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSize {
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
   final List<Widget>? actions;
@@ -22,7 +18,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
       leading: leading,
       systemOverlayStyle: const SystemUiOverlayStyle(
           systemNavigationBarContrastEnforced: true,
-          statusBarColor: Colors.white,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.black,
           systemNavigationBarIconBrightness: Brightness.dark),
@@ -39,10 +35,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
   }
 
   @override
-  // TODO: implement child
-  Widget get child => child;
-
-  @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size(double.maxFinite, 56.h);
 }

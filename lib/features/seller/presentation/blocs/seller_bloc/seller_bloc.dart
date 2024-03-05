@@ -1,15 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
-import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
-import 'package:admin_seller/features/seller/data/client_info_model.dart';
-import 'package:admin_seller/features/seller/repository/seller_repo.dart';
-import 'package:admin_seller/features/seller_admin/repository/seller_admin_repo.dart';
-import 'package:admin_seller/services/socket_io_client_service.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive/hive.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 part 'seller_event.dart';
 part 'seller_state.dart';
@@ -32,16 +21,32 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     on<HelpShareClient>(_helpShareClient);
     on<HelpNotifications>(_helpNotifications);
     on<ChangeReportStatus>(_changeReportStatus);
+    on<AcceptVisitEvent>(_acceptVisitEvent);
+    on<DeclineVisitEvent>(_declineVisitEvent);
   }
 
   final GlobalKey<AnimatedListState> key = GlobalKey();
 
   final SellerRepository _sellerRepository = SellerRepository();
+  
 
   final SocketService _socketService;
+  final ScrollController scrollController = ScrollController();
   bool _isSocketConnected = false;
   List<ClientInfo?> visits = [];
   List<HelpClientInfo?> helpVisits = [];
+
+  void _acceptVisitEvent(AcceptVisitEvent event, Emitter<SellerState> emit) {
+    _socketService.emitEventAck('accept-visit', event.data, (value) {
+      debugPrint("${AckDataModel.fromJson(value).isAccepted}-------accepted");
+    });
+  }
+
+  void _declineVisitEvent(DeclineVisitEvent event, Emitter<SellerState> emit) {
+    _socketService.emitEventAck('cancel-visit', event.data, (value) {
+      debugPrint("${AckDataModel.fromJson(value).isCanceled}-------canceled");
+    });
+  }
 
   void _changeReportStatus(
       ChangeReportStatus event, Emitter<SellerState> emit) {
@@ -50,14 +55,13 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   Future<void> _clientInfoListEvent(
       ClientInfoListEvent event, Emitter<SellerState> emit) async {
-
     final logToken = await AuthLocalDataSource().getLogToken();
-    // final apiVisits = await ApiService().getAllUserVisits();
-    // final newList = List<ClientInfo>.from(state.clientInfoList);
+    debugPrint("${logToken}_____________socketBloc");
 
     if (!_isSocketConnected) {
       _socketService.connect(logToken!);
 
+      debugPrint(logToken);
       _isSocketConnected = true;
     }
 
@@ -66,13 +70,38 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
       _socketService.onEvent('new-order', (data) {
         // key.currentState!
         //     .insertItem(0, duration: const Duration(milliseconds: 600));
-        visits.insert(0, clientInfoFromJson(data));
+        // scrollController.animateTo(
+        //   scrollController.position.maxScrollExtent,
+        //   duration: const Duration(milliseconds: 300),
+        //   curve: Curves.easeOut,
+        // );
+        // scrollController.animateTo(
+        //   scrollController.position.maxScrollExtent,
+        //   duration: const Duration(milliseconds: 300),
+        //   curve: Curves.easeOut,
+        // );
 
-        debugPrint('yangi klient ------------${clientInfoFromJson(data)}');
+        visits.add(ClientInfo.fromJson(data));
+        // scrollController.animateTo(1.0,
+        //     curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+
+        debugPrint(
+            'yangi klient ------------${ClientInfo.fromJson(data).sentAt}====${ClientInfo.fromJson(data).details}');
+        // debugPrint(DateTime.now().toString());
+        // debugPrint(DateTime.fromMillisecondsSinceEpoch(
+        //         ClientInfo.fromJson(data).sentAt!)
+        //     .toString());
+        // debugPrint(
+        //     "${DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(ClientInfo.fromJson(data).sentAt!)).inSeconds}-----------");
 
         add(
           ClientInfoListEvent(visits),
         );
+
+        // for (int i = 0; i < visits.length; i++) {
+        //   debugPrint(
+        //       "[${DateTime.fromMillisecondsSinceEpoch(visits[i]!.sentAt!).toString()}]");
+        // }
       });
     }
 
@@ -89,8 +118,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
     final value = await AuthLocalDataSource().getUserPause();
     emit(state.copyWith(loadingdata: false));
-    emit(state.copyWith(
-        clientInfoList: visits.reversed.toList(), isPaused: value));
+    emit(state.copyWith(clientInfoList: visits, isPaused: value));
   }
 
   void _whereFromEvent(WhereFromEvent event, Emitter<SellerState> emit) {
@@ -100,14 +128,18 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
   Future<void> _clearVisits(
       ClearVisits event, Emitter<SellerState> emit) async {
     emit(state.copyWith(showLoading: true, selectedIndex: event.index));
-    await _sellerRepository.sendEmptySelling(id: event.id,report: event.report,sharedId: event.sharedId);
+    await _sellerRepository.sendEmptySelling(
+        id: event.id, report: event.report, sharedId: event.sharedId);
+
     visits = await _sellerRepository.getAllUserVisits();
     final value = await AuthLocalDataSource().getUserPause();
-
     emit(state.copyWith(
-        clientInfoList: visits.reversed.toList(),
-        showLoading: false,
-        isPaused: value));
+        showLoading: false, isPaused: value, clientInfoList: visits));
+
+    // debugPrint(visits.first!.sentAt!.toString());
+    // debugPrint(visits.first!.isAccepted!.toString());
+    // debugPrint(visits.first!.isCanceled!.toString());
+    // debugPrint(visits.first!.details!.toString());
   }
 
   Future<void> _savePauseInfo(
@@ -137,10 +169,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     );
     visits = await _sellerRepository.getAllUserVisits();
 
-    emit(SellerState(
-        clientInfoList: visits.reversed.toList(),
-        sellerList: [],
-        helpClients: []));
+    emit(SellerState(clientInfoList: visits, sellerList: [], helpClients: []));
   }
 
   Future<void> _helpShareClient(
@@ -158,10 +187,7 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
     );
     visits = await _sellerRepository.getAllUserVisits();
     emit(state.copyWith(loadingdata: true));
-    emit(SellerState(
-        clientInfoList: visits.reversed.toList(),
-        sellerList: [],
-        helpClients: []));
+    emit(SellerState(clientInfoList: visits, sellerList: [], helpClients: []));
     emit(state.copyWith(loadingdata: false));
   }
 
@@ -188,7 +214,10 @@ class SellerBloc extends Bloc<SellerEvent, SellerState> {
 
   void _disconnectSocket(DisconnectSocket event, Emitter<SellerState> emit) {
     _socketService.disconnect();
+    _isSocketConnected = false;
+
     emit(state);
+    debugPrint('soccketDisconnected');
   }
 
   void _connectSocket(ConnectSocket event, Emitter<SellerState> emit) async {

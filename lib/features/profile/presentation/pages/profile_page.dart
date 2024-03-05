@@ -1,20 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/hive_local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/usermodel/hive_usermodel.dart';
-import 'package:admin_seller/features/profile/presentation/blocs/profile_bloc.dart';
-import 'package:admin_seller/features/profile/presentation/widgets/online_tile.dart';
-import 'package:admin_seller/features/profile/presentation/widgets/profile_tile.dart';
-import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:hive/hive.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -24,10 +10,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final hiveUserBox = Hive.box<UserModelHive>('User');
+  late List<UserModelHive> user;
   @override
   void initState() {
-    BlocProvider.of<ProfileBloc>(context).add(GetUserOnlineModelEvent());
-    BlocProvider.of<ProfileBloc>(context).add(GetUserRating());
+    user = hiveUserBox.values.toList().cast<UserModelHive>();
+    if (user.first.type != 'seller_admin') {
+      BlocProvider.of<ProfileBloc>(context).add(GetUserOnlineModelEvent());
+    }
+
     super.initState();
   }
 
@@ -40,8 +31,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        final hiveUserBox = Hive.box<UserModelHive>('User');
-        final user = hiveUserBox.values.toList().cast<UserModelHive>();
         return Scaffold(
           appBar: const AppBarWidget(
             title: 'Профиль',
@@ -50,8 +39,10 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: AppColors.primaryColor,
             color: AppColors.black,
             onRefresh: () async {
-              return BlocProvider.of<ProfileBloc>(context)
-                  .add(GetUserOnlineModelEvent());
+              if (user.first.type != 'seller_admin') {
+                BlocProvider.of<ProfileBloc>(context)
+                    .add(GetUserOnlineModelEvent());
+              }
             },
             child: CustomScrollView(
               slivers: [
@@ -81,10 +72,20 @@ class _ProfilePageState extends State<ProfilePage> {
                             user.first.fullName,
                             style: Styles.headline2,
                           )),
+                      if (user.first.type != 'seller_admin')
+                        Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w),
+                            child: Text(
+                              "+998${state.phoneNumber}",
+                              style: Styles.headline4,
+                            )),
                       ScreenUtil().setVerticalSpacing(24.h),
-                      const Divider(
-                        height: 0,
-                        color: AppColors.grey,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: const Divider(
+                          height: 0,
+                          color: AppColors.grey,
+                        ),
                       ),
                       ProfileTile(
                         title: 'Филиал',
@@ -100,6 +101,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ProfileTile(
                           title: 'Рейтинг',
                           subtitle: '${state.rating} балл',
+                        ),
+                      if (user.first.type == 'seller')
+                        ProfileTile(
+                          title: 'Баланс',
+                          subtitle: '${state.balance} сум',
                         ),
                       if (user.first.type == 'seller')
                         OnlineTile(
@@ -120,7 +126,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context, AppRoutes.auth, (route) => false);
                             await HiveDataSource().clearUserDetails();
                             await AuthLocalDataSource().removeLogToken();
-                            // SocketIOService().disconnectSocket();
+                            await AuthLocalDataSource().removeSellingToken();
+                            final token =
+                                await AuthLocalDataSource().getLogToken();
+                            debugPrint(token);
+
+                            if (user.first.type == 'seller') {
+                              BlocProvider.of<SellerBloc>(context)
+                                  .add(DisconnectSocket());
+                            }
+                            if (user.first.type == 'seller_admin') {
+                              SocketIOService().disconnectSocket();
+                              isConnected = false;
+                              setState(() {});
+                            }
                             // await AuthLocalDataSource().removeFcmToken();
                           }),
                       ScreenUtil().setVerticalSpacing(30.h)

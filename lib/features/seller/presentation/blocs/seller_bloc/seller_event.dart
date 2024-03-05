@@ -79,3 +79,15 @@ class HelpNotifications extends SellerEvent {
 class ChangeReportStatus extends SellerEvent {}
 
 class GetNewSellerVisits extends SellerEvent {}
+
+class AcceptVisitEvent extends SellerEvent {
+  final dynamic data;
+
+  AcceptVisitEvent(this.data);
+}
+
+class DeclineVisitEvent extends SellerEvent {
+   final dynamic data;
+
+  DeclineVisitEvent(this.data);
+}

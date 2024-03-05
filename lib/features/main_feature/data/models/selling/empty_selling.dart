@@ -2,7 +2,7 @@
 //
 //     final emptySelling = emptySellingFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 EmptySelling emptySellingFromJson(String str) => EmptySelling.fromJson(json.decode(str));
 

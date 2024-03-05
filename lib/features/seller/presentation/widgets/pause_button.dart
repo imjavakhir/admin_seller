@@ -1,12 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_icons.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/transparent_longbutton.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class PauseButton extends StatelessWidget {
   final bool isPaused;
@@ -42,7 +34,7 @@ class PauseButton extends StatelessWidget {
                               : 'Вы на перерыве, хотите вернуться к работе?',
                           style: Styles.headline3,
                         ),
-                        ScreenUtil().setVerticalSpacing(20.h),
+                        ScreenUtil().setVerticalSpacing(20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -74,7 +66,8 @@ class PauseButton extends StatelessWidget {
       },
       icon: SvgPicture.asset(
         !isPaused ? AppIcons.userTick : AppIcons.userRemove,
-        color: !isPaused ? AppColors.green : AppColors.red,
+        colorFilter: ColorFilter.mode(
+            !isPaused ? AppColors.green : AppColors.red, BlendMode.srcIn),
         height: 32.h,
         width: 32.w,
       ),

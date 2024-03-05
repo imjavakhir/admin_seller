@@ -1,7 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class SellerCardShimmer extends StatelessWidget {
   const SellerCardShimmer({
@@ -21,7 +18,7 @@ class SellerCardShimmer extends StatelessWidget {
                   color: AppColors.cardShadow,
                   offset: const Offset(0, 0))
             ]),
-        height: 164.h,
+        height: 200.h,
         width: double.maxFinite,
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         child: Shimmer.fromColors(

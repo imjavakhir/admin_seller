@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class LongButton extends StatelessWidget {
+  final bool isDisabled;
   final String buttonName;
   final VoidCallback? onTap;
   final double width;
@@ -11,9 +9,12 @@ class LongButton extends StatelessWidget {
   final double fontsize;
   final double paddingW;
   final bool isloading;
+  final bool isBooking;
   const LongButton({
     Key? key,
     required this.buttonName,
+    this.isDisabled = false,
+    this.isBooking = false,
     required this.onTap,
     this.width = double.maxFinite,
     this.height = 56,
@@ -30,7 +31,9 @@ class LongButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: AppColors.primaryColor),
+          color: isDisabled
+              ? AppColors.primaryColor.withOpacity(0.2)
+              : AppColors.primaryColor),
       width: width,
       height: height.h,
       child: MaterialButton(
@@ -38,7 +41,11 @@ class LongButton extends StatelessWidget {
         enableFeedback: false,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-        onPressed: !isloading ? onTap : null,
+        onPressed: isDisabled
+            ? null
+            : !isloading
+                ? onTap
+                : null,
         child: isloading
             ? Transform.scale(
                 scale: 0.7,
@@ -46,9 +53,27 @@ class LongButton extends StatelessWidget {
                   color: AppColors.white,
                 ),
               )
-            : Text(
-                buttonName,
-                style: Styles.headline3.copyWith(fontSize: fontsize.sp),
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isBooking)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.w),
+                      child: Icon(
+                        Icons.bookmark_added,
+                        size: 20.h,
+                      ),
+                    ),
+                  Text(
+                    buttonName,
+                    style: Styles.headline3.copyWith(
+                        fontSize: fontsize.sp,
+                        color: isDisabled
+                            ? AppColors.black.withOpacity(0.2)
+                            : AppColors.black),
+                  ),
+                ],
               ),
       ),
     );

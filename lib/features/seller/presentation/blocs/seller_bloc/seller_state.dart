@@ -26,7 +26,7 @@ class SellerState {
       this.showLoading = false,
       this.showLoadingBottomSheet = false,
       this.selectedIndex = -1,
-      this.loadingdata=false});
+      this.loadingdata = false});
 
   SellerState copyWith(
       {final List<ClientInfo?>? clientInfoList,
@@ -43,7 +43,7 @@ class SellerState {
       final bool? loadingdata}) {
     // debugPrint('Error ------------- $error');
     return SellerState(
-      loadingdata: loadingdata??this.loadingdata,
+        loadingdata: loadingdata ?? this.loadingdata,
         helpClients: helpClients ?? this.helpClients,
         isReported: isReported ?? this.isReported,
         isPaused: isPaused ?? this.isPaused,
@@ -58,4 +58,3 @@ class SellerState {
         isShared: isShared ?? this.isShared);
   }
 }
-

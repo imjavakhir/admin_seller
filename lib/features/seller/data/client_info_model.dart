@@ -2,12 +2,11 @@
 //
 //     final clientInfo = clientInfoFromJson(jsonString);
 
-import 'dart:convert';
+import 'package:admin_seller/app_const/app_exports.dart';
+
 
 List<ClientInfo> clientsInfoFromJson(List str) =>
     List<ClientInfo>.from(str.map((x) => ClientInfo.fromJson(x)));
-ClientInfo clientInfoFromJson(String str) =>
-    ClientInfo.fromJson(json.decode(str));
 
 String clientInfoToJson(List<ClientInfo> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -16,21 +15,31 @@ class ClientInfo {
   final String? id;
   final String? details;
   final bool? isCanceled;
-  final String? shared_seller;
+  final bool? isAccepted;
+  final int? sentAt;
 
-  ClientInfo({this.id, this.details, this.isCanceled, this.shared_seller});
+  ClientInfo({
+    this.id,
+    this.details,
+    this.isCanceled,
+    this.isAccepted,
+    this.sentAt,
+  });
 
   factory ClientInfo.fromJson(Map<String, dynamic> json) => ClientInfo(
-      id: json["id"],
-      details: json["details"],
-      isCanceled: json["is_canceled"],
-      shared_seller: json["shared_seller"]);
+        id: json["_id"],
+        details: json["details"],
+        isCanceled: json["is_canceled"],
+        isAccepted: json["is_accepted"],
+        sentAt: json["sent_at"],
+      );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "_id": id,
         "details": details,
         "is_canceled": isCanceled,
-        "shared_seller": shared_seller
+        "is_accepted": isAccepted,
+        "sent_at": sentAt,
       };
 }
 

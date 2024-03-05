@@ -1,11 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/accept_online/data/models/user_unverified_model.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/profile/data/models/user_online_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class AcceptOnlineRepository {
   Dio? _dio;
@@ -19,12 +12,12 @@ class AcceptOnlineRepository {
     _dio = Dio(options);
   }
 
-  Future<UserOnlineModel?> verifyUser({required String seller}) async {
+  Future<UserUnverified?> verifyUser({required String seller}) async {
     final token = await AuthLocalDataSource().getLogToken();
-    UserOnlineModel? userOnlineModel;
-    final data = {"is_online": true, "is_verified": true, "seller": seller};
+    UserUnverified? userUnverified;
+    final data = {"user": seller, "is_verified": true};
     try {
-      Response response = await _dio!.put(AppEndPoints.userOnlineStatusApi,
+      Response response = await _dio!.put(AppEndPoints.userOnlineVerify,
           data: data,
           options: Options(headers: {
             'Content-Type': 'application/json',
@@ -32,7 +25,7 @@ class AcceptOnlineRepository {
             'Authorization': 'Bearer $token',
           }));
       if (response.statusCode == 200) {
-        userOnlineModel = UserOnlineModel.fromJson(response.data);
+        userUnverified = UserUnverified.fromJson(response.data);
         Fluttertoast.showToast(
             timeInSecForIosWeb: 2,
             gravity: ToastGravity.CENTER,
@@ -40,11 +33,11 @@ class AcceptOnlineRepository {
             textColor: AppColors.white,
             fontSize: 16,
             backgroundColor: AppColors.grey);
-        print(
-            'verified-----------------success-----${userOnlineModel.isVerified}---${userOnlineModel.id}');
-        return userOnlineModel;
+        debugPrint(
+            'verified-----------------success-----${userUnverified.isVerified}---${userUnverified.user}');
+        return userUnverified;
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);
       Fluttertoast.showToast(
           timeInSecForIosWeb: 2,
@@ -53,9 +46,9 @@ class AcceptOnlineRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
-    return userOnlineModel;
+    return userUnverified;
   }
 
   Future<List<UserUnverified?>> getAllUnverified() async {
@@ -71,11 +64,11 @@ class AcceptOnlineRepository {
           }));
       if (response.statusCode == 200) {
         userUnverified = userUnverifiedFromJson(response.data);
-        print(
+        debugPrint(
             'unverified-----------------success-----${userUnverified.length} }');
         return userUnverified;
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);
       Fluttertoast.showToast(
           timeInSecForIosWeb: 2,
@@ -84,7 +77,7 @@ class AcceptOnlineRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return userUnverified;
   }

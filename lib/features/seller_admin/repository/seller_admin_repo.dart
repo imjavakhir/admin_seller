@@ -1,10 +1,4 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/features/main_feature/data/data_src/local_data_src.dart';
-import 'package:admin_seller/features/main_feature/data/models/seller_model/sellers_model.dart';
-import 'package:admin_seller/services/dio_exceptions.dart';
-import 'package:admin_seller/services/endpoints.dart';
-import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
 
 class SellerAdminRepository {
   Dio? _dio;
@@ -30,7 +24,7 @@ class SellerAdminRepository {
           }));
       if (response.statusCode == 200) {
         sellersModel = sellerFromJson(response.data);
-        print('-----------------success ------ ${response.data}');
+        debugPrint('-----------------success ------ ${response.data}');
         return sellersModel;
       }
     } on DioError catch (error) {
@@ -42,7 +36,7 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return sellersModel;
   }
@@ -59,7 +53,7 @@ class SellerAdminRepository {
           }));
       if (response.statusCode == 200) {
         sellerModel = Sellers.fromJson(response.data);
-        print(
+        debugPrint(
             '${sellerModel.phoneNumber}   ${sellerModel.id}-----------------success-------${sellerModel.fullname}');
         return sellerModel;
       }
@@ -72,8 +66,109 @@ class SellerAdminRepository {
           textColor: AppColors.white,
           fontSize: 16,
           backgroundColor: AppColors.grey);
-      print('---------------------------------------$error-------');
+      debugPrint('---------------------------------------$error-------');
     }
     return sellerModel;
+  }
+
+  Future<AdminSellerVisits?> getAdminSellerVisits(
+      {required int page, required int size}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    AdminSellerVisits? adminSellerVisits;
+    try {
+      Response response = await _dio!
+          .get("${AppEndPoints.adminSellerVisits}?page=$page&size=$size",
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200) {
+        adminSellerVisits = AdminSellerVisits.fromJson(response.data);
+        if (adminSellerVisits.data!.isNotEmpty) {
+          debugPrint(adminSellerVisits.data!.last.details);
+        }
+        return adminSellerVisits;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+    return adminSellerVisits;
+  }
+
+  Future<List<AdminVisitsInfo?>> getAdminSellerVisitsStored() async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<AdminVisitsInfo?> adminSellerVisitsStored = [];
+    try {
+      Response response = await _dio!.get(AppEndPoints.adminSellerVisitsStored,
+          options: Options(headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200) {
+        adminSellerVisitsStored = adminVisitsInfoFromJson(response.data);
+        if (adminSellerVisitsStored.isNotEmpty) {
+          debugPrint(
+              '${adminSellerVisitsStored.first!.isAccepted}  }-----------------success-------');
+        }
+        return adminSellerVisitsStored;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      print('---------------------------------------$error-------');
+    }
+    return adminSellerVisitsStored;
+  }
+
+  Future<List<AdminSellerVisitSellers?>> getAdminSellerVisitSellers(
+      {required String id}) async {
+    final token = await AuthLocalDataSource().getLogToken();
+    List<AdminSellerVisitSellers?> adminSellerVisitSellers = [];
+
+    try {
+      Response response =
+          await _dio!.get("${AppEndPoints.adminSellerVisitSellers}/$id",
+              options: Options(headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200) {
+        adminSellerVisitSellers =
+            adminSellerVisitSellersFromJson(response.data);
+        if (adminSellerVisitSellers.isNotEmpty) {
+          debugPrint(
+              '${adminSellerVisitSellers.first!..fullname}  }-----------------success-------');
+        }
+        return adminSellerVisitSellers;
+      }
+    } on DioError catch (error) {
+      final errorMessage = DioExceptions.fromDioError(error);
+      Fluttertoast.showToast(
+          timeInSecForIosWeb: 2,
+          gravity: ToastGravity.TOP,
+          msg: errorMessage.toString(),
+          textColor: AppColors.white,
+          fontSize: 16,
+          backgroundColor: AppColors.grey);
+      debugPrint('---------------------------------------$error-------');
+    }
+    return adminSellerVisitSellers;
   }
 }

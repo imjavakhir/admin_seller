@@ -1,21 +1,6 @@
-import 'package:admin_seller/app_const/app_colors.dart';
-import 'package:admin_seller/app_const/app_routes.dart';
-import 'package:admin_seller/features/seller/data/client_info_model.dart';
-import 'package:admin_seller/features/seller/presentation/blocs/seller_bloc.dart';
-import 'package:admin_seller/features/seller/presentation/widgets/phone_textfield.dart';
-import 'package:admin_seller/features/seller/repository/seller_repo.dart';
-import 'package:admin_seller/src/decoration/input_text_mask.dart';
-import 'package:admin_seller/src/theme/text_styles.dart';
-import 'package:admin_seller/src/validators/validators.dart';
-import 'package:admin_seller/src/widgets/appbar_widget.dart';
-import 'package:admin_seller/src/widgets/big_textfield_widget.dart';
-import 'package:admin_seller/src/widgets/longbutton.dart';
-import 'package:admin_seller/src/widgets/radio_button.dart';
-import 'package:admin_seller/src/widgets/textfield_widget.dart';
+import 'package:admin_seller/app_const/app_exports.dart';
+import 'package:admin_seller/features/seller/data/local_datasrc/hive_local.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum Sold { sold, notSold }
 
@@ -24,7 +9,6 @@ Sold soldInfo = Sold.notSold;
 bool isSoldInfo = true;
 
 class AddClientpage extends StatelessWidget {
-  final SellerRepository _sellerRepository = SellerRepository();
   final TextEditingController _detailsController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
@@ -35,7 +19,7 @@ class AddClientpage extends StatelessWidget {
   final GlobalKey<FormState> sellKey = GlobalKey<FormState>();
   final TextEditingController _textEditingControllerID =
       TextEditingController();
-
+  final SellerRepository _sellerRepository = SellerRepository();
   AddClientpage({
     super.key,
   });
@@ -63,7 +47,6 @@ class AddClientpage extends StatelessWidget {
                         style: Styles.headline4,
                       ),
                     ),
-                    ScreenUtil().setVerticalSpacing(6.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.w),
                       child: Text(
@@ -146,26 +129,11 @@ class AddClientpage extends StatelessWidget {
                                     groupValue: soldInfo)
                               ],
                             ),
-                            ScreenUtil().setVerticalSpacing(10.h),
-                            Form(
-                              key: sellKey,
-                              child: TextfieldWidget(
-                                  listFormater: [
-                                    ThousandsSeparatorInputFormatter()
-                                  ],
-                                  validator: Validators.empty,
-                                  textInputType: TextInputType.number,
-                                  isDisabled: isSoldInfo,
-                                  isSoldField: true,
-                                  paddingW: 0,
-                                  hintext: '0',
-                                  textEditingController: _priceController),
-                            )
                           ],
                         ),
                       );
                     }),
-                    ScreenUtil().setVerticalSpacing(30.h),
+                    ScreenUtil().setVerticalSpacing(20),
                     const Spacer(),
                     StatefulBuilder(builder: (context, set) {
                       return LongButton(
@@ -173,13 +141,13 @@ class AddClientpage extends StatelessWidget {
                           buttonName: 'Оформить',
                           onTap: !_isLoading
                               ? () async {
-                                  final String? reporShareId =
-                                      client.shared_seller != null &&
-                                              client.shared_seller!.isNotEmpty
-                                          ? client.shared_seller
-                                          : '';
-                                  debugPrint(
-                                      '${state.isReported}++++++++$reporShareId');
+                                  // // final String? reporShareId =
+                                  // //     client.shared_seller != null &&
+                                  // //             client.shared_seller!.isNotEmpty
+                                  // //         ? client.shared_seller
+                                  // //         : '';
+                                  // // debugPrint(
+                                  // //     '${state.isReported}++++++++$reporShareId');
 
                                   print(client.id);
                                   if (soldInfo == Sold.notSold) {
@@ -200,7 +168,7 @@ class AddClientpage extends StatelessWidget {
                                       if (_isLoading) {
                                         await _sellerRepository
                                             .sendNotSoldSelling(
-                                                sharedid: reporShareId,
+                                                sharedid: /* reporShareId */ '',
                                                 report: state.isReported,
                                                 id: client.id!,
                                                 whereFrom:
@@ -231,14 +199,9 @@ class AddClientpage extends StatelessWidget {
                                         });
                                       }
                                     }
-
-                                    // Navigator.of(context)
-                                    //     .pushNamed(AppRoutes.addClient);
                                   }
 
                                   if (soldInfo == Sold.sold) {
-                                    final isValidatedSell =
-                                        sellKey.currentState!.validate();
                                     final isValidatedPhone =
                                         phoneFormKey.currentState!.validate();
                                     final isValidatedParams = paramClientFormKey
@@ -249,78 +212,51 @@ class AddClientpage extends StatelessWidget {
                                         .validate();
                                     if (isValidatedName &&
                                         isValidatedParams &&
-                                        isValidatedPhone &&
-                                        isValidatedSell) {
-                                      set(() {
-                                        _isLoading = true;
-                                      });
-
-                                      if (_isLoading) {
-                                        final soldSelling = await _sellerRepository
-                                            .sendSoldSelling(
-                                                sharedid: reporShareId,
-                                                report: state.isReported,
-                                                whereFrom:
-                                                    _textEditingControllerID
-                                                                .text !=
-                                                            ''
-                                                        ? _textEditingControllerID
-                                                            .text
-                                                        : state.whereFrom!,
-                                                id: client.id!,
-                                                details:
-                                                    _detailsController.text,
-                                                fullName:
-                                                    _fullNameController.text,
-                                                phoneNumber: _phoneController
-                                                    .text
-                                                    .replaceAll('-', '')
-                                                    .replaceAll('(', '')
-                                                    .replaceAll(')', '')
-                                                    .replaceAll(' ', ''),
-                                                price: double.parse(
-                                                    _priceController.text
-                                                        .replaceAll('.', '')));
-                                        debugPrint(soldSelling!.whereComeFrom!);
-                                        Navigator.of(context)
-                                            .pushNamed(AppRoutes.main);
-                                        set(() {
-                                          _isLoading = false;
-                                        });
-                                      } else {
-                                        set(() {
-                                          _isLoading = false;
-                                        });
-                                      }
+                                        isValidatedPhone) {
+                                      await HiveDataSourceCLient()
+                                          .saveClientDetails(
+                                        id: client.id!,
+                                        phoneNumber: _phoneController.text
+                                            .replaceAll('-', '')
+                                            .replaceAll('(', '')
+                                            .replaceAll(')', '')
+                                            .replaceAll(' ', ''),
+                                        fullName: _fullNameController.text,
+                                        whereFrom:
+                                            _textEditingControllerID.text != ''
+                                                ? _textEditingControllerID.text
+                                                : state.whereFrom!,
+                                        details: _detailsController.text,
+                                      );
+                                      Navigator.of(context)
+                                          .pushNamed('/acceptOrder');
                                     }
                                   }
-
-                                  // LoginService().sendSoldSelling();
                                 }
                               : null);
                     }),
-                    ScreenUtil().setVerticalSpacing(30.h),
+                    ScreenUtil().setVerticalSpacing(20),
                   ],
                 ),
               )
             ]),
             appBar: AppBarWidget(
-              actions: [
-                if (client.shared_seller != null &&
-                    client.shared_seller!.isNotEmpty)
-                  IconButton(
-                      enableFeedback: false,
-                      splashRadius: 24.r,
-                      onPressed: () {
-                        BlocProvider.of<SellerBloc>(context)
-                            .add(ChangeReportStatus());
-                      },
-                      icon: Icon(
-                        state.isReported ? Icons.report : Icons.report,
-                        color:
-                            state.isReported ? AppColors.red : AppColors.green,
-                      )),
-              ],
+              // actions: [
+              //   if (client.shared_seller != null &&
+              //       client.shared_seller!.isNotEmpty)
+              //     IconButton(
+              //         enableFeedback: false,
+              //         splashRadius: 24.r,
+              //         onPressed: () {
+              //           BlocProvider.of<SellerBloc>(context)
+              //               .add(ChangeReportStatus());
+              //         },
+              //         icon: Icon(
+              //           state.isReported ? Icons.report : Icons.report,
+              //           color:
+              //               state.isReported ? AppColors.red : AppColors.green,
+              //         )),
+              // ],
               title: 'Оформить клиента',
               leading: IconButton(
                   enableFeedback: false,
@@ -340,3 +276,38 @@ class AddClientpage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+      // final soldSelling = await _sellerRepository
+      //                                       .sendSoldSelling(
+      //                                           sharedid: /* reporShareId */ '',
+      //                                           report: state.isReported,
+      //                                           whereFrom:
+      //                                               _textEditingControllerID
+      //                                                           .text !=
+      //                                                       ''
+      //                                                   ? _textEditingControllerID
+      //                                                       .text
+      //                                                   : state.whereFrom!,
+      //                                           id: client.id!,
+      //                                           details:
+      //                                               _detailsController.text,
+      //                                           fullName:
+      //                                               _fullNameController.text,
+      //                                           phoneNumber: _phoneController
+      //                                               .text
+      //                                               .replaceAll('-', '')
+      //                                               .replaceAll('(', '')
+      //                                               .replaceAll(')', '')
+      //                                               .replaceAll(' ', ''),
+      //                                           price: double.parse(
+      //                                               _priceController.text
+      //                                                   .replaceAll('.', '')));
+      //                                   debugPrint(soldSelling!.whereComeFrom!);
+
+
+
+
+      
