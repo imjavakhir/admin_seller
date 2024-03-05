@@ -9,7 +9,8 @@ abstract class UITools {
             AppIcons.closeCircle,
             height: 20.h,
             width: 20.h,
-            color: AppColors.grey,
+            colorFilter:
+                const ColorFilter.mode(AppColors.grey, BlendMode.srcIn),
           ),
           ScreenUtil().setHorizontalSpacing(8),
           Text(title, style: Styles.headline4Reg),

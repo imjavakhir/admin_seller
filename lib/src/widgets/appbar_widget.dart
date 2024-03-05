@@ -1,6 +1,6 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSize {
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
   final List<Widget>? actions;
@@ -35,10 +35,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSize {
   }
 
   @override
-  // TODO: implement child
-  Widget get child => child;
-
-  @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size(double.maxFinite, 56.h);
 }

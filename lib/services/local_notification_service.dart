@@ -1,23 +1,4 @@
-// import 'package:firebase_messaging/firebase_messaging.dart';
-// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-// class LocalNotificationService {
-//   static final FlutterLocalNotificationsPlugin notificationsPlugin =
-//       FlutterLocalNotificationsPlugin();
-
-//   void initialize() {
-//     InitializationSettings initializationSettings =
-//         const InitializationSettings(
-//             android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-//     notificationsPlugin.initialize(initializationSettings);
-//     notificationsPlugin
-//         .resolvePlatformSpecificImplementation<
-//             AndroidFlutterLocalNotificationsPlugin>()!
-//         .requestPermission();
-//   }
-
 import 'package:admin_seller/app_const/app_exports.dart';
-
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin notificationsPlugin =

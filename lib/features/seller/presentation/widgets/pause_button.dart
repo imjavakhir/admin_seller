@@ -66,7 +66,8 @@ class PauseButton extends StatelessWidget {
       },
       icon: SvgPicture.asset(
         !isPaused ? AppIcons.userTick : AppIcons.userRemove,
-        color: !isPaused ? AppColors.green : AppColors.red,
+        colorFilter: ColorFilter.mode(
+            !isPaused ? AppColors.green : AppColors.red, BlendMode.srcIn),
         height: 32.h,
         width: 32.w,
       ),

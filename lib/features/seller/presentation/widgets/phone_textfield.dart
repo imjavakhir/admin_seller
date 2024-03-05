@@ -54,7 +54,7 @@ class _PhoneFieldState extends State<PhoneField> {
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: TypeAheadFormField<SearchedCustomers?>(
             validator: widget.validator,
-            autovalidate: true,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             loadingBuilder: (context) => const SizedBox(),
             textFieldConfiguration: TextFieldConfiguration(
                 onChanged: widget.valueChanged,
@@ -90,7 +90,7 @@ class _PhoneFieldState extends State<PhoneField> {
                     focusedBorder: Decorations.focusedBorder,
                     errorBorder: Decorations.errorBorder)),
             suggestionsCallback: (pattern) {
-              print(MaskFormat.mask.getUnmaskedText());
+              debugPrint(MaskFormat.mask.getUnmaskedText());
               return SellerRepository().getSearchedCustomer(
                   searchNumber: MaskFormat.mask.getUnmaskedText());
             },
@@ -134,7 +134,8 @@ class _PhoneFieldState extends State<PhoneField> {
                 widget.textEditingControllerName.text =
                     suggestion.customer!.fullname!;
 
-                print('---------${suggestion.customer!.phoneNumber!}---------');
+                debugPrint(
+                    '---------${suggestion.customer!.phoneNumber!}---------');
               });
             },
             debounceDuration: const Duration(milliseconds: 500),

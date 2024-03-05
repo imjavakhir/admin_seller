@@ -1,12 +1,12 @@
 import 'package:admin_seller/features/seller/data/hive_client_model.dart/hive_client_model.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:path_provider/path_provider.dart' as pathprovider;
 
 import 'app_const/app_exports.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  Directory directory = await pathprovider.getApplicationDocumentsDirectory();
   Hive.init(directory.path);
   Hive.registerAdapter(UserModelHiveAdapter());
   Hive.registerAdapter(HiveClientModelAdapter());

@@ -37,7 +37,7 @@ class AcceptOnlineRepository {
             'verified-----------------success-----${userUnverified.isVerified}---${userUnverified.user}');
         return userUnverified;
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);
       Fluttertoast.showToast(
           timeInSecForIosWeb: 2,
@@ -68,7 +68,7 @@ class AcceptOnlineRepository {
             'unverified-----------------success-----${userUnverified.length} }');
         return userUnverified;
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       final errorMessage = DioExceptions.fromDioError(error);
       Fluttertoast.showToast(
           timeInSecForIosWeb: 2,

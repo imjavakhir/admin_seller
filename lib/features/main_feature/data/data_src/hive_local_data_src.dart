@@ -14,8 +14,8 @@ class HiveDataSource {
       ..type = type;
     box.put('user', userModelHive);
 
-    print(userModelHive.fullName);
-    print('savedhive---------------');
+    debugPrint(userModelHive.fullName);
+    debugPrint('savedhive---------------');
   }
 
   // Future<UserModelHive> getEmployees() async {
@@ -31,6 +31,6 @@ class HiveDataSource {
 
   Future<void> clearUserDetails() async {
     box.clear();
-    print('----------userdetails--------------revmoved');
+    debugPrint('----------userdetails--------------revmoved');
   }
 }

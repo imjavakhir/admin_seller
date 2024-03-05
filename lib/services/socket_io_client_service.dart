@@ -1,5 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 abstract class SocketService {
   void connect(String logToken);
@@ -13,42 +13,34 @@ abstract class SocketService {
 }
 
 class SocketServiceImpl implements SocketService {
-  late IO.Socket _socket;
+  late io.Socket _socket;
   final mongoUrl = 'http://64.226.90.160:5555';
   final localTestUrl = 'http://192.168.1.140:9999';
   final remoteTest = 'http://64.226.90.160:9999';
   final remote = 'http://64.226.90.160:3000/';
-final sellingLocal = 'http://192.168.1.140:9999';
+  final sellingLocal = 'http://192.168.1.140:9999';
 
   @override
   void connect(String logToken) async {
     debugPrint("${logToken}_____________before connecting socket--------");
-    final options = IO.OptionBuilder()
+    final options = io.OptionBuilder()
         .setTransports(['websocket'])
         .enableForceNewConnection()
         .setQuery({'token': logToken})
         .disableAutoConnect()
         .build();
-    _socket = IO.io(sellingLocal, options);
+    _socket = io.io(sellingLocal, options);
 
     _socket.connect();
 
     _socket.onConnect((_) {
       debugPrint('Connection established');
     });
-    // _socket.onDisconnect((_) => debugPrint('Connection Disconnection'));
-    // _socket.onConnectError((err) => debugPrint(err.toString()));
-    // _socket.onError((err) => debugPrint(err));
-    // _socket.on('javohir', (data) {
-    //   debugPrint(data + "    response from socket");
-    // });
   }
 
   @override
   void disconnect() {
     if (_socket.connected) {
-      // socket.dispose();
-      // debugPrint("disposed--------------------");
       _socket.disconnect();
       _socket.dispose();
 
@@ -86,7 +78,7 @@ final sellingLocal = 'http://192.168.1.140:9999';
 
 //eskisi
 
-IO.Socket? socket;
+io.Socket? socket;
 
 class SocketIOService {
   final mongoUrl = 'http://64.226.90.160:5555';
@@ -100,9 +92,9 @@ class SocketIOService {
     final logToken = await AuthLocalDataSource().getLogToken();
     debugPrint("${logToken}_____________socket");
 
-    socket = IO.io(
+    socket = io.io(
         sellingLocal,
-        IO.OptionBuilder()
+        io.OptionBuilder()
             .setTransports(['websocket'])
             .enableForceNewConnection()
             .setQuery({'token': logToken})
@@ -114,14 +106,6 @@ class SocketIOService {
     socket!.on('javohir', (data) {
       debugPrint(data + "    response from socket");
     });
-    // socket!.on('new-order', (data) {
-    //   clientInfos.add(ClientInfo.fromJson(data));
-    //   print('clientinfos----------$clientInfos');
-    //   print('--------------------------Received response: $data');
-    // });
-    // socket!.onConnect((_) {
-    //   print('connected--------------------------------');
-    // });
   }
 
   void sendnotification(String sellerId, String details) {
@@ -168,9 +152,5 @@ class SocketIOService {
       socket!.disconnect();
       debugPrint('diconccecd--------------------------${socket!.disconnected}');
     }
-
-    // socket!.onDisconnect((_) {
-    //   print('disconnnect----------------------');
-    // });
   }
 }

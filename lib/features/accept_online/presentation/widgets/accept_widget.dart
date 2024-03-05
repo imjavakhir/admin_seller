@@ -1,6 +1,5 @@
 import 'package:admin_seller/app_const/app_exports.dart';
 
-
 class AcceptWidget extends StatelessWidget {
   final String fullname;
   final String phoneNumber;
@@ -10,8 +9,6 @@ class AcceptWidget extends StatelessWidget {
   final int? index;
   final bool isVerfied;
   final bool isOnline;
-
-  // final VoidCallback onTapClose;
   const AcceptWidget(
       {super.key,
       required this.fullname,
@@ -21,9 +18,7 @@ class AcceptWidget extends StatelessWidget {
       this.selectedItem,
       this.index,
       this.isVerfied = false,
-      this.isOnline = false
-      // required this.onTapClose,
-      });
+      this.isOnline = false});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +60,6 @@ class AcceptWidget extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-
                   if (!isVerfied && isOnline)
                     Material(
                       type: MaterialType.button,
@@ -80,24 +74,10 @@ class AcceptWidget extends StatelessWidget {
                             AppIcons.tick,
                             height: 36.h,
                             width: 36.h,
-                            color: AppColors.green,
+                            colorFilter: const ColorFilter.mode(
+                                AppColors.green, BlendMode.srcIn),
                           )),
                     ),
-                  // Material(
-                  //   color: Colors.transparent,
-                  //   type: MaterialType.button,
-                  //   shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(100.r)),
-                  //   child: IconButton(
-                  //       splashRadius: 24,
-                  //       onPressed: onTapClose,
-                  //       icon: SvgPicture.asset(
-                  //         AppIcons.closeCircle,
-                  //         height: 36.h,
-                  //         width: 36.h,
-                  //         color: AppColors.red,
-                  //       )),
-                  // )
                 ],
               )
             ],

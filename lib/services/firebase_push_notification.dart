@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:admin_seller/app_const/app_exports.dart';
-
 
 class FirebaseNotificationService {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -11,10 +8,6 @@ class FirebaseNotificationService {
 
     String? fcmToken = await _firebaseMessaging.getToken();
     await AuthLocalDataSource().saveFcmToken(fcmToken!);
-
-    // final apnToken = await _firebaseMessaging.getAPNSToken();
-    // // await AuthLocalDataSource().saveFcmToken(apnToken!);
-    // debugPrint("{$apnToken}----------");
 
     if (Platform.isIOS) {
       _firebaseMessaging.setForegroundNotificationPresentationOptions(
@@ -41,19 +34,6 @@ class FirebaseNotificationService {
         }
       });
     }
-
-    // if (Platform.isIOS) {
-    //   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //     print('app is on onMessageOpenedApp');
-    //     if (message.notification != null) {
-    //       print('New Notification opened app');
-    //       print(message.notification!.title);
-    //       print(message.notification!.body);
-
-    //       LocalNotificationService().createNotification(message);
-    //     }
-    //   });
-    // }
   }
 }
 
@@ -67,19 +47,3 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     LocalNotificationService().createNotification(message);
   }
 }
-
-
-  // void handleMessage(RemoteMessage? remoteMessage) {
-  //   if (remoteMessage == null) {
-  //     return;
-  //   }
-  // }
-
-  // Future initPushNotification() async {
-  //   await FirebaseMessaging.instance
-  //       .setForegroundNotificationPresentationOptions(
-  //           alert: true, badge: true, sound: true);
-  //   FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-  //   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-  //   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  // }

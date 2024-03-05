@@ -57,8 +57,9 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: AppColors.white,
               colorScheme: ColorScheme.fromSwatch(accentColor: Colors.white)),
           builder: (context, child) => MediaQuery(
-              data: MediaQuery.of(context)
-                  .copyWith(textScaleFactor: 1.0, alwaysUse24HourFormat: true),
+              data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                  alwaysUse24HourFormat: true),
               child: child!),
         ),
       ),
