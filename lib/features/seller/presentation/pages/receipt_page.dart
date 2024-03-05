@@ -322,13 +322,13 @@ class _ReceiptPageState extends State<ReceiptPage> {
                       paddingW: 0,
                       buttonName: 'Неправильно',
                       onTap: () {
-                        final data = {"data": "salom"};
-                        debugPrint(data.toString());
+                        // final data = {"data": "salom"};
+                        // debugPrint(data.toString());
                         sendOrder.clear();
                         sendPayment.clear();
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //     AppRoutes.acceptOrder,
-                        //     ModalRoute.withName(AppRoutes.addClient));
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            AppRoutes.acceptOrder,
+                            ModalRoute.withName(AppRoutes.addClient));
                       },
                     ),
                   ),

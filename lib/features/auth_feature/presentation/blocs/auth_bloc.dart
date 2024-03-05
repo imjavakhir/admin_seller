@@ -12,7 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // on<DeleteToken>(_onDeleteToken);
   }
   final GlobalKey<FormState> _formKey;
-  final ApiService _apiService = ApiService();
+  final AuthRepository _authRepository = AuthRepository();
   final TextEditingController _phoneController;
   final TextEditingController _passwordController;
   GlobalKey get formKey => _formKey;
@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(showLoginButtonLoading: true));
     UserModel? userModel;
     if (state.showLoginButtonLoading) {
-      userModel = await _apiService.login(
+      userModel = await _authRepository.login(
         phoneNumber: _phoneController.text,
         password: _passwordController.text,
         role: role,

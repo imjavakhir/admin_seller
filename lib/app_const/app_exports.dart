@@ -73,7 +73,6 @@ export 'package:admin_seller/features/seller_admin/presentation/widgets/seller_t
 export 'package:admin_seller/features/seller_admin/presentation/widgets/sellers_widget.dart';
 export 'package:admin_seller/features/seller_admin/repository/seller_admin_repo.dart';
 export 'package:admin_seller/firebase_options.dart';
-export 'package:admin_seller/services/api_service.dart';
 export 'package:admin_seller/services/dio_exceptions.dart';
 export 'package:admin_seller/services/endpoints.dart';
 export 'package:admin_seller/services/firebase_push_notification.dart';
